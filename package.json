@@ -3,10 +3,16 @@
   "private": true,
   "version": "0.0.1",
   "type": "module",
+
+  "homepage": "https://shreeyabhatt.github.io/Portfolio_Shreeya_Bhatt",
+
   "scripts": {
+    "dev": "vite",
     "build": "vite build",
-    "dev": "vite"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
+
   "dependencies": {
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
@@ -64,6 +70,7 @@
     "tw-animate-css": "1.3.8",
     "vaul": "1.1.2"
   },
+
   "devDependencies": {
     "@tailwindcss/vite": "4.1.12",
     "@vitejs/plugin-react": "4.7.0",
@@ -71,18 +78,17 @@
     "tailwindcss": "4.1.12",
     "vite": "6.3.5"
   },
+
   "peerDependencies": {
     "react": "18.3.1",
     "react-dom": "18.3.1"
   },
+
   "peerDependenciesMeta": {
-    "react": {
-      "optional": true
-    },
-    "react-dom": {
-      "optional": true
-    }
+    "react": { "optional": true },
+    "react-dom": { "optional": true }
   },
+
   "pnpm": {
     "overrides": {
       "vite": "6.3.5"
