@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/* ============================================================
+   DESIGN TOKENS — the single source of truth for this site.
+   Every component should draw color / spacing / radius / shadow
+   values from here (via Tailwind utility classes mapped below)
+   rather than inventing one-off numbers per component.
+   ============================================================ */
+@theme {
+  /* ---- Fonts ---- */
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* ---- Brand palette (light defaults) ---- */
+  --color-bg: #faf9f6;
+  --color-bg-raised: #ffffff;
+  --color-fg: #1a1a1f;
+  --color-fg-muted: #5b5b66;
+  --color-border: #e4e2dc;
+
+  --color-accent: #7c5cfc;
+  --color-accent-soft: #ece7ff;
+  --color-accent-2: #ffb648;
+  --color-accent-2-soft: #fff1dc;
+
+  --color-success: #22a06b;
+  --color-danger: #e5484d;
+
+  /* ---- Radius scale (2-3 values, reused everywhere) ---- */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+  --radius-lg: 1.5rem;
+
+  /* ---- Shadow / elevation tiers ---- */
+  --shadow-resting: 0 1px 2px rgba(20, 20, 30, 0.06), 0 1px 1px rgba(20, 20, 30, 0.04);
+  --shadow-raised: 0 12px 24px -8px rgba(20, 20, 30, 0.18), 0 4px 8px -2px rgba(20, 20, 30, 0.08);
+  --shadow-modal: 0 24px 48px -12px rgba(10, 10, 15, 0.35);
+}
+
+/* ---- Dark mode overrides (same token names, new values) ---- */
+:root.dark {
+  --color-bg: #0b0c10;
+  --color-bg-raised: #14151b;
+  --color-fg: #f4f3ef;
+  --color-fg-muted: #a3a2ad;
+  --color-border: #24252d;
+
+  --color-accent: #9c85ff;
+  --color-accent-soft: rgba(124, 92, 252, 0.16);
+  --color-accent-2: #ffc164;
+  --color-accent-2-soft: rgba(255, 182, 72, 0.14);
+
+  --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-raised: 0 12px 24px -8px rgba(0, 0, 0, 0.5), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
+  --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: white;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (pointer: fine) {
+    body.custom-cursor-active {
+      cursor: none;
+    }
+  }
+}
+
+@utility container-page {
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
