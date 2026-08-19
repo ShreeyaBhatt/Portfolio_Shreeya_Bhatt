@@ -48,8 +48,8 @@ export default function About() {
       <Section className="pt-0">
         <SectionHeading eyebrow="// certifications" title="Certifications" />
         <p className="-mt-6 mb-8 max-w-2xl text-[var(--color-fg-muted)]">
-          {certifications.length} certifications completed so far, spanning Python, web
-          fundamentals, Java, data analysis, and version control.
+          {certifications.length} certifications completed so far, spanning Python, machine
+          learning, web fundamentals, Java, and version control.
         </p>
         <Link
           to="/certifications"

@@ -38,7 +38,8 @@ export const projects = [
     ],
     tech: ["React.js", "Node.js", "Express", "Django REST", "MongoDB", "Machine Learning", "Gemini API"],
     featured: true,
-    codeUrl: "https://github.com/ShreeyaBhatt/your-repo-name",
+    demoUrl: "https://wealthnest-client.onrender.com",
+    demoLabel: "Live Demo",
   },
   {
     slug: "spendwise",

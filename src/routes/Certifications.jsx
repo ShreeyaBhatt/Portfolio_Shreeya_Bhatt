@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { Award, ExternalLink } from "lucide-react";
 import { Section } from "../components/ui/Section.jsx";
 import { Card } from "../components/ui/Card.jsx";
+import { Tag } from "../components/ui/Tag.jsx";
 import { SignalField } from "../components/hero/SignalField.jsx";
 import { certifications } from "../data/certifications.js";
 import { staggerContainer, getRevealVariants } from "../lib/motion.js";
@@ -23,7 +24,7 @@ export default function Certifications() {
         </h1>
         <p className="mt-4 max-w-2xl text-[var(--color-fg-muted)]">
           Courses I've completed to build and round out my skills — from Python fundamentals to
-          data analysis and Java data structures.
+          machine learning, Java data structures, and web development.
         </p>
 
         <motion.ul
@@ -43,10 +44,21 @@ export default function Certifications() {
                     <p className="mt-1 text-xs text-[var(--color-fg-muted)]">
                       {cert.issuer} · {cert.date}
                     </p>
+                    {cert.credentialId && (
+                      <p className="mt-1 font-mono text-xs text-[var(--color-fg-muted)]">
+                        Credential ID: {cert.credentialId}
+                      </p>
+                    )}
                   </div>
                 </div>
                 {cert.skills && (
-                  <p className="mt-4 flex-1 text-sm text-[var(--color-fg-muted)]">{cert.skills}</p>
+                  <div className="mt-4 flex flex-1 flex-wrap items-start gap-2">
+                    {cert.skills.split(",").map((skill) => (
+                      <Tag key={skill} tone="accent2">
+                        {skill.trim()}
+                      </Tag>
+                    ))}
+                  </div>
                 )}
                 {cert.credentialUrl ? (
                   <a

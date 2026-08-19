@@ -21,8 +21,8 @@
 
   --color-accent: #7c5cfc;
   --color-accent-soft: #ece7ff;
-  --color-accent-2: #ffb648;
-  --color-accent-2-soft: #fff1dc;
+  --color-accent-2: #0f766e;
+  --color-accent-2-soft: #ccfbf1;
 
   --color-success: #22a06b;
   --color-danger: #e5484d;
@@ -48,8 +48,8 @@
 
   --color-accent: #9c85ff;
   --color-accent-soft: rgba(124, 92, 252, 0.16);
-  --color-accent-2: #ffc164;
-  --color-accent-2-soft: rgba(255, 182, 72, 0.14);
+  --color-accent-2: #2dd4bf;
+  --color-accent-2-soft: rgba(45, 212, 191, 0.16);
 
   --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-raised: 0 12px 24px -8px rgba(0, 0, 0, 0.5), 0 4px 8px -2px rgba(0, 0, 0, 0.3);

@@ -5,12 +5,14 @@ import { Footer } from "./Footer.jsx";
 import { PageTransition } from "./PageTransition.jsx";
 import { ScrollProgress } from "./ScrollProgress.jsx";
 import { CustomCursor } from "../common/CustomCursor.jsx";
+import { IntroSplash } from "../common/IntroSplash.jsx";
 
 export function Layout() {
   const location = useLocation();
 
   return (
     <div className="flex min-h-screen flex-col">
+      <IntroSplash />
       <CustomCursor />
       <ScrollProgress />
       <Nav />

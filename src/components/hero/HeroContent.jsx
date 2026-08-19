@@ -1,10 +1,11 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { ArrowDown, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/Button.jsx";
 import { GithubIcon, LinkedinIcon } from "../common/icons.jsx";
 import { ProfilePhoto } from "../common/ProfilePhoto.jsx";
+import { TypewriterRoles } from "../common/TypewriterRoles.jsx";
 import { profile } from "../../data/profile.js";
 import { easeSignature, durations } from "../../lib/motion.js";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
@@ -21,14 +22,25 @@ export function HeroContent() {
   const opacity = useTransform(scrollYProgress, [0, 1], [1, prefersReducedMotion ? 1 : 0.2]);
 
   return (
-    <div ref={containerRef} className="relative flex min-h-[85vh] flex-col justify-center">
+    <div
+      ref={containerRef}
+      className="relative flex min-h-[75vh] flex-col justify-center py-20 md:py-28"
+    >
       <motion.div style={{ y, opacity }} className="container-page">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: durations.page, ease: easeSignature }}
+          className="w-fit"
         >
-          <ProfilePhoto className="h-20 w-20 rounded-full border-2 border-[var(--color-accent)] shadow-[var(--shadow-raised)]" />
+          <motion.div
+            animate={prefersReducedMotion ? undefined : { y: [0, -8, 0] }}
+            transition={
+              prefersReducedMotion ? undefined : { duration: 4, repeat: Infinity, ease: "easeInOut" }
+            }
+          >
+            <ProfilePhoto className="h-20 w-20 rounded-full border-2 border-[var(--color-accent)] shadow-[var(--shadow-raised)]" />
+          </motion.div>
         </motion.div>
 
         <motion.p
@@ -50,9 +62,18 @@ export function HeroContent() {
         </motion.h1>
 
         <motion.p
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: durations.transition, ease: easeSignature, delay: 0.14 }}
+          className="mt-4 font-mono text-lg text-[var(--color-accent-2)] sm:text-xl"
+        >
+          <TypewriterRoles />
+        </motion.p>
+
+        <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: durations.page, ease: easeSignature, delay: 0.16 }}
+          transition={{ duration: durations.page, ease: easeSignature, delay: 0.2 }}
           className="mt-6 max-w-xl text-lg text-[var(--color-fg-muted)] md:text-xl"
         >
           {profile.tagline} — I build{" "}
@@ -101,16 +122,6 @@ export function HeroContent() {
             </a>
           </div>
         </motion.div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: durations.page, delay: 0.6 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 text-[var(--color-fg-muted)]"
-        aria-hidden="true"
-      >
-        <ArrowDown size={20} className={prefersReducedMotion ? "" : "animate-bounce"} />
       </motion.div>
     </div>
   );

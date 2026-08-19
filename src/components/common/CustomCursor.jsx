@@ -2,7 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
-/** Small dot+ring cursor that scales on hoverable elements. Desktop (pointer: fine) only. */
+/**
+ * Small dot + outlined ring that scales on hoverable elements. Desktop
+ * (pointer: fine) only.
+ *
+ * Deliberately not `mix-blend-mode`-based: blend-mode cursors look great in
+ * theory but render unreliably in practice (they can composite as a solid
+ * opaque blob instead of inverting, especially over canvas content or inside
+ * nested stacking contexts), which ends up covering the content underneath
+ * instead of revealing it. A plain accent-colored dot plus a mostly-hollow
+ * ring achieves the same "custom cursor" feel without depending on blending
+ * to render correctly — the ring's interior stays transparent so it never
+ * blocks whatever is beneath it.
+ */
 export function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
   const [hovering, setHovering] = useState(false);
@@ -10,8 +22,8 @@ export function CustomCursor() {
 
   const x = useMotionValue(-100);
   const y = useMotionValue(-100);
-  const springX = useSpring(x, { stiffness: 500, damping: 40 });
-  const springY = useSpring(y, { stiffness: 500, damping: 40 });
+  const ringX = useSpring(x, { stiffness: 320, damping: 30 });
+  const ringY = useSpring(y, { stiffness: 320, damping: 30 });
 
   const rafRef = useRef(null);
 
@@ -51,19 +63,35 @@ export function CustomCursor() {
   if (!enabled) return null;
 
   return (
-    <motion.div
-      aria-hidden="true"
-      className="pointer-events-none fixed left-0 top-0 z-[60] rounded-full mix-blend-difference"
-      style={{
-        x: springX,
-        y: springY,
-        translateX: "-50%",
-        translateY: "-50%",
-        width: hovering ? 36 : 18,
-        height: hovering ? 36 : 18,
-        backgroundColor: "#ffffff",
-        transition: "width 150ms ease, height 150ms ease",
-      }}
-    />
+    <>
+      {/* small solid dot, tracks the pointer exactly */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 top-0 z-[60] rounded-full bg-[var(--color-accent)]"
+        style={{
+          x,
+          y,
+          translateX: "-50%",
+          translateY: "-50%",
+          width: 6,
+          height: 6,
+        }}
+      />
+      {/* hollow ring, trails slightly behind and grows on hover — never opaque */}
+      <motion.div
+        aria-hidden="true"
+        className="pointer-events-none fixed left-0 top-0 z-[60] rounded-full border-2 border-[var(--color-accent)]"
+        style={{
+          x: ringX,
+          y: ringY,
+          translateX: "-50%",
+          translateY: "-50%",
+          width: hovering ? 44 : 26,
+          height: hovering ? 44 : 26,
+          opacity: hovering ? 0.9 : 0.45,
+          transition: "width 150ms ease, height 150ms ease, opacity 150ms ease",
+        }}
+      />
+    </>
   );
 }
