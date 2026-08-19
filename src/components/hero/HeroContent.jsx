@@ -1,10 +1,8 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/Button.jsx";
 import { GithubIcon, LinkedinIcon } from "../common/icons.jsx";
-import { ProfilePhoto } from "../common/ProfilePhoto.jsx";
 import { TypewriterRoles } from "../common/TypewriterRoles.jsx";
 import { profile } from "../../data/profile.js";
 import { easeSignature, durations } from "../../lib/motion.js";
@@ -27,27 +25,11 @@ export function HeroContent() {
       className="relative flex min-h-[75vh] flex-col justify-center py-20 md:py-28"
     >
       <motion.div style={{ y, opacity }} className="container-page">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: durations.page, ease: easeSignature }}
-          className="w-fit"
-        >
-          <motion.div
-            animate={prefersReducedMotion ? undefined : { y: [0, -8, 0] }}
-            transition={
-              prefersReducedMotion ? undefined : { duration: 4, repeat: Infinity, ease: "easeInOut" }
-            }
-          >
-            <ProfilePhoto className="h-20 w-20 rounded-full border-2 border-[var(--color-accent)] shadow-[var(--shadow-raised)]" />
-          </motion.div>
-        </motion.div>
-
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: durations.transition, ease: easeSignature }}
-          className="mb-4 mt-6 font-mono text-sm text-[var(--color-accent)]"
+          className="mb-4 font-mono text-sm text-[var(--color-accent)]"
         >
           {"// "}Computer Science student & builder
         </motion.p>
@@ -91,15 +73,7 @@ export function HeroContent() {
           <Button as={Link} to="/projects" variant="primary">
             View Projects
           </Button>
-          <Button
-            as="a"
-            href={profile.resumePath}
-            download
-            variant="secondary"
-          >
-            <Download size={16} /> Download Resume
-          </Button>
-          <div className="ml-2 flex items-center gap-3 text-[var(--color-fg-muted)]">
+          <div className="flex items-center gap-3 text-[var(--color-fg-muted)]">
             <a
               href={profile.githubUrl}
               target="_blank"

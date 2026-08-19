@@ -6,8 +6,6 @@
  * @property {string} email
  * @property {string} linkedinUrl
  * @property {string} githubUrl
- * @property {string} resumePath
- * @property {string} photoPath
  * @property {{bio: string, publicRepos: number, stars: number, focusAreas: string[]}} github
  * @property {string[]} lookingFor
  * @property {string[]} funFacts
@@ -22,10 +20,6 @@ export const profile = {
   email: "shreeyasbhatt@gmail.com",
   linkedinUrl: "https://www.linkedin.com/in/shreeya-bhatt-4a5715363",
   githubUrl: "https://github.com/ShreeyaBhatt",
-  // MANUAL FOLLOW-UP: add the actual file at public/resume.pdf
-  resumePath: "/resume.pdf",
-  // MANUAL FOLLOW-UP: add the actual file at public/profile.jpg
-  photoPath: "/profile.jpg",
   github: {
     bio: "Computer Science & Technology Student • Full Stack Developer • Python Developer • AI Enthusiast",
     publicRepos: 13,

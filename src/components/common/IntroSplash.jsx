@@ -3,7 +3,6 @@ import { AnimatePresence, motion } from "motion/react";
 import { profile } from "../../data/profile.js";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 import { easeSignature } from "../../lib/motion.js";
-import { ProfilePhoto } from "./ProfilePhoto.jsx";
 
 const SESSION_KEY = "sb-intro-seen";
 const HOLD_MS = 1400;
@@ -63,12 +62,11 @@ export function IntroSplash() {
             transition={{ duration: 0.6, ease: easeSignature }}
             className="flex flex-col items-center text-center"
           >
-            <ProfilePhoto className="h-32 w-32 rounded-full border-2 border-[var(--color-accent)] shadow-[var(--shadow-raised)] sm:h-40 sm:w-40" />
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4, delay: 0.2 }}
-              className="mt-6 font-mono text-sm text-[var(--color-accent)]"
+              className="font-mono text-sm text-[var(--color-accent)]"
             >
               {"// hello, I'm"}
             </motion.p>

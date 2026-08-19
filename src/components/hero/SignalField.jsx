@@ -10,7 +10,7 @@ const CURSOR_RADIUS = 160;
  * The site's signature motif: a hand-rolled canvas "circuit" of nodes on a
  * loose grid, connected by distance-fading lines, gently repelled by the
  * cursor. Reused at different densities/heights across pages so the motif
- * recurs consistently (Home hero, Projects/Posts header strip).
+ * recurs consistently (Home hero, Projects/Certifications header strip).
  *
  * Perf: node count capped, devicePixelRatio capped, animation loop pauses
  * off-screen via IntersectionObserver, and prefers-reduced-motion renders a

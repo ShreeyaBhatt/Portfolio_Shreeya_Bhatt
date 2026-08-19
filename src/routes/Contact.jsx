@@ -1,7 +1,6 @@
 import { Mail } from "lucide-react";
 import { Section } from "../components/ui/Section.jsx";
 import { Card } from "../components/ui/Card.jsx";
-import { ResumeButton } from "../components/common/ResumeButton.jsx";
 import { GithubIcon, LinkedinIcon } from "../components/common/icons.jsx";
 import { profile } from "../data/profile.js";
 
@@ -44,10 +43,6 @@ export default function Contact() {
             <p className="mt-1 break-words font-medium">{value}</p>
           </Card>
         ))}
-      </div>
-
-      <div className="mt-12">
-        <ResumeButton />
       </div>
     </Section>
   );
