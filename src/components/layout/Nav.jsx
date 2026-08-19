@@ -9,6 +9,7 @@ const links = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/projects", label: "Projects" },
+  { to: "/certifications", label: "Certifications" },
   { to: "/posts", label: "Posts" },
   { to: "/contact", label: "Contact" },
 ];
@@ -45,7 +46,7 @@ export function Nav() {
           SB<span className="text-[var(--color-accent)]">.</span>
         </NavLink>
 
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-1 lg:flex">
           {links.map((link) => (
             <li key={link.to} className="relative">
               <NavLink
@@ -83,7 +84,7 @@ export function Nav() {
             data-cursor-hover
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className="rounded-[var(--radius-sm)] p-2 text-[var(--color-fg)] md:hidden"
+            className="rounded-[var(--radius-sm)] p-2 text-[var(--color-fg)] lg:hidden"
             onClick={() => setMenuOpen((open) => !open)}
           >
             {menuOpen ? <X size={20} /> : <Menu size={20} />}
@@ -96,7 +97,7 @@ export function Nav() {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
-          className="container-page flex flex-col gap-1 border-t border-[var(--color-border)] pb-4 md:hidden"
+          className="container-page flex flex-col gap-1 border-t border-[var(--color-border)] pb-4 lg:hidden"
         >
           {links.map((link) => (
             <li key={link.to}>

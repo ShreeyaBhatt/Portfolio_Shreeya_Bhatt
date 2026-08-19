@@ -9,6 +9,8 @@
  * @property {string} resumePath
  * @property {string} photoPath
  * @property {{bio: string, publicRepos: number, stars: number, focusAreas: string[]}} github
+ * @property {string[]} lookingFor
+ * @property {string[]} funFacts
  */
 
 /** @type {Profile} */
@@ -29,4 +31,11 @@ export const profile = {
     stars: 6,
     focusAreas: ["System Design", "Machine Learning", "Advanced MERN Stack", "Cloud Fundamentals"],
   },
+  // Sourced from the "Looking For" / "Fun Fact" sections of my GitHub profile README.
+  lookingFor: ["Software Engineering Internships", "Python Developer Roles", "MERN Stack Developer Roles"],
+  funFacts: [
+    "🎤 I enjoy singing just as much as I enjoy building software.",
+    "💡 I believe technology should solve real-world problems.",
+    "📚 Always mid-course on something new — right now that's system design and cloud fundamentals.",
+  ],
 };

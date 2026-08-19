@@ -4,6 +4,7 @@ import { ArrowDown, Download } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/Button.jsx";
 import { GithubIcon, LinkedinIcon } from "../common/icons.jsx";
+import { ProfilePhoto } from "../common/ProfilePhoto.jsx";
 import { profile } from "../../data/profile.js";
 import { easeSignature, durations } from "../../lib/motion.js";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
@@ -22,11 +23,19 @@ export function HeroContent() {
   return (
     <div ref={containerRef} className="relative flex min-h-[85vh] flex-col justify-center">
       <motion.div style={{ y, opacity }} className="container-page">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: durations.page, ease: easeSignature }}
+        >
+          <ProfilePhoto className="h-20 w-20 rounded-full border-2 border-[var(--color-accent)] shadow-[var(--shadow-raised)]" />
+        </motion.div>
+
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: durations.transition, ease: easeSignature }}
-          className="mb-4 font-mono text-sm text-[var(--color-accent)]"
+          className="mb-4 mt-6 font-mono text-sm text-[var(--color-accent)]"
         >
           {"// "}Computer Science student & builder
         </motion.p>

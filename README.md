@@ -31,6 +31,7 @@ npm run preview    # preview the production build locally
 - [ ] Add your profile photo as `public/profile.jpg` (referenced in `src/data/profile.js`).
 - [ ] Replace the 3 placeholder entries in `src/data/posts.js` with real LinkedIn posts/articles.
 - [ ] Add `codeUrl` (GitHub repo) links for WealthNest, CareeRise, SmartCart, and the Payroll Management System in `src/data/projects.js` once they're public. (SpendWise's two live app links are wired in, and CareeRise/SmartCart/Payroll already link out to their Google Drive demo videos as `demoUrl`.)
+- [ ] Add `credentialUrl` verification links for each entry in `src/data/certifications.js` (the `/certifications` page already links out when present — Udemy/IBM/Penn Engineering certificates usually have a shareable verification URL).
 - [ ] Periodically refresh the GitHub stats (`publicRepos`, `stars`, `focusAreas`) in `src/data/profile.js`.
 
 ## Deployment (Vercel)
