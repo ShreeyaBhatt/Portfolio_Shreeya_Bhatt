@@ -54,12 +54,3 @@ This is a plain Vite SPA — Vercel auto-detects the framework preset (build com
 To deploy: push this repo to GitHub, then import it in the [Vercel dashboard](https://vercel.com/new) and connect it — no further configuration needed.
 
 **Live:** [portfolio-shreeya-bhatt.vercel.app](https://portfolio-shreeya-bhatt.vercel.app/)
-
-## Manual Follow-ups Before Launch
-
-- [x] Add `credentialUrl` verification links for each entry in `src/data/certifications.js`.
-- [ ] Add `codeUrl` (GitHub repo) links for WealthNest, CareeRise, SmartCart, and the Payroll Management System in `src/data/projects.js` once they're public.
-  - SpendWise's two live app links are already wired in.
-  - WealthNest links to its live demo.
-  - CareeRise / SmartCart / Payroll link out to their Google Drive demo videos as `demoUrl`.
-- [ ] Periodically refresh the GitHub stats (`publicRepos`, `stars`, `focusAreas`) in `src/data/profile.js`.
