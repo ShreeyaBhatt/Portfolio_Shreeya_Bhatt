@@ -15,7 +15,7 @@ export default function Projects() {
           Things I've built
         </h1>
         <p className="mt-4 max-w-2xl text-[var(--color-fg-muted)]">
-          Five projects spanning full-stack AI platforms, data-driven applications, and
+          Five projects spanning Python-driven data & AI platforms, full-stack development, and
           Core Java systems built around solid data structures.
         </p>
 
