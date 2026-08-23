@@ -6,9 +6,9 @@
  */
 
 export const colorTokens = {
-  accent: "#7C5CFC",
+  accent: "#6C4CF0", // nebula violet
   accentDark: "#9C85FF",
-  accent2: "#FFB648",
+  accent2: "#A15C07", // starlight gold
   accent2Dark: "#FFC164",
 };
 

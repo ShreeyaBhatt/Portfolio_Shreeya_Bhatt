@@ -39,7 +39,7 @@ export function GithubIdentityBlock() {
       </div>
 
       <p className="mt-6 mb-2 text-xs uppercase tracking-wide text-[var(--color-fg-muted)]">
-        Currently focused on
+        Currently orbiting
       </p>
       <div className="flex flex-wrap gap-2">
         {github.focusAreas.map((area) => (

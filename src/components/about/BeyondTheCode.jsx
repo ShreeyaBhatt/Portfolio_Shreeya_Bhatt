@@ -21,7 +21,7 @@ export function BeyondTheCode() {
       <motion.div variants={variants}>
         <Card tilt={false} className="h-full p-6">
           <p className="mb-3 text-xs uppercase tracking-wide text-[var(--color-fg-muted)]">
-            Currently looking for
+            Currently scanning for
           </p>
           <div className="flex flex-wrap gap-2">
             {profile.lookingFor.map((role) => (

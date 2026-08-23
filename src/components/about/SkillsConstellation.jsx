@@ -156,22 +156,33 @@ export function SkillsConstellation() {
   return (
     <div className="w-full">
       <p className="mb-4 text-center font-mono text-xs text-[var(--color-fg-muted)] sm:text-left">
-        {"// hover or tap a node to see connections. Drag any node to rearrange."}
+        {"// hover or tap a star to trace its constellation. Drag any star to redraw the sky."}
       </p>
       <div className="overflow-x-auto">
         <svg
           ref={svgRef}
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
           role="img"
-          aria-label="Interactive graph of skills grouped by category"
+          aria-label="Interactive star chart of skills grouped by category"
           className="mx-auto block h-auto min-w-[820px] max-w-full touch-none select-none"
           onPointerMove={handlePointerMove}
           onMouseLeave={() => setHoveredId(null)}
         >
+          <defs>
+            <filter id="starGlow" x="-120%" y="-120%" width="340%" height="340%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
           {edges.map((edge) => {
             const from = positions[edge.from];
             const to = positions[edge.to];
             const dimmed = isDimmed(edge.categoryIndex, edge.from) && isDimmed(edge.categoryIndex, edge.to);
+            const isCoreEdge = edge.from === CORE_ID;
             return (
               <line
                 key={edge.id}
@@ -179,7 +190,7 @@ export function SkillsConstellation() {
                 y1={from.y}
                 x2={to.x}
                 y2={to.y}
-                stroke={dimmed ? "var(--color-border)" : "var(--color-accent)"}
+                stroke={dimmed ? "var(--color-border)" : isCoreEdge ? "var(--color-accent-2)" : "var(--color-accent)"}
                 strokeWidth={dimmed ? 1 : 1.5}
                 opacity={dimmed ? 0.25 : 0.6}
                 style={{ transition }}
@@ -213,9 +224,13 @@ export function SkillsConstellation() {
                 <circle
                   r={radius}
                   fill={isCore ? "var(--color-accent)" : "var(--color-bg-raised)"}
-                  stroke={isCore ? "none" : isHub ? "var(--color-accent)" : "var(--color-accent-2)"}
+                  stroke={isCore ? "none" : isHub ? "var(--color-accent-2)" : "var(--color-accent)"}
                   strokeWidth={isHub ? 2 : 1.5}
+                  filter={isCore || isHub ? "url(#starGlow)" : undefined}
                 />
+                {isCore && (
+                  <circle r={4} fill="var(--color-bg-raised)" opacity={0.9} aria-hidden="true" />
+                )}
                 <text
                   x={0}
                   y={radius + 14}
@@ -223,7 +238,7 @@ export function SkillsConstellation() {
                   className="font-mono"
                   fontSize={isHub ? 13 : 11}
                   fontWeight={isHub ? 600 : 400}
-                  fill={isHub ? "var(--color-accent)" : "var(--color-fg)"}
+                  fill={isHub ? "var(--color-accent-2)" : "var(--color-fg)"}
                 >
                   {node.label}
                 </text>

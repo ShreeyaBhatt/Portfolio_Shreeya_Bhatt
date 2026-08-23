@@ -21,7 +21,7 @@ export default function ProjectDetail() {
         data-cursor-hover
         className="inline-flex items-center gap-1 text-sm text-[var(--color-fg-muted)] hover:text-[var(--color-accent)]"
       >
-        <ArrowLeft size={16} /> Back to projects
+        <ArrowLeft size={16} /> Back to launch log
       </Link>
 
       <div className="mt-6">
@@ -67,7 +67,7 @@ export default function ProjectDetail() {
         </div>
 
         <div className="mt-10">
-          <h2 className="text-lg font-semibold">Highlights</h2>
+          <h2 className="text-lg font-semibold">Mission highlights</h2>
           <ul className="mt-4 space-y-2">
             {project.highlights.map((item) => (
               <li key={item} className="flex items-start gap-2 text-[var(--color-fg-muted)]">

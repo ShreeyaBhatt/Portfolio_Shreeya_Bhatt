@@ -15,7 +15,10 @@ export function SectionHeading({ eyebrow, title, description }) {
       className="mb-10 max-w-2xl"
     >
       {eyebrow && (
-        <p className="mb-2 font-mono text-sm text-[var(--color-accent)]">{eyebrow}</p>
+        <p className="mb-2 flex items-center gap-1.5 font-mono text-sm text-[var(--color-accent)]">
+          <span className="text-[var(--color-accent-2)]" aria-hidden="true">✦</span>
+          {eyebrow}
+        </p>
       )}
       <h2 className="relative inline-block text-3xl font-bold tracking-tight md:text-4xl">
         {title}

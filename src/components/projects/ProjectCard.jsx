@@ -52,7 +52,7 @@ export function ProjectCard({ project, spanClassName }) {
             data-cursor-hover
             className="font-medium text-[var(--color-accent)] hover:underline"
           >
-            View details →
+            Mission details →
           </Link>
           {project.codeUrl && (
             <a
@@ -90,7 +90,7 @@ export function ProjectCard({ project, spanClassName }) {
         </div>
         {!hasLinks && (
           <p className="mt-6 font-mono text-xs text-[var(--color-fg-muted)]">
-            Code / demo link coming soon
+            Transmission incoming — code / demo link coming soon
           </p>
         )}
       </Card>

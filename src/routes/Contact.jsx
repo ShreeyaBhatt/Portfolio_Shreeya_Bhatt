@@ -1,5 +1,6 @@
 import { Mail } from "lucide-react";
 import { Section } from "../components/ui/Section.jsx";
+import { PageEyebrow } from "../components/common/PageEyebrow.jsx";
 import { Card } from "../components/ui/Card.jsx";
 import { GithubIcon, LinkedinIcon } from "../components/common/icons.jsx";
 import { profile } from "../data/profile.js";
@@ -28,10 +29,10 @@ const contactLinks = [
 export default function Contact() {
   return (
     <Section className="pt-16 md:pt-20">
-      <p className="font-mono text-sm text-[var(--color-accent)]">// contact</p>
-      <h1 className="mt-2 text-4xl font-bold tracking-tight md:text-5xl">Let's talk</h1>
+      <PageEyebrow>// transmit</PageEyebrow>
+      <h1 className="mt-2 text-4xl font-bold tracking-tight md:text-5xl">Let's make contact</h1>
       <p className="mt-4 max-w-2xl text-[var(--color-fg-muted)]">
-        I'm currently looking for a software development internship. Reach out via email or
+        I'm currently scanning for a software development internship. Send a signal via email or
         LinkedIn — I'd love to hear from you.
       </p>
 

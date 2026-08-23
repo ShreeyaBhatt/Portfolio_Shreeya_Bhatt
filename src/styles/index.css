@@ -2,9 +2,12 @@
 
 /* ============================================================
    DESIGN TOKENS — the single source of truth for this site.
-   Every component should draw color / spacing / radius / shadow
-   values from here (via Tailwind utility classes mapped below)
-   rather than inventing one-off numbers per component.
+   Theme: deep space / constellation. Nebula violet + starlight
+   gold as the two accents, a night-sky base in dark mode and a
+   pale, high-altitude sky in light mode. Every component should
+   draw color / spacing / radius / shadow values from here (via
+   Tailwind utility classes mapped below) rather than inventing
+   one-off numbers per component.
    ============================================================ */
 @theme {
   /* ---- Fonts ---- */
@@ -12,20 +15,27 @@
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
 
-  /* ---- Brand palette (light defaults) ---- */
-  --color-bg: #faf9f6;
+  /* ---- Brand palette (light / "daylight sky" defaults) ---- */
+  --color-bg: #f6f6fb;
   --color-bg-raised: #ffffff;
-  --color-fg: #1a1a1f;
-  --color-fg-muted: #5b5b66;
-  --color-border: #e4e2dc;
+  --color-fg: #14141f;
+  --color-fg-muted: #5a5a70;
+  --color-border: #e2e1ee;
 
-  --color-accent: #7c5cfc;
+  --color-accent: #6c4cf0;
   --color-accent-soft: #ece7ff;
-  --color-accent-2: #0f766e;
-  --color-accent-2-soft: #ccfbf1;
+  --color-accent-2: #a15c07;
+  --color-accent-2-soft: #fff1da;
 
   --color-success: #22a06b;
   --color-danger: #e5484d;
+
+  /* ---- Starfield / nebula backdrop (theme-aware, used by body::before/::after) ---- */
+  --star-color: #6c4cf0;
+  --star-opacity: 0.16;
+  --nebula-opacity: 0.35;
+  --twinkle-opacity-low: 1;
+  --twinkle-opacity-high: 1;
 
   /* ---- Radius scale (2-3 values, reused everywhere) ---- */
   --radius-sm: 0.5rem;
@@ -36,24 +46,32 @@
   --shadow-resting: 0 1px 2px rgba(20, 20, 30, 0.06), 0 1px 1px rgba(20, 20, 30, 0.04);
   --shadow-raised: 0 12px 24px -8px rgba(20, 20, 30, 0.18), 0 4px 8px -2px rgba(20, 20, 30, 0.08);
   --shadow-modal: 0 24px 48px -12px rgba(10, 10, 15, 0.35);
+  --shadow-glow: 0 0 0 rgba(124, 92, 252, 0);
 }
 
 /* ---- Dark mode overrides (same token names, new values) ---- */
 :root.dark {
-  --color-bg: #0b0c10;
-  --color-bg-raised: #14151b;
-  --color-fg: #f4f3ef;
-  --color-fg-muted: #a3a2ad;
-  --color-border: #24252d;
+  --color-bg: #05060f;
+  --color-bg-raised: #0e1020;
+  --color-fg: #eef0fb;
+  --color-fg-muted: #9a9cbb;
+  --color-border: #202340;
 
   --color-accent: #9c85ff;
-  --color-accent-soft: rgba(124, 92, 252, 0.16);
-  --color-accent-2: #2dd4bf;
-  --color-accent-2-soft: rgba(45, 212, 191, 0.16);
+  --color-accent-soft: rgba(156, 133, 255, 0.16);
+  --color-accent-2: #ffc164;
+  --color-accent-2-soft: rgba(255, 193, 100, 0.16);
+
+  --star-color: #ffffff;
+  --star-opacity: 0.85;
+  --nebula-opacity: 0.55;
+  --twinkle-opacity-low: 0.35;
+  --twinkle-opacity-high: 1;
 
   --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-raised: 0 12px 24px -8px rgba(0, 0, 0, 0.5), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
   --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 24px -4px rgba(156, 133, 255, 0.55);
 }
 
 @layer base {
@@ -71,6 +89,55 @@
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  /* ---- Starfield: a fixed, evenly-tiled scatter of stars behind every page.
+     Built from repeating radial-gradients rather than randomized per-load, so
+     the sky reads as deliberately placed constellations rather than noise. ---- */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    background-image:
+      radial-gradient(1.6px 1.6px at 8% 18%, var(--star-color), transparent 60%),
+      radial-gradient(1px 1px at 22% 64%, var(--star-color), transparent 60%),
+      radial-gradient(1.2px 1.2px at 38% 12%, var(--star-color), transparent 60%),
+      radial-gradient(1px 1px at 52% 78%, var(--star-color), transparent 60%),
+      radial-gradient(1.8px 1.8px at 64% 34%, var(--star-color), transparent 60%),
+      radial-gradient(1px 1px at 78% 58%, var(--star-color), transparent 60%),
+      radial-gradient(1.3px 1.3px at 90% 22%, var(--star-color), transparent 60%),
+      radial-gradient(1px 1px at 12% 90%, var(--star-color), transparent 60%),
+      radial-gradient(1.5px 1.5px at 46% 46%, var(--star-color), transparent 60%),
+      radial-gradient(1px 1px at 96% 84%, var(--star-color), transparent 60%);
+    background-repeat: repeat;
+    background-size: 480px 480px;
+    opacity: var(--star-opacity);
+    animation: twinkle 6s ease-in-out infinite;
+  }
+
+  /* ---- Nebula wash: two soft, low-contrast color clouds for depth. ---- */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -3;
+    pointer-events: none;
+    background-image:
+      radial-gradient(ellipse 60% 45% at 12% 10%, var(--color-accent-soft), transparent 60%),
+      radial-gradient(ellipse 55% 40% at 88% 82%, var(--color-accent-2-soft), transparent 60%);
+    opacity: var(--nebula-opacity);
+  }
+
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: calc(var(--star-opacity) * var(--twinkle-opacity-high));
+    }
+    50% {
+      opacity: calc(var(--star-opacity) * var(--twinkle-opacity-low));
+    }
   }
 
   h1,

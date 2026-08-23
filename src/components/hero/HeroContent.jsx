@@ -31,7 +31,7 @@ export function HeroContent() {
           transition={{ duration: durations.transition, ease: easeSignature }}
           className="mb-4 font-mono text-sm text-[var(--color-accent)]"
         >
-          {"// "}Computer Science student & builder
+          {"// "}Computer Science student, building across the stars
         </motion.p>
 
         <motion.h1
@@ -60,8 +60,8 @@ export function HeroContent() {
         >
           {profile.tagline} — I build{" "}
           <span className="text-[var(--color-accent)]">AI-powered</span> and{" "}
-          <span className="text-[var(--color-accent-2)]">data-driven</span> applications, end to
-          end.
+          <span className="text-[var(--color-accent-2)]">data-driven</span> applications, launched
+          end to end.
         </motion.p>
 
         <motion.div

@@ -9,7 +9,8 @@ export function Footer() {
     <footer className="border-t border-[var(--color-border)] py-10">
       <div className="container-page flex flex-col items-center gap-4 text-sm text-[var(--color-fg-muted)] sm:flex-row sm:justify-between">
         <p>
-          © {year} {profile.name}. Built with React, Vite & Tailwind CSS.
+          <span className="text-[var(--color-accent-2)]" aria-hidden="true">✦</span> © {year}{" "}
+          {profile.name} · Built with React, Vite & Tailwind CSS, somewhere in the Milky Way.
         </p>
         <div className="flex items-center gap-4">
           <a

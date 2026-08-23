@@ -3,7 +3,7 @@ import { easeSignature, durations, getMotionComponent } from "../../lib/motion.j
 
 const variantClasses = {
   primary:
-    "bg-[var(--color-accent)] text-white hover:brightness-110 shadow-[var(--shadow-resting)]",
+    "bg-[var(--color-accent)] text-white hover:brightness-110 shadow-[var(--shadow-resting)] hover:shadow-[var(--shadow-glow)]",
   secondary:
     "bg-transparent text-[var(--color-fg)] border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]",
   ghost: "bg-transparent text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]",

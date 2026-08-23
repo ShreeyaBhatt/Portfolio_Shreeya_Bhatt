@@ -7,10 +7,12 @@ const LINK_DISTANCE = 140;
 const CURSOR_RADIUS = 160;
 
 /**
- * The site's signature motif: a hand-rolled canvas "circuit" of nodes on a
- * loose grid, connected by distance-fading lines, gently repelled by the
- * cursor. Reused at different densities/heights across pages so the motif
- * recurs consistently (Home hero, Projects/Certifications header strip).
+ * The site's signature motif: a hand-rolled canvas starfield — stars of
+ * varying magnitude sit on a tidy, lightly-jittered grid (not a fully random
+ * scatter, so the sky reads as deliberate constellations rather than noise),
+ * connected by distance-fading lines, gently repelled by the cursor. Reused
+ * at different densities/heights across pages so the motif recurs
+ * consistently (Home hero, Projects/Certifications header strip).
  *
  * Perf: node count capped, devicePixelRatio capped, animation loop pauses
  * off-screen via IntersectionObserver, and prefers-reduced-motion renders a
@@ -36,14 +38,14 @@ export function SignalField({ density = 1, interactive = true, className = "" })
 
     const accentColor = getComputedStyle(document.documentElement)
       .getPropertyValue("--color-accent")
-      .trim() || "#7C5CFC";
+      .trim() || "#6C4CF0";
 
     function hexToRgb(hex) {
       const parsed = hex.replace("#", "");
       const bigint = parseInt(parsed, 16);
       return { r: (bigint >> 16) & 255, g: (bigint >> 8) & 255, b: bigint & 255 };
     }
-    const rgb = hexToRgb(accentColor.length === 7 ? accentColor : "#7C5CFC");
+    const rgb = hexToRgb(accentColor.length === 7 ? accentColor : "#6C4CF0");
 
     function buildNodes() {
       const targetCount = Math.max(12, Math.min(MAX_NODES, Math.round((width / 18) * density)));
@@ -56,8 +58,13 @@ export function SignalField({ density = 1, interactive = true, className = "" })
       for (let r = 0; r < rows; r += 1) {
         for (let c = 0; c < cols; c += 1) {
           if (nodes.length >= targetCount) break;
-          const jitterX = (Math.random() - 0.5) * cellW * 0.6;
-          const jitterY = (Math.random() - 0.5) * cellH * 0.6;
+          // Modest jitter (not a full random scatter) keeps the sky reading
+          // as an orderly star grid rather than chaotic noise.
+          const jitterX = (Math.random() - 0.5) * cellW * 0.35;
+          const jitterY = (Math.random() - 0.5) * cellH * 0.35;
+          // Star magnitude: mostly small/dim stars, occasional bright ones.
+          const magnitudeRoll = Math.random();
+          const radius = magnitudeRoll > 0.92 ? 2.4 : magnitudeRoll > 0.6 ? 1.7 : 1.1;
           nodes.push({
             baseX: c * cellW + cellW / 2 + jitterX,
             baseY: r * cellH + cellH / 2 + jitterY,
@@ -65,6 +72,7 @@ export function SignalField({ density = 1, interactive = true, className = "" })
             y: 0,
             vx: (Math.random() - 0.5) * 0.15,
             vy: (Math.random() - 0.5) * 0.15,
+            radius,
           });
         }
       }
@@ -110,14 +118,15 @@ export function SignalField({ density = 1, interactive = true, className = "" })
         node.y += node.vy;
       });
 
-      // links
+      // constellation lines — thin and low-opacity, so the shape stays legible
+      // without ever looking like a tangle.
       for (let i = 0; i < nodes.length; i += 1) {
         for (let j = i + 1; j < nodes.length; j += 1) {
           const a = nodes[i];
           const b = nodes[j];
           const dist = Math.hypot(a.x - b.x, a.y - b.y);
           if (dist < LINK_DISTANCE) {
-            const opacity = (1 - dist / LINK_DISTANCE) * 0.35;
+            const opacity = (1 - dist / LINK_DISTANCE) * 0.3;
             ctx.strokeStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${opacity})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
@@ -128,13 +137,16 @@ export function SignalField({ density = 1, interactive = true, className = "" })
         }
       }
 
-      // nodes
+      // stars — a soft glow behind a bright core, sized by magnitude
+      ctx.shadowColor = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.9)`;
       nodes.forEach((node) => {
-        ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.75)`;
+        ctx.shadowBlur = node.radius * 4;
+        ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.85)`;
         ctx.beginPath();
-        ctx.arc(node.x, node.y, 2, 0, Math.PI * 2);
+        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
         ctx.fill();
       });
+      ctx.shadowBlur = 0;
     }
 
     function loop() {

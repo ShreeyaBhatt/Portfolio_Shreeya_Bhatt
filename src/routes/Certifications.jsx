@@ -1,6 +1,7 @@
 import { motion } from "motion/react";
 import { Award, ExternalLink } from "lucide-react";
 import { Section } from "../components/ui/Section.jsx";
+import { PageEyebrow } from "../components/common/PageEyebrow.jsx";
 import { Card } from "../components/ui/Card.jsx";
 import { Tag } from "../components/ui/Tag.jsx";
 import { SignalField } from "../components/hero/SignalField.jsx";
@@ -18,12 +19,12 @@ export default function Certifications() {
         <SignalField density={0.5} interactive={false} className="opacity-60" />
       </div>
       <Section className="pt-8">
-        <p className="font-mono text-sm text-[var(--color-accent)]">// certifications</p>
+        <PageEyebrow>// flight certifications</PageEyebrow>
         <h1 className="mt-2 text-4xl font-bold tracking-tight md:text-5xl">
           Certifications & Credentials
         </h1>
         <p className="mt-4 max-w-2xl text-[var(--color-fg-muted)]">
-          Courses I've completed to build and round out my skills — from Python fundamentals to
+          Courses I've completed while charting this trajectory — from Python fundamentals to
           machine learning, Java data structures, and web development.
         </p>
 
@@ -72,7 +73,7 @@ export default function Certifications() {
                   </a>
                 ) : (
                   <p className="mt-4 font-mono text-xs text-[var(--color-fg-muted)]">
-                    Credential link coming soon
+                    Credential link in transit
                   </p>
                 )}
               </Card>

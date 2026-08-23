@@ -42,7 +42,13 @@ export function Nav() {
           className="font-display text-lg font-semibold tracking-tight"
           onClick={() => setMenuOpen(false)}
         >
-          SB<span className="text-[var(--color-accent)]">.</span>
+          SB
+          <span
+            className="text-[var(--color-accent-2)] [text-shadow:0_0_8px_var(--color-accent-2)]"
+            aria-hidden="true"
+          >
+            .
+          </span>
         </NavLink>
 
         <ul className="hidden items-center gap-1 md:flex">
