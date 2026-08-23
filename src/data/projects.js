@@ -134,6 +134,7 @@ export const projects = [
   },
 ];
 
+/** @param {string} slug */
 export function getProjectBySlug(slug) {
   return projects.find((project) => project.slug === slug);
 }

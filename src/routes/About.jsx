@@ -2,7 +2,7 @@ import { Section } from "../components/ui/Section.jsx";
 import { SectionHeading } from "../components/common/SectionHeading.jsx";
 import { Link } from "react-router-dom";
 import { EducationTimeline } from "../components/about/EducationTimeline.jsx";
-import { SkillsBento } from "../components/about/SkillsBento.jsx";
+import { SkillsConstellation } from "../components/about/SkillsConstellation.jsx";
 import { GithubIdentityBlock } from "../components/about/GithubIdentityBlock.jsx";
 import { BeyondTheCode } from "../components/about/BeyondTheCode.jsx";
 import { certifications } from "../data/certifications.js";
@@ -26,7 +26,7 @@ export default function About() {
 
       <Section className="pt-0">
         <SectionHeading eyebrow="// skills" title="Skills" />
-        <SkillsBento />
+        <SkillsConstellation />
       </Section>
 
       <Section className="pt-0">
