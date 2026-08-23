@@ -32,10 +32,8 @@
 
   /* ---- Starfield / nebula backdrop (theme-aware, used by body::before/::after) ---- */
   --star-color: #6c4cf0;
-  --star-opacity: 0.16;
+  --star-opacity: 0.4;
   --nebula-opacity: 0.35;
-  --twinkle-opacity-low: 1;
-  --twinkle-opacity-high: 1;
 
   /* ---- Radius scale (2-3 values, reused everywhere) ---- */
   --radius-sm: 0.5rem;
@@ -65,8 +63,6 @@
   --star-color: #ffffff;
   --star-opacity: 0.85;
   --nebula-opacity: 0.55;
-  --twinkle-opacity-low: 0.35;
-  --twinkle-opacity-high: 1;
 
   --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-raised: 0 12px 24px -8px rgba(0, 0, 0, 0.5), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
@@ -91,52 +87,30 @@
     transition: background-color 200ms ease, color 200ms ease;
   }
 
-  /* ---- Starfield: a fixed, evenly-tiled scatter of stars behind every page.
-     Built from repeating radial-gradients rather than randomized per-load, so
-     the sky reads as deliberately placed constellations rather than noise. ---- */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
-    background-image:
-      radial-gradient(1.6px 1.6px at 8% 18%, var(--star-color), transparent 60%),
-      radial-gradient(1px 1px at 22% 64%, var(--star-color), transparent 60%),
-      radial-gradient(1.2px 1.2px at 38% 12%, var(--star-color), transparent 60%),
-      radial-gradient(1px 1px at 52% 78%, var(--star-color), transparent 60%),
-      radial-gradient(1.8px 1.8px at 64% 34%, var(--star-color), transparent 60%),
-      radial-gradient(1px 1px at 78% 58%, var(--star-color), transparent 60%),
-      radial-gradient(1.3px 1.3px at 90% 22%, var(--star-color), transparent 60%),
-      radial-gradient(1px 1px at 12% 90%, var(--star-color), transparent 60%),
-      radial-gradient(1.5px 1.5px at 46% 46%, var(--star-color), transparent 60%),
-      radial-gradient(1px 1px at 96% 84%, var(--star-color), transparent 60%);
-    background-repeat: repeat;
-    background-size: 480px 480px;
-    opacity: var(--star-opacity);
-    animation: twinkle 6s ease-in-out infinite;
-  }
-
-  /* ---- Nebula wash: two soft, low-contrast color clouds for depth. ---- */
+  /* ---- Nebula wash: two soft, low-contrast color clouds for depth, drifting
+     very slowly so the backdrop never feels perfectly still. The stars
+     themselves (parallax + shooting stars + the odd passing rocket) are
+     rendered by <SpaceBackground>, mounted once in the layout — see
+     src/components/common/SpaceBackground.jsx. ---- */
   body::after {
     content: "";
     position: fixed;
-    inset: 0;
+    inset: -10%;
     z-index: -3;
     pointer-events: none;
     background-image:
       radial-gradient(ellipse 60% 45% at 12% 10%, var(--color-accent-soft), transparent 60%),
       radial-gradient(ellipse 55% 40% at 88% 82%, var(--color-accent-2-soft), transparent 60%);
     opacity: var(--nebula-opacity);
+    animation: nebula-drift 90s ease-in-out infinite alternate;
   }
 
-  @keyframes twinkle {
-    0%,
-    100% {
-      opacity: calc(var(--star-opacity) * var(--twinkle-opacity-high));
+  @keyframes nebula-drift {
+    0% {
+      transform: translate(0, 0) scale(1);
     }
-    50% {
-      opacity: calc(var(--star-opacity) * var(--twinkle-opacity-low));
+    100% {
+      transform: translate(-2%, 2%) scale(1.05);
     }
   }
 

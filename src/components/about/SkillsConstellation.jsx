@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useMemo } from "react";
 import { skillCategories } from "../../data/skills.js";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
@@ -26,12 +26,12 @@ function buildGraph() {
 
   skillCategories.forEach((cat, categoryIndex) => {
     const hubId = `hub-${categoryIndex}`;
-    edges.push({ id: `edge-${hubId}`, from: CORE_ID, to: hubId, categoryIndex });
+    edges.push({ id: `edge-${hubId}`, from: CORE_ID, to: hubId, categoryIndex, isCoreEdge: true });
 
     cat.skills.forEach((skill, skillIndex) => {
       const id = `skill-${categoryIndex}-${skillIndex}`;
       skillNodes.push({ id, label: skill, type: "skill", categoryIndex, hubId });
-      edges.push({ id: `edge-${id}`, from: hubId, to: id, categoryIndex });
+      edges.push({ id: `edge-${id}`, from: hubId, to: id, categoryIndex, isCoreEdge: false });
     });
   });
 
@@ -69,6 +69,15 @@ function computeLayout(hubs, skillNodes) {
   return positions;
 }
 
+/**
+ * A fixed, read-only star chart of skills grouped by category — no drag, no
+ * hover-to-highlight. The layout never moves; what's "alive" is the sky
+ * itself: every star twinkles on its own cycle (SMIL `<animate>`, so it
+ * costs nothing in JS), the core pulses like a small sun, and a point of
+ * light periodically travels each core→hub line, as if signal were flowing
+ * out through the constellation. All of it is skipped for reduced motion,
+ * which renders one calm, static frame.
+ */
 export function SkillsConstellation() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const { hubs, skillNodes, edges } = useMemo(buildGraph, []);
@@ -76,97 +85,20 @@ export function SkillsConstellation() {
     () => [{ id: CORE_ID, label: "Skills", type: "core", categoryIndex: null }, ...hubs, ...skillNodes],
     [hubs, skillNodes]
   );
-
-  const [positions, setPositions] = useState(() => computeLayout(hubs, skillNodes));
-  const [hoveredId, setHoveredId] = useState(null);
-  const [selectedId, setSelectedId] = useState(null);
-  const svgRef = useRef(null);
-  const dragRef = useRef(null);
-
-  const activeId = hoveredId ?? selectedId;
-
-  const activeCategoryIndex = useMemo(() => {
-    if (!activeId) return null;
-    if (activeId === CORE_ID) return "all";
-    const hub = hubs.find((h) => h.id === activeId);
-    if (hub) return hub.categoryIndex;
-    const skill = skillNodes.find((s) => s.id === activeId);
-    return skill ? skill.categoryIndex : null;
-  }, [activeId, hubs, skillNodes]);
-
-  const isDimmed = useCallback(
-    (categoryIndex, nodeId) => {
-      if (activeCategoryIndex === null || activeCategoryIndex === "all") return false;
-      if (nodeId === CORE_ID) return false;
-      return categoryIndex !== activeCategoryIndex;
-    },
-    [activeCategoryIndex]
-  );
-
-  const toSvgPoint = useCallback((clientX, clientY) => {
-    const svgEl = svgRef.current;
-    if (!svgEl) return { x: 0, y: 0 };
-    const point = svgEl.createSVGPoint();
-    point.x = clientX;
-    point.y = clientY;
-    const ctm = svgEl.getScreenCTM();
-    if (!ctm) return { x: 0, y: 0 };
-    const inverted = point.matrixTransform(ctm.inverse());
-    return { x: inverted.x, y: inverted.y };
-  }, []);
-
-  const handlePointerDown = useCallback(
-    (event, nodeId) => {
-      event.currentTarget.setPointerCapture(event.pointerId);
-      const start = toSvgPoint(event.clientX, event.clientY);
-      const nodePos = positions[nodeId];
-      dragRef.current = {
-        nodeId,
-        offsetX: nodePos.x - start.x,
-        offsetY: nodePos.y - start.y,
-        moved: false,
-      };
-    },
-    [positions, toSvgPoint]
-  );
-
-  const handlePointerMove = useCallback(
-    (event) => {
-      if (!dragRef.current) return;
-      const point = toSvgPoint(event.clientX, event.clientY);
-      dragRef.current.moved = true;
-      const { nodeId, offsetX, offsetY } = dragRef.current;
-      setPositions((prev) => ({
-        ...prev,
-        [nodeId]: { x: point.x + offsetX, y: point.y + offsetY },
-      }));
-    },
-    [toSvgPoint]
-  );
-
-  const handlePointerUp = useCallback((_event, nodeId) => {
-    if (dragRef.current && !dragRef.current.moved) {
-      setSelectedId((current) => (current === nodeId ? null : nodeId));
-    }
-    dragRef.current = null;
-  }, []);
-
-  const transition = prefersReducedMotion ? undefined : "opacity 200ms ease, stroke 200ms ease";
+  const positions = useMemo(() => computeLayout(hubs, skillNodes), [hubs, skillNodes]);
+  const coreEdges = useMemo(() => edges.filter((edge) => edge.isCoreEdge), [edges]);
 
   return (
     <div className="w-full">
       <p className="mb-4 text-center font-mono text-xs text-[var(--color-fg-muted)] sm:text-left">
-        {"// hover or tap a star to trace its constellation. Drag any star to redraw the sky."}
+        {"// a fixed star chart of skills, grouped by category"}
       </p>
       <div className="overflow-x-auto">
         <svg
-          ref={svgRef}
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
           role="img"
-          aria-label="Interactive star chart of skills grouped by category"
-          className="mx-auto block h-auto min-w-[820px] max-w-full touch-none select-none"
-          onPointerMove={handlePointerMove}
-          onMouseLeave={() => setHoveredId(null)}
+          aria-label="Star chart of skills grouped by category"
+          className="mx-auto block h-auto min-w-[820px] max-w-full select-none"
         >
           <defs>
             <filter id="starGlow" x="-120%" y="-120%" width="340%" height="340%">
@@ -178,11 +110,10 @@ export function SkillsConstellation() {
             </filter>
           </defs>
 
-          {edges.map((edge) => {
+          {edges.map((edge, i) => {
             const from = positions[edge.from];
             const to = positions[edge.to];
-            const dimmed = isDimmed(edge.categoryIndex, edge.from) && isDimmed(edge.categoryIndex, edge.to);
-            const isCoreEdge = edge.from === CORE_ID;
+            const baseOpacity = edge.isCoreEdge ? 0.6 : 0.4;
             return (
               <line
                 key={edge.id}
@@ -190,44 +121,76 @@ export function SkillsConstellation() {
                 y1={from.y}
                 x2={to.x}
                 y2={to.y}
-                stroke={dimmed ? "var(--color-border)" : isCoreEdge ? "var(--color-accent-2)" : "var(--color-accent)"}
-                strokeWidth={dimmed ? 1 : 1.5}
-                opacity={dimmed ? 0.25 : 0.6}
-                style={{ transition }}
-              />
+                stroke={edge.isCoreEdge ? "var(--color-accent-2)" : "var(--color-accent)"}
+                strokeWidth={edge.isCoreEdge ? 1.5 : 1}
+                opacity={baseOpacity}
+              >
+                {!prefersReducedMotion && (
+                  <animate
+                    attributeName="opacity"
+                    values={`${baseOpacity};${baseOpacity * 0.35};${baseOpacity}`}
+                    dur={`${4 + (i % 5)}s`}
+                    begin={`${(i % 7) * 0.4}s`}
+                    repeatCount="indefinite"
+                  />
+                )}
+              </line>
             );
           })}
 
-          {allNodes.map((node) => {
+          {!prefersReducedMotion &&
+            coreEdges.map((edge, i) => {
+              const from = positions[edge.from];
+              const to = positions[edge.to];
+              return (
+                <circle key={`spark-${edge.id}`} r={3} fill="var(--color-accent-2)" filter="url(#starGlow)">
+                  <animateMotion
+                    dur={`${3.5 + i * 0.4}s`}
+                    begin={`${i * 0.6}s`}
+                    repeatCount="indefinite"
+                    path={`M${from.x},${from.y} L${to.x},${to.y}`}
+                  />
+                  <animate
+                    attributeName="opacity"
+                    values="0;1;1;0"
+                    dur={`${3.5 + i * 0.4}s`}
+                    begin={`${i * 0.6}s`}
+                    repeatCount="indefinite"
+                  />
+                </circle>
+              );
+            })}
+
+          {allNodes.map((node, i) => {
             const pos = positions[node.id];
-            const dimmed = isDimmed(node.categoryIndex, node.id);
             const isCore = node.type === "core";
             const isHub = node.type === "hub";
             const radius = isCore ? 16 : isHub ? 24 : 12;
+            const twinkleDur = 2.4 + ((i * 37) % 30) / 10;
+            const twinkleDelay = ((i * 53) % 40) / 10;
 
             return (
-              <g
-                key={node.id}
-                transform={`translate(${pos.x}, ${pos.y})`}
-                tabIndex={0}
-                role="button"
-                aria-label={node.label}
-                data-cursor-hover
-                onPointerDown={(event) => handlePointerDown(event, node.id)}
-                onPointerUp={(event) => handlePointerUp(event, node.id)}
-                onMouseEnter={() => setHoveredId(node.id)}
-                onMouseLeave={() => setHoveredId(null)}
-                onFocus={() => setHoveredId(node.id)}
-                onBlur={() => setHoveredId(null)}
-                style={{ cursor: "grab", opacity: dimmed ? 0.3 : 1, transition, outline: "none" }}
-              >
+              <g key={node.id} transform={`translate(${pos.x}, ${pos.y})`}>
                 <circle
                   r={radius}
                   fill={isCore ? "var(--color-accent)" : "var(--color-bg-raised)"}
                   stroke={isCore ? "none" : isHub ? "var(--color-accent-2)" : "var(--color-accent)"}
                   strokeWidth={isHub ? 2 : 1.5}
                   filter={isCore || isHub ? "url(#starGlow)" : undefined}
-                />
+                >
+                  {!prefersReducedMotion && (
+                    <animate
+                      attributeName="opacity"
+                      values={isCore ? "1;0.75;1" : "1;0.6;1"}
+                      dur={`${isCore ? 3 : twinkleDur}s`}
+                      begin={`${isCore ? 0 : twinkleDelay}s`}
+                      repeatCount="indefinite"
+                    />
+                  )}
+                  {!prefersReducedMotion && isCore && (
+                    <animate attributeName="r" values={`${radius};${radius + 2};${radius}`} dur="3s" repeatCount="indefinite" />
+                  )}
+                </circle>
                 {isCore && (
                   <circle r={4} fill="var(--color-bg-raised)" opacity={0.9} aria-hidden="true" />
                 )}
