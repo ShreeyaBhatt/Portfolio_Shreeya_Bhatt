@@ -1,10 +1,13 @@
-# Shreeya Bhatt — Portfolio
+# Shreeya Bhatt — The Digital Lab
 
-A multi-page personal portfolio built with React, Vite, Tailwind CSS, React Router, and Motion (Framer Motion).
+A personal portfolio built as an interactive "digital software laboratory" — React, Vite,
+Tailwind CSS v4, React Router, Motion, and a lazy React Three Fiber accent. Editorial type on
+a near-black ground, one warm accent, mono telemetry, a command palette, and an optional
+page-wide "scan" interaction.
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-portfolio--shreeya--bhatt.vercel.app-000?style=for-the-badge&logo=vercel&logoColor=white)](https://portfolio-shreeya-bhatt.vercel.app/)
 
-![React](https://img.shields.io/badge/React_18-149ECA?style=flat-square&logo=react&logoColor=white)
+![React](https://img.shields.io/badge/React_19-149ECA?style=flat-square&logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_v4-38BDF8?style=flat-square&logo=tailwindcss&logoColor=white)
 ![React Router](https://img.shields.io/badge/React_Router_v6-CA4245?style=flat-square&logo=reactrouter&logoColor=white)
@@ -18,7 +21,7 @@ A multi-page personal portfolio built with React, Vite, Tailwind CSS, React Rout
 
 | Layer | Choice |
 |---|---|
-| Build tool | Vite + React 18 (plain JavaScript/JSX — no TypeScript) |
+| Build tool | Vite + React 19 (plain JavaScript/JSX — no TypeScript) |
 | Styling | Tailwind CSS v4 (CSS-first `@theme` design tokens in `src/styles/index.css`) |
 | Routing | React Router v6 for multi-page navigation |
 | Animation | Motion (`motion/react`) |
@@ -37,21 +40,28 @@ npm run preview   # preview the production build locally
 
 ```
 src/
-├─ data/*.js                              # all editable content — projects, skills,
-│                                          # certifications, education, profile
+├─ data/*.js                     # all editable content — projects, skills, certifications,
+│                                 # education, profile, timeline, log, site config
 ├─ components/
-│  ├─ common/SpaceBackground.jsx           # parallax starfield canvas, mounted once
-│  ├─ common/RevealLines.jsx               # masked line-by-line heading reveal
-│  ├─ common/SectionHeader.jsx             # the numbered editorial section header
-│  ├─ about/SkillsCarousel.jsx             # colour-themed skills carousel
-│  ├─ projects/ProjectIndex.jsx            # the work, as a numbered index
-│  └─ home/                                # the home page's scroll narrative
+│  ├─ common/LabBackground.jsx    # the 1px-grid + grain + glow backdrop, mounted once
+│  ├─ common/LabStatus.jsx        # the persistent corner status readout
+│  ├─ common/CommandPalette.jsx   # "/" or ⌘K command centre
+│  ├─ common/LabScan.jsx          # the "scan the lab" signature interaction
+│  ├─ common/EasterEggs.jsx       # keystroke eggs (`sudo explore`, …)
+│  ├─ common/RevealLines.jsx      # masked line-by-line heading reveal
+│  ├─ hero/                       # "lab initialization" hero + node-field visual
+│  ├─ about/                      # timeline, toolbox graph, "how I build", lab activity
+│  ├─ projects/                   # experiment index, featured experiment, schematic diagram
+│  └─ contact/ContactForm.jsx     # the "experiment request" form
 └─ lib/
-   ├─ motion.js                            # shared animation variants + easings
-   └─ tokens.js                            # motion durations shared with CSS
+   ├─ motion.js                   # shared animation variants + easings
+   ├─ labEvents.js                # tiny window-event bus for the interaction layer
+   └─ tokens.js                   # motion durations shared with CSS
 ```
 
-Edit the files in `src/data/` to update the site's content — nothing else needs to change for routine content updates.
+Edit the files in `src/data/` to update the site's content — nothing else needs to change for
+routine content updates. `src/data/site.js` holds `contactEndpoint` (blank → the contact form
+drafts a pre-filled email instead of POSTing).
 
 ## Design system
 
@@ -60,7 +70,7 @@ All colour, type, spacing, radius, and elevation values live as CSS custom prope
 Two conventions worth knowing before editing:
 
 - **The fluid type scale** (`text-display` → `text-lead`) ships size, line-height, and tracking together via Tailwind's `--text-*--line-height` / `--text-*--letter-spacing` companions. Use the step; don't pair a size with a one-off leading.
-- **`.tone-*` classes** supply the skills carousel's per-panel palette (`--slide-accent`, `--slide-tint`) and flip with the theme automatically. A slide's colour is one class, set from `tone` in `src/data/skills.js`.
+- **One accent only.** `--color-accent` (sodium amber) is the single colour with a voice; `--color-accent-2` (steel) is structural — diagram lines and telemetry rules — and never carries emphasis.
 
 ## Deployment (Vercel)
 

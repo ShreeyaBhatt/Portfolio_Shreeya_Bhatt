@@ -3,21 +3,32 @@ import { motion, useMotionValue, useSpring } from "motion/react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 /**
- * Small dot + outlined ring that scales on hoverable elements. Desktop
- * (pointer: fine) only.
+ * Small dot + outlined ring that reacts to what it's over. Desktop
+ * (pointer: fine) only; native cursor everywhere else.
  *
- * Deliberately not `mix-blend-mode`-based: blend-mode cursors look great in
- * theory but render unreliably in practice (they can composite as a solid
- * opaque blob instead of inverting, especially over canvas content or inside
- * nested stacking contexts), which ends up covering the content underneath
- * instead of revealing it. A plain accent-colored dot plus a mostly-hollow
- * ring achieves the same "custom cursor" feel without depending on blending
- * to render correctly — the ring's interior stays transparent so it never
- * blocks whatever is beneath it.
+ * Two tiers of state:
+ *  - `[data-cursor-hover]`  → the ring expands. Generic "this is interactive".
+ *  - `[data-cursor="..."]`  → the ring expands further and a mono label trails
+ *    it. Context-aware readouts:
+ *        project  → VIEW EXPERIMENT →
+ *        external → OPEN →
+ *        contact  → CONNECT →
+ *
+ * Deliberately not `mix-blend-mode`-based: blend-mode cursors composite
+ * unreliably over canvas / nested stacking contexts and can end up an opaque
+ * blob. A plain accent dot plus a mostly-hollow ring gets the same feel without
+ * depending on blending to render.
  */
+const LABELS = {
+  project: "View experiment",
+  external: "Open",
+  contact: "Connect",
+};
+
 export function CustomCursor() {
   const [enabled, setEnabled] = useState(false);
   const [hovering, setHovering] = useState(false);
+  const [label, setLabel] = useState(null);
   const prefersReducedMotion = usePrefersReducedMotion();
 
   const x = useMotionValue(-100);
@@ -46,7 +57,10 @@ export function CustomCursor() {
     }
 
     function handleOver(event) {
-      setHovering(Boolean(event.target.closest("[data-cursor-hover]")));
+      const labelled = event.target.closest("[data-cursor]");
+      const nextLabel = labelled ? LABELS[labelled.getAttribute("data-cursor")] ?? null : null;
+      setLabel(nextLabel);
+      setHovering(Boolean(nextLabel) || Boolean(event.target.closest("[data-cursor-hover]")));
     }
 
     window.addEventListener("pointermove", handleMove);
@@ -62,6 +76,8 @@ export function CustomCursor() {
 
   if (!enabled) return null;
 
+  const ringSize = hovering ? 44 : 26;
+
   return (
     <>
       {/* small solid dot, tracks the pointer exactly */}
@@ -75,9 +91,12 @@ export function CustomCursor() {
           translateY: "-50%",
           width: 6,
           height: 6,
+          opacity: label ? 0 : 1,
         }}
       />
-      {/* hollow ring, trails slightly behind and grows on hover — never opaque */}
+
+      {/* hollow ring, trails slightly and grows on hover — hidden while a
+          contextual label is showing */}
       <motion.div
         aria-hidden="true"
         className="pointer-events-none fixed left-0 top-0 z-[60] rounded-full border-2 border-[var(--color-accent)]"
@@ -86,12 +105,28 @@ export function CustomCursor() {
           y: ringY,
           translateX: "-50%",
           translateY: "-50%",
-          width: hovering ? 44 : 26,
-          height: hovering ? 44 : 26,
-          opacity: hovering ? 0.9 : 0.45,
-          transition: "width 150ms ease, height 150ms ease, opacity 150ms ease",
+          width: ringSize,
+          height: ringSize,
+          opacity: label ? 0 : hovering ? 0.9 : 0.45,
+          transition: "width 160ms ease, height 160ms ease, opacity 160ms ease",
         }}
       />
+
+      {/* contextual label pill — replaces the ring on [data-cursor] elements */}
+      <motion.div
+        aria-hidden="true"
+        className="label-mono pointer-events-none fixed left-0 top-0 z-[60] flex items-center rounded-full bg-[var(--color-accent)] px-3 py-1.5 text-[0.6rem] text-[var(--color-bg)]"
+        style={{
+          x: ringX,
+          y: ringY,
+          translateX: "-50%",
+          translateY: "-50%",
+          opacity: label ? 1 : 0,
+          transition: "opacity 140ms ease",
+        }}
+      >
+        {label ? `${label} →` : ""}
+      </motion.div>
     </>
   );
 }

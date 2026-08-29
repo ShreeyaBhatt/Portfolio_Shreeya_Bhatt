@@ -3,30 +3,29 @@ import { ArrowRight } from "lucide-react";
 import { Section } from "../components/ui/Section.jsx";
 import { SectionHeader } from "../components/common/SectionHeader.jsx";
 import { RevealLines } from "../components/common/RevealLines.jsx";
+import { DevTimeline } from "../components/about/DevTimeline.jsx";
+import { Toolbox } from "../components/about/Toolbox.jsx";
+import { BuildProcess } from "../components/about/BuildProcess.jsx";
+import { LabActivity } from "../components/about/LabActivity.jsx";
 import { EducationTimeline } from "../components/about/EducationTimeline.jsx";
-import { SkillsCarousel } from "../components/about/SkillsCarousel.jsx";
-import { GithubIdentityBlock } from "../components/about/GithubIdentityBlock.jsx";
 import { BeyondTheCode } from "../components/about/BeyondTheCode.jsx";
 import { certifications } from "../data/certifications.js";
 import { profile } from "../data/profile.js";
 
 export default function About() {
-  const firstName = profile.name.split(" ")[0];
-
   return (
     <>
-      <Section className="pb-0 pt-16 md:pt-20">
-        <p className="label-mono text-[var(--color-fg-subtle)]">About</p>
+      <Section className="pb-0 pt-24 md:pt-28">
+        <p className="label-mono text-[var(--color-fg-subtle)]">The Researcher</p>
 
         <RevealLines
           as="h1"
           animateOnMount
-          className="mt-8 text-h1 font-display font-medium"
+          className="mt-8 text-h1 font-display font-semibold"
           lines={[
-            `Hi, I'm ${firstName}.`,
+            "I turn messy problems",
             <span key="l2">
-              I build{" "}
-              <span className="accent-italic text-[var(--color-accent)]">software</span>.
+              into <span className="accent-italic">systems</span>.
             </span>,
           ]}
         />
@@ -37,39 +36,74 @@ export default function About() {
       </Section>
 
       <Section>
-        <SectionHeader index="01" label="Education" meta="2021 — 2028" />
+        <SectionHeader
+          index="01"
+          label="The Timeline"
+          meta="2024 — 2028"
+          titleLines={[
+            "A development",
+            <span key="l2" className="accent-italic">
+              timeline
+            </span>,
+          ]}
+          lead="Not a job history — a record of what got built and what got learned, year by year, drawn from the material on this site."
+        />
+        <div className="mt-16">
+          <DevTimeline />
+        </div>
+      </Section>
+
+      <Section id="skills">
+        <SectionHeader
+          index="02"
+          label="The Toolbox"
+          meta="07 Drawers"
+          titleLines={[
+            "The",
+            <span key="l2" className="accent-italic">
+              toolbox
+            </span>,
+          ]}
+          lead="Python at the centre, everything else growing out from it. Pick a drawer to see what's in it and what it connects to — no ratings, because a number next to a language measures nothing."
+        />
+        <div className="mt-16">
+          <Toolbox />
+        </div>
+      </Section>
+
+      <Section>
+        <SectionHeader
+          index="03"
+          label="How I Build"
+          meta="04 Stages"
+          titleLines={[
+            "How I",
+            <span key="l2" className="accent-italic">
+              build
+            </span>,
+          ]}
+        />
+        <div className="mt-16">
+          <BuildProcess />
+        </div>
+      </Section>
+
+      <Section>
+        <SectionHeader index="04" label="Lab Activity" meta="Telemetry" />
+        <div className="mt-14">
+          <LabActivity />
+        </div>
+      </Section>
+
+      <Section>
+        <SectionHeader index="05" label="Education" meta="2021 — 2028" />
         <div className="mt-16">
           <EducationTimeline />
         </div>
       </Section>
 
       <Section>
-        <SectionHeader
-          index="02"
-          label="Skills"
-          meta="05 Categories"
-          titleLines={[
-            "What I work",
-            <span key="l2" className="accent-italic text-[var(--color-accent)]">
-              with
-            </span>,
-          ]}
-          lead="Five groups, one panel each — swipe or use the arrows to move through them."
-        />
-        <div className="mt-16">
-          <SkillsCarousel />
-        </div>
-      </Section>
-
-      <Section>
-        <SectionHeader index="03" label="GitHub" meta="Open source" />
-        <div className="mt-16">
-          <GithubIdentityBlock />
-        </div>
-      </Section>
-
-      <Section>
-        <SectionHeader index="04" label="Beyond the code" />
+        <SectionHeader index="06" label="Beyond the Code" />
         <div className="mt-16">
           <BeyondTheCode />
         </div>
@@ -77,7 +111,7 @@ export default function About() {
 
       <Section className="pb-28 md:pb-40">
         <SectionHeader
-          index="05"
+          index="07"
           label="Credentials"
           meta={`${String(certifications.length).padStart(2, "0")} Completed`}
           lead={`${certifications.length} certifications so far, spanning Python, machine learning, web fundamentals, Java, and version control.`}

@@ -27,16 +27,18 @@ export function ContactCta() {
       <hr className="hairline" aria-hidden="true" />
 
       <div className="mt-16 md:mt-24">
-        <p className="label-mono text-[var(--color-fg-subtle)]">(04) Contact</p>
+        <p className="label-mono text-[var(--color-fg-subtle)]">
+          <span className="text-[var(--color-accent)]">(04)</span> Open Collaboration
+        </p>
 
         <RevealLines
           lines={[
-            "Let's build",
-            <span key="l2">
-              something <span className="accent-italic text-[var(--color-accent)]">good</span>
+            "Have an interesting",
+            <span key="l2" className="accent-italic">
+              problem?
             </span>,
           ]}
-          className="mt-8 text-hero font-display font-medium"
+          className="mt-8 text-hero font-display font-semibold"
         />
 
         <motion.div
@@ -47,13 +49,14 @@ export function ContactCta() {
           className="mt-14"
         >
           <p className="max-w-xl text-lead text-[var(--color-fg-muted)]">
-            I'm looking for a software engineering internship or a Python developer role. If
-            you're hiring — or just want to talk about a project — I'd like to hear from you.
+            Let's build something useful. I'm looking for a software engineering internship or
+            a Python developer role — if you're hiring, or just want to talk through a
+            project, I'd like to hear from you.
           </p>
 
           <a
             href={`mailto:${profile.email}`}
-            data-cursor-hover
+            data-cursor="contact"
             className="link-underline mt-10 inline-block break-all font-display text-[clamp(1.5rem,4.5vw,3rem)] font-medium leading-tight tracking-[-0.03em] transition-colors hover:text-[var(--color-accent)]"
           >
             {profile.email}

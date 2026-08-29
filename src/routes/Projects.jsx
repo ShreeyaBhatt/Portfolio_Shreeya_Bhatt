@@ -1,26 +1,26 @@
 import { Section } from "../components/ui/Section.jsx";
 import { SectionHeader } from "../components/common/SectionHeader.jsx";
-import { ProjectIndex } from "../components/projects/ProjectIndex.jsx";
+import { ExperimentIndex } from "../components/projects/ExperimentIndex.jsx";
 import { projects } from "../data/projects.js";
 
 export default function Projects() {
   return (
-    <Section className="pt-16 md:pt-20">
+    <Section className="pt-24 md:pt-28">
       <SectionHeader
-        label="Work"
-        meta={`${String(projects.length).padStart(2, "0")} Projects`}
+        label="Experiments"
+        meta={`${String(projects.length).padStart(2, "0")} Logged`}
         titleLines={[
-          "Selected",
-          <span key="l2" className="accent-italic text-[var(--color-accent)]">
-            work
+          "The",
+          <span key="l2" className="accent-italic">
+            experiment log
           </span>,
         ]}
         titleClassName="text-h1"
-        lead="Five projects spanning Python-driven data and AI platforms, full-stack development, and Core Java systems built around solid data structures."
+        lead="Five entries spanning Python-driven data and AI platforms, full-stack development, and Core Java systems built around solid data structures. Hover an entry for its readout; open it for the full case study."
       />
 
       <div className="mt-16">
-        <ProjectIndex projects={projects} />
+        <ExperimentIndex projects={projects} />
       </div>
     </Section>
   );

@@ -1,22 +1,26 @@
-import { HeroContent } from "../components/hero/HeroContent.jsx";
+import { Hero } from "../components/hero/Hero.jsx";
 import { Marquee } from "../components/common/Marquee.jsx";
+import { FeaturedExperiment } from "../components/projects/FeaturedExperiment.jsx";
 import { SelectedWork } from "../components/home/SelectedWork.jsx";
 import { Capabilities } from "../components/home/Capabilities.jsx";
 import { AboutTeaser } from "../components/home/AboutTeaser.jsx";
 import { ContactCta } from "../components/home/ContactCta.jsx";
+import { projects } from "../data/projects.js";
 import { profile } from "../data/profile.js";
 
 /**
- * The home page is a single scroll narrative, numbered end to end:
- * hero → what I work with → the work → what I do → who I am → how to reach me.
- * Everything below the hero is a section a visitor could stop at and still
- * have learned something worth knowing.
+ * The lab, as one scroll: initialization → the working vocabulary → the lead
+ * experiment → the rest of the log → what the work consists of → the person
+ * behind it → how to start something. Every section stands on its own.
  */
 export default function Home() {
+  const featured = projects.find((p) => p.featured) ?? projects[0];
+
   return (
     <>
-      <HeroContent />
+      <Hero />
       <Marquee items={profile.marquee} durationSeconds={50} />
+      <FeaturedExperiment project={featured} />
       <SelectedWork />
       <Capabilities />
       <AboutTeaser />

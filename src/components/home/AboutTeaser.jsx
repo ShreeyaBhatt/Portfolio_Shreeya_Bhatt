@@ -20,7 +20,17 @@ export function AboutTeaser() {
 
   return (
     <Section>
-      <SectionHeader index="03" label="About" meta={profile.location} />
+      <SectionHeader
+        index="03"
+        label="The Researcher"
+        meta={profile.location}
+        titleLines={[
+          "The",
+          <span key="l2" className="accent-italic">
+            researcher
+          </span>,
+        ]}
+      />
 
       <div className="mt-16 grid gap-16 lg:grid-cols-[1.15fr_1fr] lg:gap-24">
         <div>

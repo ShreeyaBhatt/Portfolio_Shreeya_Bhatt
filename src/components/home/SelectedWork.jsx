@@ -2,30 +2,34 @@ import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { Section } from "../ui/Section.jsx";
 import { SectionHeader } from "../common/SectionHeader.jsx";
-import { ProjectIndex } from "../projects/ProjectIndex.jsx";
+import { ExperimentIndex } from "../projects/ExperimentIndex.jsx";
 import { projects } from "../../data/projects.js";
 
-/** The three projects that best argue the case, with the rest a click away. */
-const FEATURED_COUNT = 3;
-
+/**
+ * The rest of the log, beneath the featured experiment. WealthNest is
+ * `projects[0]` and gets its own block upstream, so this lists the remainder
+ * and numbers them from 002.
+ */
 export function SelectedWork() {
+  const rest = projects.slice(1);
+
   return (
-    <Section>
+    <Section id="experiments">
       <SectionHeader
         index="01"
-        label="Selected Work"
-        meta={`${String(projects.length).padStart(2, "0")} Projects`}
+        label="Experiments"
+        meta={`${String(projects.length).padStart(2, "0")} Logged`}
         titleLines={[
-          "Things I've",
-          <span key="l2">
-            actually <span className="accent-italic text-[var(--color-accent)]">shipped</span>
+          "The",
+          <span key="l2" className="accent-italic">
+            log
           </span>,
         ]}
-        lead="Machine learning inside real products, full-stack platforms, and systems built from the data structures up."
+        lead="Machine learning inside real products, full-stack platforms, and console systems built from the data structures up. Each entry opens as a short case study."
       />
 
       <div className="mt-16">
-        <ProjectIndex projects={projects.slice(0, FEATURED_COUNT)} />
+        <ExperimentIndex projects={rest} startIndex={2} />
       </div>
 
       <Link
@@ -33,7 +37,7 @@ export function SelectedWork() {
         data-cursor-hover
         className="group mt-10 inline-flex items-center gap-3 text-[var(--color-fg)] transition-colors hover:text-[var(--color-accent)]"
       >
-        <span className="link-underline text-lead font-medium">View all work</span>
+        <span className="link-underline text-lead font-medium">All experiments</span>
         <ArrowRight
           size={18}
           className="transition-transform duration-300 group-hover:translate-x-1.5"

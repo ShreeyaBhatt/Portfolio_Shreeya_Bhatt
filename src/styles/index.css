@@ -3,44 +3,39 @@
 /* ============================================================
    DESIGN TOKENS — the single source of truth for this site.
 
-   Direction: "Observatory" — an editorial, type-led portfolio
-   with a quiet cosmic atmosphere. The space theme lives in the
-   VISUAL layer (deep-navy ground, starfield, nebula wash, one
-   luminous accent); the writing and layout stay plain and
-   professional. Restraint is the point: one accent carries the
-   whole site, gold appears only where something must be
-   singled out.
+   Direction: "THE DIGITAL LAB" — an editorial, instrument-led
+   portfolio that reads as a piece of software someone built.
+   The lab metaphor lives in the VISUAL layer: near-black ground,
+   a fine 1px grid, faint grain, technical hairlines, mono
+   metadata, and ONE warm accent (sodium amber) that behaves like
+   instrument lighting. Restraint is the point — the amber is the
+   only colour with a voice; steel-grey is structural only.
 
-   Every component draws color / type / spacing / radius from
+   Every component draws colour / type / spacing / radius from
    here rather than inventing one-off values.
    ============================================================ */
 @theme {
   /* ---- Fonts ----
      Display: Space Grotesk — geometric, slightly technical.
-     Accent:  Instrument Serif italic — used ONLY for a single
-              emphasised word inside a display heading. It is what
-              keeps oversized type from reading as a wall of sans.
-     Body:    Inter. Mono: JetBrains Mono (labels, indices, meta). */
+     Body:    Inter.
+     Mono:    JetBrains Mono — every label, index, coordinate,
+              status readout and stack list on the site. */
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-accent: "Instrument Serif", ui-serif, Georgia, serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
 
   /* ---- Fluid type scale ----
      clamp() everywhere so the site scales continuously instead of
-     stepping at breakpoints — the oversized display sizes are what
-     give the layout its editorial weight.
+     stepping at breakpoints. Each step ships its own line-height
+     and tracking via Tailwind's `--text-*--line-height` /
+     `--text-*--letter-spacing` companions, so `text-hero` alone
+     sets all three.
 
-     Each step ships its own line-height and tracking via Tailwind's
-     `--text-*--line-height` / `--text-*--letter-spacing` companions,
-     so `text-hero` alone sets all three and no component has to
-     remember to pair a size with its leading.
-
-     Leading stays just under 1 rather than the 0.86 that display
-     type can take, because these lines are rendered inside clipping
-     masks (see `.line-mask`) — anything tighter crops descenders. */
-  --text-display: clamp(3.25rem, 13vw, 11rem);
-  --text-display--line-height: 0.9;
+     Leading stays just under 1 rather than 0.86 because these
+     lines render inside clipping masks (`.line-mask`) — anything
+     tighter crops descenders. */
+  --text-display: clamp(3rem, 10.5vw, 8.5rem);
+  --text-display--line-height: 0.92;
   --text-display--letter-spacing: -0.045em;
 
   --text-hero: clamp(2.75rem, 9vw, 7.5rem);
@@ -63,65 +58,79 @@
   --text-lead--line-height: 1.55;
   --text-lead--letter-spacing: 0;
 
-  /* ---- Palette (light / "high-altitude daylight" defaults) ---- */
-  --color-bg: #f7f7fb;
-  --color-bg-raised: #ffffff;
-  --color-bg-elevated: #f0f0f7;
-  --color-fg: #0e1020;
-  --color-fg-muted: #55596f;
-  --color-fg-subtle: #8b8fa8;
-  --color-border: #e3e3ef;
-  --color-border-strong: #cdcddf;
+  /* ---- Palette (light / "daylight bench" defaults) ---- */
+  --color-bg: #f4f3ef;
+  --color-bg-raised: #fbfbf8;
+  --color-bg-elevated: #eceae2;
+  --color-fg: #14140f;
+  --color-fg-muted: #575751;
+  --color-fg-subtle: #8a8a80;
+  --color-border: #dedcd2;
+  --color-border-strong: #c6c4b7;
 
-  --color-accent: #5b3fd6;
-  --color-accent-soft: rgba(91, 63, 214, 0.1);
-  --color-accent-2: #8a5a05;
-  --color-accent-2-soft: rgba(138, 90, 5, 0.1);
+  --color-accent: #b26b00;
+  --color-accent-soft: rgba(178, 107, 0, 0.1);
+  /* Secondary is STRUCTURAL only — diagram lines, telemetry rules.
+     It never carries meaning or emphasis. */
+  --color-accent-2: #6b7280;
+  --color-accent-2-soft: rgba(107, 114, 128, 0.1);
 
-  --color-success: #22a06b;
-  --color-danger: #e5484d;
+  --color-success: #1f7a4d;
+  --color-danger: #c23a2f;
 
-  /* ---- Starfield / nebula backdrop (read by SpaceBackground + body::after) ---- */
-  --star-color: #5b3fd6;
-  --star-opacity: 0.35;
-  --nebula-opacity: 0.5;
+  /* ---- Backdrop controls (read by LabBackground) ---- */
+  --grid-color: rgba(20, 20, 15, 0.05);
+  --grid-size: 46px;
+  --grain-opacity: 0.035;
+  --glow-opacity: 0.5;
 
-  /* ---- Radius scale ---- */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1.25rem;
+  /* ---- Radius scale — kept tight; this is an instrument, not a card. */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.875rem;
 
   /* ---- Elevation ---- */
-  --shadow-resting: 0 1px 2px rgba(14, 16, 32, 0.05);
-  --shadow-raised: 0 16px 40px -16px rgba(14, 16, 32, 0.2);
-  --shadow-modal: 0 24px 48px -12px rgba(10, 10, 15, 0.3);
-  --shadow-glow: 0 0 32px -6px rgba(91, 63, 214, 0.45);
+  --shadow-resting: 0 1px 2px rgba(20, 20, 15, 0.05);
+  --shadow-raised: 0 18px 44px -18px rgba(20, 20, 15, 0.22);
+  --shadow-modal: 0 24px 48px -12px rgba(10, 10, 8, 0.3);
+  --shadow-glow: 0 0 32px -6px rgba(178, 107, 0, 0.4);
+
+  /* ---- Brief §33 aliases — both spellings resolve to the same value. */
+  --background: var(--color-bg);
+  --surface: var(--color-bg-raised);
+  --foreground: var(--color-fg);
+  --muted: var(--color-fg-muted);
+  --border: var(--color-border);
+  --accent: var(--color-accent);
 }
 
 /* ---- Dark mode: the site's primary, intended appearance ---- */
 :root.dark {
-  --color-bg: #07080f;
-  --color-bg-raised: #0d0f1c;
-  --color-bg-elevated: #141728;
-  --color-fg: #f2f3f9;
-  --color-fg-muted: #8b8fa8;
-  --color-fg-subtle: #5a5e76;
-  --color-border: #1c1f35;
-  --color-border-strong: #2c3050;
+  --color-bg: #0a0a0c;
+  --color-bg-raised: #101014;
+  --color-bg-elevated: #16161b;
+  --color-fg: #edebe4;
+  --color-fg-muted: #9a9a93;
+  --color-fg-subtle: #5f5f5a;
+  --color-border: #22222a;
+  --color-border-strong: #33333d;
 
-  --color-accent: #9b8cff;
-  --color-accent-soft: rgba(155, 140, 255, 0.14);
-  --color-accent-2: #f5c453;
-  --color-accent-2-soft: rgba(245, 196, 83, 0.14);
+  --color-accent: #e8a24a;
+  --color-accent-soft: rgba(232, 162, 74, 0.13);
+  --color-accent-2: #7c8598;
+  --color-accent-2-soft: rgba(124, 133, 152, 0.12);
 
-  --star-color: #ffffff;
-  --star-opacity: 0.8;
-  --nebula-opacity: 0.6;
+  --color-success: #4bbd83;
+  --color-danger: #e5695f;
 
-  --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-raised: 0 16px 40px -16px rgba(0, 0, 0, 0.7);
-  --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.65);
-  --shadow-glow: 0 0 32px -6px rgba(155, 140, 255, 0.5);
+  --grid-color: rgba(232, 162, 74, 0.055);
+  --grain-opacity: 0.05;
+  --glow-opacity: 0.55;
+
+  --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-raised: 0 18px 44px -18px rgba(0, 0, 0, 0.75);
+  --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 34px -6px rgba(232, 162, 74, 0.42);
 }
 
 @layer base {
@@ -144,32 +153,6 @@
     transition: background-color 300ms ease, color 300ms ease;
   }
 
-  /* ---- Nebula wash: two soft, low-contrast colour clouds for depth,
-     drifting very slowly so the backdrop is never perfectly still. The
-     stars themselves (parallax layers + shooting stars) are drawn by
-     <SpaceBackground>, mounted once in the layout. ---- */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: -10%;
-    z-index: -3;
-    pointer-events: none;
-    background-image:
-      radial-gradient(ellipse 55% 40% at 15% 8%, var(--color-accent-soft), transparent 62%),
-      radial-gradient(ellipse 50% 38% at 85% 88%, var(--color-accent-2-soft), transparent 62%);
-    opacity: var(--nebula-opacity);
-    animation: nebula-drift 100s ease-in-out infinite alternate;
-  }
-
-  @keyframes nebula-drift {
-    0% {
-      transform: translate(0, 0) scale(1);
-    }
-    100% {
-      transform: translate(-2%, 2%) scale(1.06);
-    }
-  }
-
   h1,
   h2,
   h3,
@@ -186,7 +169,7 @@
 
   ::selection {
     background: var(--color-accent);
-    color: var(--color-bg);
+    color: #0a0a0c;
   }
 
   :focus-visible {
@@ -199,6 +182,28 @@
     body.custom-cursor-active {
       cursor: none;
     }
+  }
+
+  /* The mobile nav overlay owns the screen — hide the corner readout under it. */
+  body[data-nav-open] .lab-status {
+    display: none;
+  }
+
+  /* While "scan the lab" runs: lift the grid and outline every instrument
+     panel so the page briefly reads as a wireframe of itself. */
+  body.lab-scanning {
+    --grid-color: color-mix(in srgb, var(--color-accent) 13%, transparent);
+  }
+
+  body.lab-scanning .panel,
+  body.lab-scanning [data-scan] {
+    outline: 1px solid var(--color-accent);
+    outline-offset: 3px;
+    transition: outline-color 200ms ease;
+  }
+
+  body.lab-scanning [data-scan-label] {
+    opacity: 1 !important;
   }
 }
 
@@ -229,12 +234,12 @@
 
    `text-display` / `text-hero` / `text-h1…h3` / `text-lead` are
    generated by Tailwind from the `--text-*` theme variables above
-   (size + line-height + tracking together) — they are not declared
-   here, and must not be, or the two definitions would collide.
+   — they are not declared here.
    ============================================================ */
 
 /** The uppercase, wide-tracked mono label used for section indices,
-    eyebrows, and table headers. One look, reused everywhere. */
+    eyebrows, status readouts and table headers. One look, reused
+    everywhere. */
 @utility label-mono {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
@@ -243,29 +248,83 @@
   text-transform: uppercase;
 }
 
-/** Serif-italic emphasis inside a display heading. */
+/** Tiny mono coordinate / register label — even smaller than
+    label-mono, for diagram annotations and panel corners. */
+@utility coord {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-fg-subtle);
+}
+
+/** Emphasis for a single word inside a display heading.
+    Formerly a serif italic ("Observatory"); now a lighter-weight
+    accent-coloured span so it reads as a deliberate highlight
+    without a decorative-serif dependency. Call sites are unchanged. */
 @utility accent-italic {
-  font-family: var(--font-accent);
-  font-style: italic;
+  font-family: var(--font-display);
+  font-style: normal;
   font-weight: 400;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
+  color: var(--color-accent);
+}
+
+/* ============================================================
+   SURFACE / INSTRUMENT PRIMITIVES
+   ============================================================ */
+
+/** A flat instrument panel: raised surface, 1px border, tight radius. */
+@utility panel {
+  background-color: var(--color-bg-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+}
+
+/** Corner-tick frame — a 1px border with short accent ticks at the
+    top-left and bottom-right, like a crop mark on a technical plate. */
+@utility tech-border {
+  position: relative;
+  border: 1px solid var(--color-border);
+}
+
+.tech-border::before,
+.tech-border::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: var(--color-accent);
+  border-style: solid;
+  opacity: 0.7;
+}
+
+.tech-border::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+
+.tech-border::after {
+  right: -1px;
+  bottom: -1px;
+  border-width: 0 1px 1px 0;
 }
 
 /* ============================================================
    MOTION PRIMITIVES
    ============================================================ */
 
-/** Masked line reveal — the wrapper clips, the child slides up out of it.
-    Used for headings so type rises into place rather than fading.
+/** Masked line reveal — the wrapper clips, the child slides up out
+    of it. Used for headings so type rises into place rather than
+    fading. The padding-bottom is load-bearing: with overflow:hidden
+    and display leading below 1, a descender would be sliced at the
+    mask edge; the negative margin claws back half that space so the
+    leading between lines doesn't visibly loosen.
 
-    The padding-bottom is load-bearing: with `overflow: hidden` and display
-    leading below 1, a descender ("Shreeya", "Bhatt" in italic) would be
-    sliced off at the mask edge. The negative margin claws back half of that
-    space so the extra room doesn't visibly loosen the leading between lines.
-
-    Note the pairing with `lineRevealVariants` in src/lib/motion.js: its
-    hidden offset (135%) has to clear the box height *including* this
-    padding, or the next line peeks below the mask before it animates. */
+    Pairs with `lineRevealVariants` in src/lib/motion.js — its hidden
+    offset (135%) must clear this box height INCLUDING the padding. */
 @utility line-mask {
   display: block;
   overflow: hidden;
@@ -280,6 +339,30 @@
   }
   to {
     transform: translateX(-50%);
+  }
+}
+
+/** A thin light bar that travels once across a surface — the
+    "scanning line" used on experiment rows on hover, and (Phase 3)
+    the site-wide "scan the lab" interaction. Consumers set position
+    and a one-shot animation; this only defines the sweep. */
+@keyframes scan-line {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/** Slow readout tick for status dots. */
+@keyframes lab-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
   }
 }
 
@@ -316,22 +399,14 @@
 }
 
 /* ============================================================
-   SLIDE TONES — the per-category palettes for the skills
-   carousel.
-
-   Each tone is declared here rather than passed as an inline hex
-   so it can flip with the theme automatically: a colour set from
-   JS can't respond to `:root.dark`, and reading the theme from a
-   second `useTheme()` instance would desync from the real toggle.
-   A class per tone keeps the whole thing CSS-native and free.
-
-   `--slide-accent` drives type, rules, and the progress rail;
-   `--slide-tint` is the low-alpha wash across the panel and the
-   ambient glow behind the active slide.
+   SLIDE TONES — per-category palettes for the skills carousel
+   on the About page. Kept intact here; the skills section is
+   reworked in a later phase. Each tone flips with the theme so a
+   colour set from JS can't desync from the toggle.
    ============================================================ */
 .tone-violet {
-  --slide-accent: #5b3fd6;
-  --slide-tint: rgba(91, 63, 214, 0.09);
+  --slide-accent: #b26b00;
+  --slide-tint: rgba(178, 107, 0, 0.09);
 }
 .tone-cyan {
   --slide-accent: #0e7490;
@@ -351,8 +426,8 @@
 }
 
 :root.dark .tone-violet {
-  --slide-accent: #9b8cff;
-  --slide-tint: rgba(155, 140, 255, 0.14);
+  --slide-accent: #e8a24a;
+  --slide-tint: rgba(232, 162, 74, 0.14);
 }
 :root.dark .tone-cyan {
   --slide-accent: #5eead4;
@@ -371,8 +446,8 @@
   --slide-tint: rgba(249, 168, 212, 0.13);
 }
 
-/** Horizontal scroll track that keeps native swipe/trackpad momentum and
-    scroll-snap, but hides the scrollbar chrome. */
+/** Horizontal scroll track that keeps native swipe/trackpad
+    momentum and scroll-snap, but hides the scrollbar chrome. */
 @utility scroll-track {
   scrollbar-width: none;
   -ms-overflow-style: none;
