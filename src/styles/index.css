@@ -1,141 +1,127 @@
 @import "tailwindcss";
 
 /* ============================================================
-   DESIGN TOKENS — the single source of truth for this site.
+   DESIGN TOKENS — single source of truth.
 
-   Direction: "THE DIGITAL LAB" — an editorial, instrument-led
-   portfolio that reads as a piece of software someone built.
-   The lab metaphor lives in the VISUAL layer: near-black ground,
-   a fine 1px grid, faint grain, technical hairlines, mono
-   metadata, and ONE warm accent (sodium amber) that behaves like
-   instrument lighting. Restraint is the point — the amber is the
-   only colour with a voice; steel-grey is structural only.
+   Direction: an editorial portfolio on a dark "signal-lab"
+   ground. Big display type, a strict 12-column measure, mono
+   metadata, wide margins, one idea per screen. ONE accent —
+   mint — behaves like a signal trace: it is the guide orb,
+   marks the active nav item, draws one hairline per section,
+   and colours focus. It is never a fill.
 
-   Every component draws colour / type / spacing / radius from
-   here rather than inventing one-off values.
+   Light mode is "editorial print": warm paper, ink, a darker
+   mint. Dark is the default and intended appearance.
+
+   Components pull colour / type / spacing / radius from here.
    ============================================================ */
+:root {
+  color-scheme: light;
+}
+:root.dark {
+  color-scheme: dark;
+}
+
 @theme {
   /* ---- Fonts ----
-     Display: Space Grotesk — geometric, slightly technical.
+     Display: Bricolage Grotesque — a variable grotesk with
+              real character; used large, tight-tracked.
      Body:    Inter.
-     Mono:    JetBrains Mono — every label, index, coordinate,
-              status readout and stack list on the site. */
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+     Mono:    JetBrains Mono — every eyebrow, index, coordinate,
+              status readout and stack list.
+     Accent:  Newsreader italic — ONE editorial voice, used only
+              for a project's one-line thesis and pull quotes. */
+  --font-display: "Bricolage Grotesque", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
+  --font-accent: "Newsreader", Georgia, "Times New Roman", serif;
 
   /* ---- Fluid type scale ----
-     clamp() everywhere so the site scales continuously instead of
-     stepping at breakpoints. Each step ships its own line-height
-     and tracking via Tailwind's `--text-*--line-height` /
-     `--text-*--letter-spacing` companions, so `text-hero` alone
-     sets all three.
+     clamp() everywhere so the site scales continuously instead
+     of stepping at breakpoints. Each step ships its own
+     line-height / tracking via Tailwind's companions, so
+     `text-hero` alone sets all three. Leading stays just under 1
+     because these lines render inside clipping masks
+     (`.line-mask`) — tighter crops descenders. */
+  --text-display: clamp(3.25rem, 11vw, 9rem);
+  --text-display--line-height: 0.9;
+  --text-display--letter-spacing: -0.04em;
 
-     Leading stays just under 1 rather than 0.86 because these
-     lines render inside clipping masks (`.line-mask`) — anything
-     tighter crops descenders. */
-  --text-display: clamp(3rem, 10.5vw, 8.5rem);
-  --text-display--line-height: 0.92;
-  --text-display--letter-spacing: -0.045em;
-
-  --text-hero: clamp(2.75rem, 9vw, 7.5rem);
+  --text-hero: clamp(2.75rem, 8.5vw, 7rem);
   --text-hero--line-height: 0.92;
-  --text-hero--letter-spacing: -0.04em;
+  --text-hero--letter-spacing: -0.035em;
 
   --text-h1: clamp(2.5rem, 6vw, 4.5rem);
   --text-h1--line-height: 0.96;
-  --text-h1--letter-spacing: -0.035em;
+  --text-h1--letter-spacing: -0.03em;
 
   --text-h2: clamp(2rem, 4.2vw, 3.25rem);
   --text-h2--line-height: 1;
-  --text-h2--letter-spacing: -0.03em;
+  --text-h2--letter-spacing: -0.025em;
 
   --text-h3: clamp(1.5rem, 2.4vw, 2rem);
-  --text-h3--line-height: 1.12;
-  --text-h3--letter-spacing: -0.02em;
+  --text-h3--line-height: 1.14;
+  --text-h3--letter-spacing: -0.015em;
 
   --text-lead: clamp(1.0625rem, 1.35vw, 1.375rem);
-  --text-lead--line-height: 1.55;
+  --text-lead--line-height: 1.6;
   --text-lead--letter-spacing: 0;
 
-  /* ---- Palette (light / "daylight bench" defaults) ---- */
-  --color-bg: #f4f3ef;
-  --color-bg-raised: #fbfbf8;
-  --color-bg-elevated: #eceae2;
-  --color-fg: #14140f;
-  --color-fg-muted: #575751;
-  --color-fg-subtle: #8a8a80;
-  --color-border: #dedcd2;
-  --color-border-strong: #c6c4b7;
+  /* ---- Palette (light / "editorial print" defaults) ---- */
+  --color-bg: #eceae3;
+  --color-bg-raised: #f4f2ec;
+  --color-bg-elevated: #e3e0d6;
+  --color-fg: #12151a;
+  --color-fg-muted: #4a4e56;
+  --color-fg-subtle: #83877f;
+  --color-border: #d8d5ca;
+  --color-border-strong: #c0bcae;
 
-  --color-accent: #b26b00;
-  --color-accent-soft: rgba(178, 107, 0, 0.1);
-  /* Secondary is STRUCTURAL only — diagram lines, telemetry rules.
-     It never carries meaning or emphasis. */
-  --color-accent-2: #6b7280;
-  --color-accent-2-soft: rgba(107, 114, 128, 0.1);
+  --color-accent: #0e9e6e;
+  --color-accent-dim: #0b7d57;
+  --color-accent-soft: rgba(14, 158, 110, 0.12);
 
-  --color-success: #1f7a4d;
+  --color-success: #0e9e6e;
   --color-danger: #c23a2f;
 
-  /* ---- Backdrop controls (read by LabBackground) ---- */
-  --grid-color: rgba(20, 20, 15, 0.05);
-  --grid-size: 46px;
-  --grain-opacity: 0.035;
-  --glow-opacity: 0.5;
-
-  /* ---- Radius scale — kept tight; this is an instrument, not a card. */
-  --radius-sm: 0.25rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.875rem;
+  /* ---- Radius — kept tight; this is a document, not a card UI. */
+  --radius-sm: 0.1875rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.75rem;
 
   /* ---- Elevation ---- */
-  --shadow-resting: 0 1px 2px rgba(20, 20, 15, 0.05);
-  --shadow-raised: 0 18px 44px -18px rgba(20, 20, 15, 0.22);
-  --shadow-modal: 0 24px 48px -12px rgba(10, 10, 8, 0.3);
-  --shadow-glow: 0 0 32px -6px rgba(178, 107, 0, 0.4);
-
-  /* ---- Brief §33 aliases — both spellings resolve to the same value. */
-  --background: var(--color-bg);
-  --surface: var(--color-bg-raised);
-  --foreground: var(--color-fg);
-  --muted: var(--color-fg-muted);
-  --border: var(--color-border);
-  --accent: var(--color-accent);
+  --shadow-resting: 0 1px 2px rgba(18, 21, 26, 0.06);
+  --shadow-raised: 0 20px 50px -22px rgba(18, 21, 26, 0.24);
+  --shadow-modal: 0 28px 60px -18px rgba(10, 12, 16, 0.34);
 }
 
 /* ---- Dark mode: the site's primary, intended appearance ---- */
 :root.dark {
-  --color-bg: #0a0a0c;
-  --color-bg-raised: #101014;
-  --color-bg-elevated: #16161b;
-  --color-fg: #edebe4;
-  --color-fg-muted: #9a9a93;
-  --color-fg-subtle: #5f5f5a;
-  --color-border: #22222a;
-  --color-border-strong: #33333d;
+  --color-bg: #0b0f14;
+  --color-bg-raised: #10151c;
+  --color-bg-elevated: #161c25;
+  --color-fg: #f2f0ea;
+  --color-fg-muted: #9ba1ac;
+  --color-fg-subtle: #5c636e;
+  --color-border: #1e2530;
+  --color-border-strong: #2f3947;
 
-  --color-accent: #e8a24a;
-  --color-accent-soft: rgba(232, 162, 74, 0.13);
-  --color-accent-2: #7c8598;
-  --color-accent-2-soft: rgba(124, 133, 152, 0.12);
+  --color-accent: #5ef2b0;
+  --color-accent-dim: #37b184;
+  --color-accent-soft: rgba(94, 242, 176, 0.12);
 
-  --color-success: #4bbd83;
+  --color-success: #5ef2b0;
   --color-danger: #e5695f;
 
-  --grid-color: rgba(232, 162, 74, 0.055);
-  --grain-opacity: 0.05;
-  --glow-opacity: 0.55;
-
   --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-raised: 0 18px 44px -18px rgba(0, 0, 0, 0.75);
-  --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.7);
-  --shadow-glow: 0 0 34px -6px rgba(232, 162, 74, 0.42);
+  --shadow-raised: 0 20px 50px -22px rgba(0, 0, 0, 0.78);
+  --shadow-modal: 0 28px 60px -18px rgba(0, 0, 0, 0.72);
 }
 
 @layer base {
   * {
     border-color: var(--color-border);
+    min-width: 0;
   }
 
   html {
@@ -151,6 +137,7 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     transition: background-color 300ms ease, color 300ms ease;
+    overflow-x: hidden;
   }
 
   h1,
@@ -158,6 +145,7 @@
   h3,
   h4 {
     font-family: var(--font-display);
+    font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 0.95;
     text-wrap: balance;
@@ -167,43 +155,23 @@
     text-wrap: pretty;
   }
 
+  /* Anchors get an explicit colour rather than Preflight's `inherit`, so a
+     link that only declares a `hover:` colour still has a solid resting
+     colour and never animates up from an inherited default on load. Utility
+     `text-*` classes still override this. */
+  a {
+    color: var(--color-fg);
+  }
+
   ::selection {
     background: var(--color-accent);
-    color: #0a0a0c;
+    color: #0b0f14;
   }
 
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
     border-radius: 2px;
-  }
-
-  @media (pointer: fine) {
-    body.custom-cursor-active {
-      cursor: none;
-    }
-  }
-
-  /* The mobile nav overlay owns the screen — hide the corner readout under it. */
-  body[data-nav-open] .lab-status {
-    display: none;
-  }
-
-  /* While "scan the lab" runs: lift the grid and outline every instrument
-     panel so the page briefly reads as a wireframe of itself. */
-  body.lab-scanning {
-    --grid-color: color-mix(in srgb, var(--color-accent) 13%, transparent);
-  }
-
-  body.lab-scanning .panel,
-  body.lab-scanning [data-scan] {
-    outline: 1px solid var(--color-accent);
-    outline-offset: 3px;
-    transition: outline-color 200ms ease;
-  }
-
-  body.lab-scanning [data-scan-label] {
-    opacity: 1 !important;
   }
 }
 
@@ -213,69 +181,98 @@
 
 /** The wide editorial measure — sections, grids, index rows. */
 @utility container-page {
-  max-width: 84rem;
+  max-width: 82rem;
   margin-inline: auto;
   padding-inline: 1.5rem;
 }
 
 @media (min-width: 768px) {
   .container-page {
-    padding-inline: 2.5rem;
+    padding-inline: 3rem;
   }
 }
 
-/** Narrow measure for running prose — never let body text hit 84rem. */
+@media (min-width: 1280px) {
+  .container-page {
+    padding-inline: 4rem;
+  }
+}
+
+/** Narrow measure for running prose — never let body text hit 82rem. */
 @utility container-prose {
   max-width: 42rem;
+}
+
+/** The 12-column grid the whole site is set on. */
+@utility grid-page {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .grid-page {
+    column-gap: 2rem;
+  }
 }
 
 /* ============================================================
    TYPE UTILITIES
 
    `text-display` / `text-hero` / `text-h1…h3` / `text-lead` are
-   generated by Tailwind from the `--text-*` theme variables above
-   — they are not declared here.
+   generated by Tailwind from the `--text-*` theme variables.
    ============================================================ */
 
-/** The uppercase, wide-tracked mono label used for section indices,
-    eyebrows, status readouts and table headers. One look, reused
-    everywhere. */
+/** The uppercase, wide-tracked mono label used for section
+    indices, eyebrows, status readouts and table headers.
+    One look, reused everywhere. */
+@utility eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+/** Legacy alias of `eyebrow` — kept so older call sites keep working. */
 @utility label-mono {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 500;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  color: var(--color-fg-muted);
 }
 
-/** Tiny mono coordinate / register label — even smaller than
-    label-mono, for diagram annotations and panel corners. */
+/** Tiny mono coordinate / register label — smaller than eyebrow,
+    for diagram annotations, spine indices and panel corners. */
 @utility coord {
   font-family: var(--font-mono);
   font-size: 0.625rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-fg-subtle);
 }
 
-/** Emphasis for a single word inside a display heading.
-    Formerly a serif italic ("Observatory"); now a lighter-weight
-    accent-coloured span so it reads as a deliberate highlight
-    without a decorative-serif dependency. Call sites are unchanged. */
+/** The single editorial voice: Newsreader italic, optical size
+    up, for a project's one-line thesis and for pull quotes.
+    (Formerly a serif highlight span — call sites unchanged.) */
 @utility accent-italic {
-  font-family: var(--font-display);
-  font-style: normal;
+  font-family: var(--font-accent);
+  font-style: italic;
   font-weight: 400;
-  letter-spacing: -0.02em;
-  color: var(--color-accent);
+  font-optical-sizing: auto;
+  letter-spacing: 0;
+  color: var(--color-fg);
 }
 
 /* ============================================================
-   SURFACE / INSTRUMENT PRIMITIVES
+   SURFACE PRIMITIVES
    ============================================================ */
 
-/** A flat instrument panel: raised surface, 1px border, tight radius. */
+/** A flat panel: raised surface, 1px border, tight radius. */
 @utility panel {
   background-color: var(--color-bg-raised);
   border: 1px solid var(--color-border);
@@ -312,19 +309,35 @@
   border-width: 0 1px 1px 0;
 }
 
+/** Hairline rule used to separate editorial sections and index rows. */
+@utility hairline {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+/** The one accent hairline a section is allowed — a short mint
+    rule that sits above a section header. */
+@utility rule-accent {
+  width: 2.5rem;
+  height: 2px;
+  background: var(--color-accent);
+  border: 0;
+}
+
 /* ============================================================
    MOTION PRIMITIVES
    ============================================================ */
 
-/** Masked line reveal — the wrapper clips, the child slides up out
-    of it. Used for headings so type rises into place rather than
-    fading. The padding-bottom is load-bearing: with overflow:hidden
-    and display leading below 1, a descender would be sliced at the
-    mask edge; the negative margin claws back half that space so the
-    leading between lines doesn't visibly loosen.
+/** Masked line reveal — the wrapper clips, the child slides up
+    out of it. Used for headings so type rises into place rather
+    than fading. The padding-bottom is load-bearing: with
+    overflow:hidden and leading below 1, a descender would be
+    sliced at the mask edge; the negative margin claws back half
+    that space so leading between lines doesn't visibly loosen.
 
-    Pairs with `lineRevealVariants` in src/lib/motion.js — its hidden
-    offset (135%) must clear this box height INCLUDING the padding. */
+    Pairs with `lineRevealVariants` in src/lib/motion.js — its
+    hidden offset (135%) must clear this box height INCLUDING the
+    padding. */
 @utility line-mask {
   display: block;
   overflow: hidden;
@@ -342,19 +355,6 @@
   }
 }
 
-/** A thin light bar that travels once across a surface — the
-    "scanning line" used on experiment rows on hover, and (Phase 3)
-    the site-wide "scan the lab" interaction. Consumers set position
-    and a one-shot animation; this only defines the sweep. */
-@keyframes scan-line {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(100%);
-  }
-}
-
 /** Slow readout tick for status dots. */
 @keyframes lab-pulse {
   0%,
@@ -364,6 +364,44 @@
   50% {
     opacity: 0.35;
   }
+}
+
+/** Steady rotation — the "available for work" badge. */
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/** A caret that blinks while scramble text resolves. */
+@keyframes caret-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/** Fine film grain over the whole page — flat backgrounds read as
+    filmed rather than printed. Static (no animation) on purpose. */
+@utility grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/** Marquee that stops when you hover it. */
+@utility marquee-track {
+  animation: marquee-scroll linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
 }
 
 /** Underline that wipes in from the left on hover — replaces the
@@ -390,60 +428,6 @@
 .link-underline:focus-visible::after {
   transform: scaleX(1);
   transform-origin: left;
-}
-
-/** Hairline rule used to separate editorial sections and index rows. */
-@utility hairline {
-  border: 0;
-  border-top: 1px solid var(--color-border);
-}
-
-/* ============================================================
-   SLIDE TONES — per-category palettes for the skills carousel
-   on the About page. Kept intact here; the skills section is
-   reworked in a later phase. Each tone flips with the theme so a
-   colour set from JS can't desync from the toggle.
-   ============================================================ */
-.tone-violet {
-  --slide-accent: #b26b00;
-  --slide-tint: rgba(178, 107, 0, 0.09);
-}
-.tone-cyan {
-  --slide-accent: #0e7490;
-  --slide-tint: rgba(14, 116, 144, 0.09);
-}
-.tone-amber {
-  --slide-accent: #b45309;
-  --slide-tint: rgba(180, 83, 9, 0.09);
-}
-.tone-sky {
-  --slide-accent: #0369a1;
-  --slide-tint: rgba(3, 105, 161, 0.09);
-}
-.tone-pink {
-  --slide-accent: #be185d;
-  --slide-tint: rgba(190, 24, 93, 0.09);
-}
-
-:root.dark .tone-violet {
-  --slide-accent: #e8a24a;
-  --slide-tint: rgba(232, 162, 74, 0.14);
-}
-:root.dark .tone-cyan {
-  --slide-accent: #5eead4;
-  --slide-tint: rgba(94, 234, 212, 0.13);
-}
-:root.dark .tone-amber {
-  --slide-accent: #f5c453;
-  --slide-tint: rgba(245, 196, 83, 0.13);
-}
-:root.dark .tone-sky {
-  --slide-accent: #7dd3fc;
-  --slide-tint: rgba(125, 211, 252, 0.13);
-}
-:root.dark .tone-pink {
-  --slide-accent: #f9a8d4;
-  --slide-tint: rgba(249, 168, 212, 0.13);
 }
 
 /** Horizontal scroll track that keeps native swipe/trackpad

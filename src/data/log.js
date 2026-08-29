@@ -34,7 +34,7 @@ export const experimentLog = [
     id: "002",
     date: "2026.06",
     tag: "Frontend",
-    note: "Paying closer attention to interaction design while rebuilding this portfolio as a digital lab.",
+    note: "Paying closer attention to interaction design while rebuilding this portfolio.",
   },
   {
     id: "001",

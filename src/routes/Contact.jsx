@@ -15,7 +15,6 @@ const channels = [
     href: `mailto:${profile.email}`,
     Icon: Mail,
     note: "Fastest way to reach me",
-    cursor: "contact",
   },
   {
     label: "LinkedIn",
@@ -23,7 +22,6 @@ const channels = [
     href: profile.linkedinUrl,
     Icon: LinkedinIcon,
     note: "Experience and background",
-    cursor: "external",
   },
   {
     label: "GitHub",
@@ -31,7 +29,6 @@ const channels = [
     href: profile.githubUrl,
     Icon: GithubIcon,
     note: "Source for everything here",
-    cursor: "external",
   },
 ];
 
@@ -40,40 +37,33 @@ export default function Contact() {
   const variants = getRevealVariants(prefersReducedMotion);
 
   return (
-    <Section className="pb-28 pt-24 md:pb-40 md:pt-28">
-      <p className="label-mono flex items-center gap-3 text-[var(--color-fg-subtle)]">
-        <span className="text-[var(--color-accent)]">(05)</span>
-        Open Collaboration
+    <Section className="pb-28 pt-28 md:pb-40 md:pt-32">
+      <p className="flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[var(--color-fg-subtle)]">
+        <span className="text-[var(--color-accent)]">Contact</span>
         <span
           aria-hidden="true"
-          className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--color-accent)]"
+          className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"
+          style={{ animation: "lab-pulse 2.4s ease-in-out infinite" }}
         />
-        <span className="text-[var(--color-fg-subtle)]">{profile.availability}</span>
+        <span>{profile.availability}</span>
       </p>
 
       <RevealLines
         as="h1"
         animateOnMount
-        className="mt-8 text-hero font-display font-semibold"
-        lines={[
-          "Have an interesting",
-          <span key="l2" className="accent-italic">
-            problem?
-          </span>,
-        ]}
+        className="mt-8 text-hero font-semibold"
+        lines={["Have an interesting", <span key="l2" className="accent-italic">problem?</span>]}
       />
 
       <p className="container-prose mt-10 text-lead text-[var(--color-fg-muted)]">
-        Let's build something useful. I'm looking for a software engineering internship or a
-        Python developer role — if you're hiring, or just want to talk through a project, I'd
-        like to hear from you.
+        I'm looking for a software engineering internship or a Python developer role. If you're
+        hiring, or just want to talk through a project, I'd like to hear from you.
       </p>
 
       <div className="mt-16 grid grid-cols-1 gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">
         <div className="min-w-0">
           <a
             href={`mailto:${profile.email}`}
-            data-cursor="contact"
             className="link-underline inline-block break-all font-display text-[clamp(1.5rem,4vw,2.5rem)] font-medium leading-tight tracking-[-0.03em] transition-colors hover:text-[var(--color-accent)]"
           >
             {profile.email}
@@ -86,25 +76,20 @@ export default function Contact() {
             variants={staggerContainer}
             className="mt-12 border-t border-[var(--color-border)]"
           >
-            {channels.map(({ label, value, href, Icon, note, cursor }) => (
-              <motion.li
-                key={label}
-                variants={variants}
-                className="border-b border-[var(--color-border)]"
-              >
+            {channels.map(({ label, value, href, Icon, note }) => (
+              <motion.li key={label} variants={variants} className="border-b border-[var(--color-border)]">
                 <a
                   href={href}
                   target={href.startsWith("mailto:") ? undefined : "_blank"}
                   rel="noreferrer"
-                  data-cursor={cursor}
                   className="group grid gap-1 py-5 transition-colors sm:grid-cols-[7rem_1fr] sm:items-baseline sm:gap-6"
                 >
-                  <span className="label-mono flex items-center gap-2.5 text-[var(--color-fg-subtle)] transition-colors group-hover:text-[var(--color-accent)]">
+                  <span className="flex items-center gap-2.5 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[var(--color-fg-subtle)] transition-colors group-hover:text-[var(--color-accent)]">
                     <Icon size={14} />
                     {label}
                   </span>
                   <span>
-                    <span className="font-mono text-sm break-all transition-colors group-hover:text-[var(--color-accent)]">
+                    <span className="break-all font-mono text-sm transition-colors group-hover:text-[var(--color-accent)]">
                       {value}
                     </span>
                     <span className="coord mt-1 block">{note}</span>

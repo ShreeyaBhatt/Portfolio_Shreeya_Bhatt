@@ -82,7 +82,7 @@ export function ContactForm() {
 
   return (
     <div className="panel tech-border min-w-0 p-6 sm:p-8">
-      <p className="label-mono text-[var(--color-accent)]">New experiment request</p>
+      <p className="label-mono text-[var(--color-accent)]">Send a message</p>
 
       <AnimatePresence mode="wait">
         {done ? (
@@ -207,7 +207,7 @@ export function ContactForm() {
             })}
 
             <Button type="submit" variant="primary" disabled={status === "sending"}>
-              {status === "sending" ? "Transmitting…" : "Submit experiment"}
+              {status === "sending" ? "Sending…" : "Send message"}
             </Button>
             {!site.contactEndpoint && (
               <p className="font-mono text-[0.7rem] text-[var(--color-fg-subtle)]">

@@ -18,16 +18,16 @@ import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js"
  * stay consistent site-wide.
  */
 const variantClasses = {
-  primary: "border-transparent bg-[var(--color-accent)] text-[var(--color-bg)] hover:text-[var(--color-bg)]",
+  primary: "border-transparent bg-[var(--color-fg)] text-[var(--color-bg)] hover:text-[var(--color-fg)]",
   secondary:
-    "border-[var(--color-border-strong)] bg-transparent text-[var(--color-fg)] hover:border-[var(--color-accent)] hover:text-[var(--color-bg)]",
+    "border-[var(--color-border-strong)] bg-transparent text-[var(--color-fg)] hover:border-[var(--color-fg)]",
   ghost: "border-transparent bg-transparent text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]",
 };
 
 /** The colour that wipes up behind the label. */
 const fillClasses = {
-  primary: "bg-[var(--color-fg)]",
-  secondary: "bg-[var(--color-accent)]",
+  primary: "bg-[var(--color-bg-elevated)]",
+  secondary: "bg-[var(--color-bg-elevated)]",
   ghost: "bg-transparent",
 };
 

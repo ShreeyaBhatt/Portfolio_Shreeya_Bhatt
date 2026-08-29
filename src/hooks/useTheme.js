@@ -4,9 +4,9 @@ const STORAGE_KEY = "theme";
 
 function getInitialTheme() {
   if (typeof window === "undefined") return "dark";
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  // Dark is the site's intended default; only an explicit "light" choice opts
+  // out. This matches the pre-paint script in index.html.
+  return window.localStorage.getItem(STORAGE_KEY) === "light" ? "light" : "dark";
 }
 
 /** Reads/writes the `.dark` class on <html>, persisted to localStorage. */

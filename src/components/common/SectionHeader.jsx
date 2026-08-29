@@ -5,24 +5,22 @@ import { easeEditorial, getRevealVariants, viewportOnce } from "../../lib/motion
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 /**
- * The one section header used across the whole site — a hairline rule that
- * draws itself in, a mono index/label row beneath it, then an optional
- * display title and lead.
+ * The one section header used across the whole site — a short mint rule that
+ * draws itself in, a mono index/label row, then an optional display title and
+ * lead. Numbering every section gives a long scroll an editorial spine: the
+ * reader always knows where they are.
  *
- *   ─────────────────────────────────────────────────────
- *   (01) SELECTED WORK                      FIVE PROJECTS
+ *   ──
+ *   01 / SELECTED WORK                         FIVE PROJECTS
  *
  *   Things I've
  *   built
  *
- * Numbering every section is what gives a long scroll its editorial spine:
- * the reader always knows where they are in the document.
- *
  * @param {{
- *   index?: string,                          // "01"
- *   label: string,                           // "Selected Work"
- *   meta?: string,                           // right-aligned counterweight
- *   titleLines?: import("react").ReactNode[],// display title, one entry per line
+ *   index?: string,
+ *   label: string,
+ *   meta?: string,
+ *   titleLines?: import("react").ReactNode[],
  *   lead?: import("react").ReactNode,
  *   className?: string,
  *   titleClassName?: string,
@@ -47,24 +45,23 @@ export function SectionHeader({
         initial={{ scaleX: prefersReducedMotion ? 1 : 0 }}
         whileInView={{ scaleX: 1 }}
         viewport={viewportOnce}
-        transition={{ duration: 0.9, ease: easeEditorial }}
-        className="hairline origin-left"
+        transition={{ duration: 0.7, ease: easeEditorial }}
+        className="rule-accent origin-left"
       />
 
-      <div className="mt-4 flex items-baseline justify-between gap-6">
-        <p className="label-mono flex items-baseline gap-3 text-[var(--color-fg-subtle)]">
-          {index && <span className="text-[var(--color-accent)]">({index})</span>}
+      <div className="mt-5 flex items-baseline justify-between gap-6">
+        <p className="eyebrow flex items-baseline gap-2.5">
+          {index && <span className="text-[var(--color-accent)]">{index}</span>}
+          {index && <span className="text-[var(--color-fg-subtle)]">/</span>}
           <span>{label}</span>
         </p>
-        {meta && (
-          <p className="label-mono shrink-0 text-[var(--color-fg-subtle)]">{meta}</p>
-        )}
+        {meta && <p className="eyebrow shrink-0 text-[var(--color-fg-subtle)]">{meta}</p>}
       </div>
 
       {titleLines && (
         <RevealLines
           lines={titleLines}
-          className={cn("mt-8 text-h2 font-medium", titleClassName)}
+          className={cn("mt-7 text-h2 font-semibold", titleClassName)}
         />
       )}
 
