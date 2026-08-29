@@ -10,12 +10,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
     "clsx": "latest",
     "lucide-react": "latest",
     "motion": "latest",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^6.28.0"
+    "react-router-dom": "^6.28.0",
+    "three": "^0.185.1"
   },
   "devDependencies": {
     "@tailwindcss/vite": "latest",

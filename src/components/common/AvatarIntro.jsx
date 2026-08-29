@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Component, lazy, Suspense, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { profile } from "../../data/profile.js";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
@@ -6,17 +6,31 @@ import { easeEditorial, easeSignature } from "../../lib/motion.js";
 import { RevealLines } from "./RevealLines.jsx";
 import { Avatar } from "./Avatar.jsx";
 
+// The 3D scene (three + r3f + drei) is its own chunk, pulled in only when the
+// intro actually renders — once per browser tab. The SVG <Avatar> shows in
+// the meantime and if the chunk ever fails to load.
+const Avatar3D = lazy(() => import("./Avatar3D.jsx"));
+
 const SESSION_KEY = "sb-intro-seen";
 const DURATION_MS = 2800;
 
-// Small stars scattered around the portal — same idea as the persistent
-// <SpaceBackground>, just close up, hand-placed, and each one draggable.
+class SceneBoundary extends Component {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? this.props.fallback : this.props.children;
+  }
+}
+
 const STARS = [
-  { style: { top: "-4%", left: "10%" }, size: 5, glyph: "✦", delay: 0 },
-  { style: { top: "12%", right: "-6%" }, size: 4, delay: 0.6 },
-  { style: { bottom: "0%", right: "16%" }, size: 6, glyph: "✦", delay: 1.1 },
-  { style: { bottom: "18%", left: "-6%" }, size: 3, delay: 0.35 },
-  { style: { top: "50%", left: "-9%" }, size: 4, delay: 0.85 },
+  { style: { top: "-5%", left: "8%" }, size: 6, glyph: "✦", delay: 0 },
+  { style: { top: "10%", right: "-8%" }, size: 4, delay: 0.6 },
+  { style: { bottom: "-2%", right: "14%" }, size: 7, glyph: "✦", delay: 1.1 },
+  { style: { bottom: "16%", left: "-8%" }, size: 3, delay: 0.35 },
+  { style: { top: "48%", left: "-11%" }, size: 5, glyph: "✦", delay: 0.85 },
+  { style: { top: "30%", right: "-4%" }, size: 3, delay: 1.4 },
 ];
 
 const stopDrag = (event) => event.stopPropagation();
@@ -26,7 +40,7 @@ function Star({ size, glyph, delay }) {
     drag: true,
     dragSnapToOrigin: true,
     dragElastic: 0.5,
-    whileDrag: { scale: 1.4 },
+    whileDrag: { scale: 1.5 },
     onPointerDown: stopDrag,
     className: "block cursor-grab touch-none active:cursor-grabbing",
   };
@@ -36,9 +50,9 @@ function Star({ size, glyph, delay }) {
       <motion.span
         {...shared}
         aria-hidden="true"
-        className={`${shared.className} leading-none text-[var(--color-accent-2)]`}
+        className={`${shared.className} leading-none text-[var(--color-accent-2)] [text-shadow:0_0_16px_var(--color-accent-2)]`}
         style={{ fontSize: `${size * 3}px` }}
-        animate={{ opacity: [0.4, 1, 0.4], scale: [0.85, 1, 0.85], rotate: [0, 15, 0] }}
+        animate={{ opacity: [0.45, 1, 0.45], scale: [0.85, 1, 0.85], rotate: [0, 18, 0] }}
         transition={{ duration: 3.2, repeat: Infinity, delay, ease: "easeInOut" }}
       >
         {glyph}
@@ -49,15 +63,15 @@ function Star({ size, glyph, delay }) {
     <motion.span
       {...shared}
       aria-hidden="true"
-      className={`${shared.className} rounded-full bg-[var(--color-fg-subtle)]`}
+      className={`${shared.className} rounded-full bg-[var(--color-accent)] [box-shadow:0_0_10px_var(--color-accent)]`}
       style={{ width: size, height: size }}
-      animate={{ opacity: [0.25, 0.9, 0.25] }}
+      animate={{ opacity: [0.3, 1, 0.3] }}
       transition={{ duration: 2.6, repeat: Infinity, delay, ease: "easeInOut" }}
     />
   );
 }
 
-/** The rotating "open to work" ring — a quiet observatory dial, not a sticker. */
+/** The rotating "open to work" ring. */
 function SpinBadge() {
   return (
     <motion.div
@@ -88,17 +102,17 @@ function SpinBadge() {
 }
 
 /**
- * A one-time arrival screen in the site's own visual language: deep-space
- * ground, a hairline "portal" the portrait sits inside, display type with the
- * surname in serif italic exactly as the hero sets it.
+ * A one-time arrival screen. A real-time 3D portrait sits inside a glowing,
+ * rotating portal against a slow aurora; the surname is set in serif italic
+ * with a soft violet bloom, exactly the contrast the hero uses. A counter
+ * fills a hairline, then the whole panel wipes up to reveal the page.
  *
- * The portrait is draggable — you can lift it out of its frame and it springs
- * back — and the loading timer pauses while you're holding it, so playing
- * with it never cuts the intro short. Tapping empty space, or any key, skips
- * to the reveal; the whole panel then wipes up.
+ * The portrait is drag-to-rotate and springs back; the loading timer pauses
+ * while it's held, so playing with it never cuts the intro short. Tapping
+ * empty space, or any key, skips to the reveal.
  *
- * Shown once per browser tab (sessionStorage, the key the site has always
- * used), skipped whole under reduced motion.
+ * Shown once per browser tab (sessionStorage), skipped whole under reduced
+ * motion.
  */
 export function AvatarIntro() {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -108,8 +122,8 @@ export function AvatarIntro() {
   const rafRef = useRef(null);
   const startRef = useRef(0);
   const pausedMsRef = useRef(0);
-  const dragStartedAtRef = useRef(0);
-  const draggingRef = useRef(false);
+  const holdStartedAtRef = useRef(0);
+  const holdingRef = useRef(false);
 
   function finish() {
     window.sessionStorage.setItem(SESSION_KEY, "true");
@@ -118,7 +132,6 @@ export function AvatarIntro() {
 
   useEffect(() => {
     if (!visible) return undefined;
-
     if (prefersReducedMotion) {
       finish();
       return undefined;
@@ -126,7 +139,7 @@ export function AvatarIntro() {
 
     startRef.current = performance.now();
     function tick(now) {
-      if (draggingRef.current) {
+      if (holdingRef.current) {
         rafRef.current = requestAnimationFrame(tick);
         return;
       }
@@ -163,17 +176,21 @@ export function AvatarIntro() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, prefersReducedMotion]);
 
-  function handleDragStart() {
-    draggingRef.current = true;
-    dragStartedAtRef.current = performance.now();
+  // Pause the countdown while the portrait is being dragged.
+  function handleHoldStart(event) {
+    stopDrag(event);
+    if (holdingRef.current) return;
+    holdingRef.current = true;
+    holdStartedAtRef.current = performance.now();
   }
-  function handleDragEnd() {
-    draggingRef.current = false;
-    pausedMsRef.current += performance.now() - dragStartedAtRef.current;
+  function handleHoldEnd() {
+    if (!holdingRef.current) return;
+    holdingRef.current = false;
+    pausedMsRef.current += performance.now() - holdStartedAtRef.current;
   }
 
   const pct = Math.round(progress * 100);
-  const dragBox = { left: -140, right: 140, top: -140, bottom: 140 };
+  const fallbackPortrait = <Avatar className="h-full w-full" />;
 
   return (
     <AnimatePresence>
@@ -185,49 +202,58 @@ export function AvatarIntro() {
           className="fixed inset-0 z-[100] flex cursor-pointer flex-col items-center justify-center overflow-hidden bg-[var(--color-bg)] px-6"
           aria-label="Loading"
         >
-          <div
+          {/* slow aurora wash */}
+          <motion.div
             aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
+            className="pointer-events-none absolute inset-[-25%] blur-3xl"
             style={{
-              backgroundImage:
-                "radial-gradient(ellipse 62% 46% at 50% 40%, var(--color-accent-soft), transparent 62%)",
-              opacity: 0.8,
+              background:
+                "radial-gradient(38% 38% at 28% 30%, var(--color-accent-soft), transparent), radial-gradient(34% 34% at 74% 68%, var(--color-accent-2-soft), transparent), radial-gradient(30% 30% at 60% 20%, rgba(99,198,255,0.12), transparent)",
             }}
+            animate={{ scale: [1, 1.08, 1], opacity: [0.65, 0.9, 0.65] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           />
 
-          <div className="relative flex w-full max-w-xl flex-col items-center text-center">
+          <div className="relative flex w-full max-w-2xl flex-col items-center text-center">
+            {/* portal + portrait */}
             <div className="relative">
-              <div
+              <motion.div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-[-16%] rounded-full"
+                className="pointer-events-none absolute inset-[-36%] rounded-full blur-3xl"
                 style={{
-                  background: "radial-gradient(circle, var(--color-accent-soft), transparent 70%)",
+                  background:
+                    "conic-gradient(from 120deg, var(--color-accent), #63c6ff, var(--color-accent-2), var(--color-accent))",
+                  opacity: 0.3,
                 }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 46, ease: "linear", repeat: Infinity }}
               />
               <motion.div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-[-9%] rounded-full border border-dashed border-[var(--color-border)]"
+                className="pointer-events-none absolute inset-[-5px] rounded-full"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, var(--color-accent), var(--color-accent-2), transparent 58%, var(--color-accent))",
+                }}
                 animate={{ rotate: 360 }}
-                transition={{ duration: 64, ease: "linear", repeat: Infinity }}
+                transition={{ duration: 7, ease: "linear", repeat: Infinity }}
               />
 
               <motion.div
-                drag
-                dragConstraints={dragBox}
-                dragElastic={0.16}
-                dragSnapToOrigin
-                dragTransition={{ bounceStiffness: 280, bounceDamping: 20 }}
-                onPointerDown={stopDrag}
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragEnd}
-                whileDrag={{ scale: 1.04 }}
-                className="relative h-[clamp(11rem,34vw,17rem)] w-[clamp(11rem,34vw,17rem)] cursor-grab touch-none overflow-hidden rounded-full border border-[var(--color-border-strong)] bg-[var(--color-bg-raised)] active:cursor-grabbing"
+                onPointerDown={handleHoldStart}
+                onPointerUp={handleHoldEnd}
+                onPointerLeave={handleHoldEnd}
+                className="relative h-[clamp(12rem,36vw,18rem)] w-[clamp(12rem,36vw,18rem)] cursor-grab touch-none overflow-hidden rounded-full border border-[var(--color-border-strong)] bg-[var(--color-bg-raised)] active:cursor-grabbing"
                 style={{ boxShadow: "var(--shadow-glow)" }}
-                initial={{ scale: 0.92, opacity: 0 }}
+                initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.7, ease: easeEditorial }}
               >
-                <Avatar className="h-full w-full" />
+                <SceneBoundary fallback={fallbackPortrait}>
+                  <Suspense fallback={fallbackPortrait}>
+                    <Avatar3D className="!absolute inset-0" />
+                  </Suspense>
+                </SceneBoundary>
               </motion.div>
 
               {STARS.map((star, i) => (
@@ -246,17 +272,19 @@ export function AvatarIntro() {
               Hi, I'm
             </motion.p>
 
-            <RevealLines
-              as="h1"
-              animateOnMount
-              className="mt-3 font-display text-[clamp(2.5rem,8vw,4.5rem)] font-medium leading-[0.95] tracking-[-0.03em]"
-              lines={[
-                "Shreeya",
-                <span key="last" className="accent-italic text-[var(--color-accent)]">
-                  Bhatt
-                </span>,
-              ]}
-            />
+            <div style={{ filter: "drop-shadow(0 10px 44px rgba(155,140,255,0.28))" }}>
+              <RevealLines
+                as="h1"
+                animateOnMount
+                className="mt-3 font-display text-[clamp(2.75rem,9vw,5.5rem)] font-medium leading-[0.92] tracking-[-0.035em]"
+                lines={[
+                  "Shreeya",
+                  <span key="last" className="accent-italic text-[var(--color-accent)]">
+                    Bhatt
+                  </span>,
+                ]}
+              />
+            </div>
 
             <motion.div
               className="mt-10 flex flex-wrap items-center justify-center gap-3"
@@ -289,20 +317,20 @@ export function AvatarIntro() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.4 }}
             >
-              <div className="relative h-[2px] flex-1 bg-[var(--color-border)]">
+              <div className="relative h-[3px] flex-1 rounded-full bg-[var(--color-border)]">
                 <div
-                  className="absolute inset-y-0 left-0 bg-[var(--color-accent)]"
-                  style={{ width: `${pct}%` }}
+                  className="absolute inset-y-0 left-0 rounded-full bg-[var(--color-accent)]"
+                  style={{ width: `${pct}%`, boxShadow: "0 0 14px var(--color-accent)" }}
                 />
               </div>
-              <span className="label-mono tabular-nums text-[var(--color-fg-subtle)]">
-                {String(pct).padStart(2, "0")}
+              <span className="font-mono text-sm tabular-nums text-[var(--color-fg)]">
+                {String(pct).padStart(3, "0")}
               </span>
             </motion.div>
           </div>
 
           <p className="label-mono absolute bottom-8 text-[var(--color-fg-subtle)]">
-            Drag the portrait · tap anywhere to skip
+            Drag to rotate · tap anywhere to skip
           </p>
         </motion.div>
       )}
