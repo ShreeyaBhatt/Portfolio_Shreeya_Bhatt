@@ -17,7 +17,7 @@ import { easeSignature } from "../../lib/motion.js";
 const FIELDS = [
   { name: "name", label: "Name", type: "text", required: true, autoComplete: "name" },
   { name: "email", label: "Email", type: "email", required: true, autoComplete: "email" },
-  { name: "idea", label: "Project / Idea", type: "text", required: false, autoComplete: "off" },
+  { name: "idea", label: "Mission / Project", type: "text", required: false, autoComplete: "off" },
   { name: "message", label: "Message", type: "textarea", required: true, autoComplete: "off" },
 ];
 
@@ -81,8 +81,8 @@ export function ContactForm() {
   const done = status === "sent" || status === "mail" || status === "error";
 
   return (
-    <div className="panel tech-border min-w-0 p-6 sm:p-8">
-      <p className="label-mono text-[var(--color-accent)]">Send a message</p>
+    <div className="hud min-w-0 p-6 sm:p-8">
+      <p className="coord text-[var(--color-accent)]">TRANSMIT · NEW SIGNAL</p>
 
       <AnimatePresence mode="wait">
         {done ? (
@@ -97,7 +97,7 @@ export function ContactForm() {
           >
             {status === "sent" && (
               <>
-                <p className="text-h3 font-semibold">Request received.</p>
+                <p className="text-h3 font-bold">Transmission complete.</p>
                 <p className="label-mono mt-3 text-[var(--color-accent)]">Status → transmitted</p>
                 <p className="mt-4 text-sm text-[var(--color-fg-muted)]">
                   Thanks — I'll get back to you at {values.email}.
@@ -106,7 +106,7 @@ export function ContactForm() {
             )}
             {status === "mail" && (
               <>
-                <p className="text-h3 font-semibold">Request drafted.</p>
+                <p className="text-h3 font-bold">Signal drafted.</p>
                 <p className="label-mono mt-3 text-[var(--color-accent)]">
                   Status → handed to your mail client
                 </p>
@@ -126,7 +126,7 @@ export function ContactForm() {
             )}
             {status === "error" && (
               <>
-                <p className="text-h3 font-semibold">Transmission failed.</p>
+                <p className="text-h3 font-bold">Transmission failed.</p>
                 <p className="label-mono mt-3 text-[var(--color-danger)]">Status → error</p>
                 <p className="mt-4 text-sm text-[var(--color-fg-muted)]">
                   Something went wrong sending that. Email me directly at{" "}
@@ -147,7 +147,7 @@ export function ContactForm() {
               onClick={() => setStatus("idle")}
               className="label-mono mt-6 text-[var(--color-fg-subtle)] underline-offset-4 hover:text-[var(--color-fg)] hover:underline"
             >
-              ← Send another
+              Send another signal
             </button>
           </motion.div>
         ) : (
@@ -207,7 +207,7 @@ export function ContactForm() {
             })}
 
             <Button type="submit" variant="primary" disabled={status === "sending"}>
-              {status === "sending" ? "Sending…" : "Send message"}
+              {status === "sending" ? "Transmitting…" : "Transmit message →"}
             </Button>
             {!site.contactEndpoint && (
               <p className="font-mono text-[0.7rem] text-[var(--color-fg-subtle)]">

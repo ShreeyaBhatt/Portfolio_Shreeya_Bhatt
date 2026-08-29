@@ -10,10 +10,10 @@ export function BeyondCode() {
     <section
       id="beyond"
      
-      data-spine="03 · Beyond"
+      data-spine="03 · Crew"
       className="container-page scroll-mt-24 py-20 md:py-28"
     >
-      <SectionHeader index="03" label="Beyond the code" titleLines={["Off the", "clock"]} />
+      <SectionHeader index="03" label="Crew · Off-Duty" titleLines={["Off the", "clock"]} />
 
       <ul className="mt-12 max-w-2xl space-y-6">
         {profile.funFacts.map((fact, i) => (

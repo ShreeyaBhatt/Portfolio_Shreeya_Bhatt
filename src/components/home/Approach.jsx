@@ -9,13 +9,13 @@ export function Approach() {
     <section
       id="approach"
      
-      data-spine="02 · Approach"
+      data-spine="02 · Systems"
       className="container-page scroll-mt-24 py-20 md:py-28"
     >
       <SectionHeader
         index="02"
-        label="What I do"
-        titleLines={["Three kinds of", "building"]}
+        label="Systems"
+        titleLines={["Three core", "systems"]}
       />
 
       <div className="mt-12 max-w-2xl divide-y divide-[var(--color-border)] border-y border-[var(--color-border)]">

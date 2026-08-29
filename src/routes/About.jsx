@@ -2,6 +2,8 @@ import { motion } from "motion/react";
 import { Section } from "../components/ui/Section.jsx";
 import { SectionHeader } from "../components/common/SectionHeader.jsx";
 import { RevealLines } from "../components/common/RevealLines.jsx";
+import { HudLabel } from "../components/space/HudLabel.jsx";
+import { SystemGraph } from "../components/about/SystemGraph.jsx";
 import { viewportOnce } from "../lib/motion.js";
 import { profile } from "../data/profile.js";
 import { timeline } from "../data/timeline.js";
@@ -20,36 +22,81 @@ export default function About() {
 
   return (
     <>
+      {/* CREW PROFILE */}
       <Section className="pb-0 pt-28 md:pt-32">
-        <p className="eyebrow">About</p>
+        <p className="eyebrow">
+          <span className="text-[var(--color-accent)]">01</span>
+          <span className="mx-2 text-[var(--color-fg-subtle)]">/</span>Crew Profile
+        </p>
 
         <RevealLines
           as="h1"
           animateOnMount
-          className="mt-7 text-h1 font-semibold"
+          className="mt-6 text-h1 font-bold"
           lines={["I turn messy problems", <span key="l2">into <span className="accent-italic">systems</span>.</span>]}
         />
 
-        <p className="container-prose mt-10 text-lead text-[var(--color-fg-muted)]">{profile.bio}</p>
+        <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:gap-16">
+          {/* identification */}
+          <motion.div
+            initial={{ opacity: 0, x: -16 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={viewportOnce}
+            transition={{ duration: 0.5 }}
+            className="hud relative overflow-hidden p-6"
+          >
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[var(--color-accent)]/20 to-transparent"
+              style={{ animation: "scanline 2.4s ease-in-out 0.3s" }}
+            />
+            <p className="coord text-[var(--color-accent)]">CREW MEMBER</p>
+            <p className="mt-1 font-display text-h3 font-bold">{profile.name}</p>
+            <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-5">
+              <HudLabel k="Role" v="Python Dev" />
+              <HudLabel k="Clearance" v="Student" />
+              <HudLabel k="Location" v="Ahmedabad, IN" />
+              <HudLabel k="Status" v={profile.availability} live />
+            </div>
+            <ul className="mt-6 flex flex-wrap gap-2 border-t border-[var(--color-border)] pt-5">
+              {profile.disciplines.map((d) => (
+                <li key={d} className="rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-[0.1em] text-[var(--color-fg-muted)]">
+                  {d}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
 
-        {current && (
-          <p className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-[var(--color-fg-subtle)]">
-            <span className="text-[var(--color-accent)]">Currently</span>
-            <span>{current.note}</span>
-          </p>
-        )}
+          {/* about text */}
+          <div>
+            <p className="text-lead text-[var(--color-fg-muted)]">{profile.bio}</p>
+            {current && (
+              <div className="mt-8 corner-frame p-5">
+                <p className="coord text-[var(--color-accent)]">CURRENT MISSION</p>
+                <p className="mt-2 text-sm text-[var(--color-fg-muted)]">{current.note}</p>
+                <p className="mt-3 flex flex-wrap gap-x-3 gap-y-1">
+                  {profile.disciplines.concat(["AWS"]).map((f) => (
+                    <span key={f} className="font-mono text-[0.7rem] text-[var(--color-fg-subtle)]">
+                      {f}
+                    </span>
+                  ))}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </Section>
 
-      {/* 01 — Timeline */}
-      <Section>
+      {/* MISSION LOG */}
+      <Section id="log">
         <SectionHeader
-          index="01"
-          label="Timeline"
+          index="02"
+          label="Mission Log"
           meta="2024 — 2028"
           titleLines={["A development", "timeline"]}
           lead="Not a job history — a record of what got built and what got learned, year by year."
         />
-        <div className="mt-14">
+        <div className="mt-12">
           {timeline.map((phase, i) => (
             <motion.div
               key={phase.year}
@@ -61,10 +108,11 @@ export default function About() {
               className="grid-page border-t border-[var(--color-border)] py-8 md:py-10"
             >
               <div className="col-span-12 md:col-span-3">
-                <p className="font-mono text-h3 font-medium text-[var(--color-accent)]">
-                  {phase.year}
+                <p className="font-mono text-h3 font-bold text-[var(--color-accent)]">{phase.year}</p>
+                <p className="mt-1 eyebrow text-[var(--color-fg-subtle)]">
+                  {phase.title}
+                  {phase.open && <span className="ml-2 text-[var(--color-accent)]">· ACTIVE</span>}
                 </p>
-                <p className="mt-1 eyebrow text-[var(--color-fg-subtle)]">{phase.title}</p>
               </div>
               <div className="col-span-12 mt-4 md:col-span-9 md:mt-0">
                 <p className="text-lead text-[var(--color-fg-muted)]">{phase.summary}</p>
@@ -92,54 +140,26 @@ export default function About() {
         </div>
       </Section>
 
-      {/* 02 — Toolbox */}
+      {/* SYSTEMS */}
       <Section id="skills">
         <SectionHeader
-          index="02"
-          label="Toolbox"
-          meta={`${String(toolboxGroups.length).padStart(2, "0")} groups`}
-          titleLines={["The", "toolbox"]}
-          lead="Python at the centre, everything else growing out from it. No ratings — a number next to a language measures nothing."
+          index="03"
+          label="Systems"
+          meta={`${String(toolboxGroups.length).padStart(2, "0")} subsystems`}
+          titleLines={["System", "architecture"]}
+          lead="Python is the reactor at the centre; every other system is wired to it. Hover a node to trace its connections."
         />
-        <div className="mt-14 grid gap-px overflow-hidden rounded-[var(--radius-sm)] border border-[var(--color-border)] bg-[var(--color-border)] sm:grid-cols-2 lg:grid-cols-3">
-          {toolboxGroups.map((group) => (
-            <div key={group.id} className="bg-[var(--color-bg)] p-6">
-              <div className="flex items-baseline justify-between gap-3">
-                <h3 className="font-display text-h3 font-medium">{group.label}</h3>
-                <span
-                  className={
-                    group.weight === "primary"
-                      ? "font-mono text-[0.6rem] uppercase tracking-[0.16em] text-[var(--color-accent)]"
-                      : "font-mono text-[0.6rem] uppercase tracking-[0.16em] text-[var(--color-fg-subtle)]"
-                  }
-                >
-                  {group.weight}
-                </span>
-              </div>
-              <p className="mt-3 text-sm leading-relaxed text-[var(--color-fg-muted)]">
-                {group.blurb}
-              </p>
-              <ul className="mt-4 flex flex-wrap gap-x-3 gap-y-1">
-                {group.skills.map((s) => (
-                  <li key={s} className="font-mono text-[0.7rem] text-[var(--color-fg-subtle)]">
-                    {s}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="mt-12">
+          <SystemGraph />
         </div>
       </Section>
 
-      {/* 03 — Education */}
+      {/* EDUCATION */}
       <Section>
-        <SectionHeader index="03" label="Education" meta="2021 — 2028" />
-        <div className="mt-14">
+        <SectionHeader index="04" label="Training Record" meta="2021 — 2028" />
+        <div className="mt-12">
           {education.map((entry) => (
-            <div
-              key={entry.degree}
-              className="grid-page border-t border-[var(--color-border)] py-8"
-            >
+            <div key={entry.degree} className="grid-page border-t border-[var(--color-border)] py-8">
               <p className="col-span-12 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-[var(--color-accent)] md:col-span-3">
                 {entry.period}
               </p>
@@ -148,9 +168,7 @@ export default function About() {
                 <p className="mt-1 text-sm text-[var(--color-fg-muted)]">
                   {entry.institution} — {entry.location}
                 </p>
-                {entry.detail && (
-                  <p className="mt-3 text-sm text-[var(--color-fg-subtle)]">{entry.detail}</p>
-                )}
+                {entry.detail && <p className="mt-3 text-sm text-[var(--color-fg-subtle)]">{entry.detail}</p>}
               </div>
             </div>
           ))}
@@ -158,15 +176,15 @@ export default function About() {
         </div>
       </Section>
 
-      {/* 04 — Credentials */}
+      {/* CREDENTIALS */}
       <Section id="credentials" className="pb-28 md:pb-40">
         <SectionHeader
-          index="04"
+          index="05"
           label="Credentials"
-          meta={`${String(certifications.length).padStart(2, "0")} completed`}
+          meta={`${String(certifications.length).padStart(2, "0")} verified`}
           lead={`${certifications.length} certifications so far — Python, machine learning, web fundamentals, Java, and version control.`}
         />
-        <ul className="mt-14 border-t border-[var(--color-border)]">
+        <ul className="mt-12 border-t border-[var(--color-border)]">
           {certifications.map((cert) => (
             <li
               key={cert.credentialId ?? cert.title}
@@ -185,6 +203,7 @@ export default function About() {
                     href={cert.credentialUrl}
                     target="_blank"
                     rel="noreferrer"
+                    data-cursor="external"
                     className="link-underline font-mono text-[0.7rem] uppercase tracking-[0.14em] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
                   >
                     Verify →

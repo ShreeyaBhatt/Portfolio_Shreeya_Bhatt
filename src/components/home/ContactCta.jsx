@@ -4,13 +4,12 @@ import { RevealLines } from "../common/RevealLines.jsx";
 import { viewportOnce } from "../../lib/motion.js";
 import { profile } from "../../data/profile.js";
 
-/** Home: the closing call to action. */
+/** Home: OPEN CHANNEL — the closing call to action. */
 export function ContactCta() {
   return (
     <section
       id="contact"
-     
-      data-spine="04 · Contact"
+      data-spine="04 · Channel"
       className="container-page scroll-mt-24 py-24 md:py-36"
     >
       <motion.hr
@@ -23,13 +22,13 @@ export function ContactCta() {
       />
       <p className="mt-5 eyebrow">
         <span className="text-[var(--color-accent)]">04</span>
-        <span className="mx-2.5 text-[var(--color-fg-subtle)]">/</span>Contact
+        <span className="mx-2.5 text-[var(--color-fg-subtle)]">/</span>Open Channel
       </p>
 
       <RevealLines
         as="h2"
-        className="mt-8 text-h1 font-semibold"
-        lines={[<>Let's build</>, <>something.</>]}
+        className="mt-8 text-h1 font-bold"
+        lines={[<>Have a mission</>, <>in mind?</>]}
       />
 
       <motion.div
@@ -39,19 +38,21 @@ export function ContactCta() {
         transition={{ duration: 0.5, delay: 0.3 }}
         className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4"
       >
-        <a
-          href={`mailto:${profile.email}`}
-          className="group inline-flex items-center gap-2 rounded-full bg-[var(--color-fg)] px-6 py-3 font-mono text-[0.72rem] uppercase tracking-[0.16em] text-[var(--color-bg)] transition-transform hover:-translate-y-0.5"
-        >
-          {profile.email}
-          <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">→</span>
-        </a>
         <Link
           to="/contact"
+          data-cursor="channel"
+          className="group inline-flex items-center gap-2 rounded-[var(--radius-sm)] border border-[var(--color-accent)] bg-[var(--color-accent-soft)] px-6 py-3 font-mono text-[0.72rem] uppercase tracking-[0.16em] text-[var(--color-accent)] transition-transform hover:-translate-y-0.5"
+        >
+          Open channel
+          <span aria-hidden="true" className="transition-transform group-hover:translate-x-0.5">→</span>
+        </Link>
+        <a
+          href={`mailto:${profile.email}`}
+          data-cursor="channel"
           className="link-underline font-mono text-[0.72rem] uppercase tracking-[0.16em] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
         >
-          Use the form
-        </Link>
+          {profile.email}
+        </a>
       </motion.div>
     </section>
   );

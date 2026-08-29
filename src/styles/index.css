@@ -167,6 +167,13 @@
     outline-offset: 3px;
     border-radius: 2px;
   }
+
+  @media (pointer: fine) {
+    body.has-custom-cursor,
+    body.has-custom-cursor * {
+      cursor: none;
+    }
+  }
 }
 
 /* ============================================================

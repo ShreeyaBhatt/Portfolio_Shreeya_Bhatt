@@ -11,6 +11,7 @@ import { Grain } from "../common/Grain.jsx";
 import { Spotlight } from "../common/Spotlight.jsx";
 import { BackToTop } from "../common/BackToTop.jsx";
 import { CommandPalette } from "../common/CommandPalette.jsx";
+import { CustomCursor } from "../common/CustomCursor.jsx";
 
 export function Layout() {
   const location = useLocation();
@@ -33,6 +34,7 @@ export function Layout() {
       <Footer />
       <BackToTop />
       <CommandPalette />
+      <CustomCursor />
       <Grain />
     </div>
   );

@@ -1,0 +1,112 @@
+import { Link } from "react-router-dom";
+import { motion } from "motion/react";
+import { cn } from "../../lib/cn.js";
+import { viewportOnce } from "../../lib/motion.js";
+
+/**
+ * One project as an asymmetric "mission panel". The visual half is a live
+ * schematic built from the project's real subsystem list; the meta half is
+ * the mission dossier. Panels alternate direction down the page for rhythm.
+ * On hover a scan line sweeps the schematic and the frame lights up.
+ *
+ * @param {{ project: import("../../data/projects.js").Project, index: number, flip?: boolean }} props
+ */
+export function MissionPanel({ project, index, flip = false }) {
+  const n = String(index + 1).padStart(3, "0");
+  const nodes = (project.architecture ?? []).slice(0, 8);
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 32 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={viewportOnce}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className="grid items-center gap-8 border-t border-[var(--color-border)] py-14 md:gap-12 lg:grid-cols-12 lg:py-20"
+    >
+      {/* schematic */}
+      <Link
+        to={`/projects/${project.slug}`}
+        data-cursor="mission"
+        className={cn(
+          "group relative block lg:col-span-7",
+          flip ? "lg:order-2 lg:col-start-6" : "lg:order-1"
+        )}
+      >
+        <div className="hud relative aspect-[16/10] overflow-hidden">
+          {/* grid + node schematic */}
+          <div className="grid-overlay absolute inset-0 opacity-60" style={{ "--grid-size": "38px" }} />
+          <div className="absolute inset-0 grid grid-cols-4 content-center gap-2.5 p-6">
+            {nodes.map((node, i) => (
+              <span
+                key={node}
+                className="flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] bg-[var(--color-bg)]/60 px-2 py-1.5 font-mono text-[0.6rem] uppercase tracking-[0.06em] text-[var(--color-fg-muted)] transition-colors group-hover:border-[var(--color-accent)]/50"
+              >
+                <span className="text-[var(--color-accent)]">{String(i + 1).padStart(2, "0")}</span>
+                <span className="truncate">{node}</span>
+              </span>
+            ))}
+          </div>
+          {/* corner labels */}
+          <span className="coord absolute left-3 top-3">SCHEMATIC · {project.system}</span>
+          <span className="coord absolute bottom-3 right-3 text-[var(--color-accent)]">
+            {project.status}
+          </span>
+          {/* hover scan line */}
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-0 h-16 -translate-y-full bg-gradient-to-b from-transparent via-[var(--color-accent)]/25 to-transparent opacity-0 transition-opacity group-hover:opacity-100 group-hover:[animation:scanline_1.6s_ease-in-out]"
+          />
+          {/* frame glow on hover */}
+          <span className="pointer-events-none absolute inset-0 rounded-[var(--radius-md)] ring-1 ring-[var(--color-accent)]/0 transition-all group-hover:ring-[var(--color-accent)]/60" />
+        </div>
+      </Link>
+
+      {/* dossier */}
+      <div className={cn("lg:col-span-5", flip ? "lg:order-1 lg:col-start-1 lg:row-start-1" : "lg:order-2")}>
+        <p className="flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--color-fg-subtle)]">
+          <span className="text-[var(--color-accent)]">MISSION {n}</span>
+          {project.featured && (
+            <span className="rounded-[var(--radius-sm)] border border-[var(--color-accent)]/40 px-1.5 py-0.5 text-[var(--color-accent)]">
+              PRIMARY
+            </span>
+          )}
+        </p>
+
+        <h3 className="mt-4 text-h2 font-bold text-[var(--color-fg)]">{project.title}</h3>
+        <p className="mt-2 font-mono text-xs uppercase tracking-[0.14em] text-[var(--color-fg-subtle)]">
+          {project.category}
+        </p>
+
+        <p className="mt-5 max-w-md text-[var(--color-fg-muted)]">{project.summary}</p>
+
+        <dl className="mt-6 grid grid-cols-2 gap-x-6 gap-y-3">
+          <div>
+            <dt className="coord">Timeline</dt>
+            <dd className="mt-1 font-mono text-xs text-[var(--color-fg-muted)]">{project.period}</dd>
+          </div>
+          <div>
+            <dt className="coord">Type</dt>
+            <dd className="mt-1 font-mono text-xs text-[var(--color-fg-muted)]">{project.system}</dd>
+          </div>
+        </dl>
+
+        <ul className="mt-5 flex flex-wrap gap-x-3 gap-y-1">
+          {project.tech.slice(0, 5).map((t) => (
+            <li key={t} className="font-mono text-[0.7rem] text-[var(--color-fg-subtle)]">
+              {t}
+            </li>
+          ))}
+        </ul>
+
+        <Link
+          to={`/projects/${project.slug}`}
+          data-cursor="mission"
+          className="group mt-7 inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[var(--color-accent)]"
+        >
+          View mission
+          <span aria-hidden="true" className="transition-transform group-hover:translate-x-1">→</span>
+        </Link>
+      </div>
+    </motion.article>
+  );
+}

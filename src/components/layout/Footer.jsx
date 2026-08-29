@@ -9,9 +9,9 @@ const social = [
 ];
 
 const siteLinks = [
-  { to: "/projects", label: "Work" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { to: "/projects", label: "Missions" },
+  { to: "/about", label: "Crew" },
+  { to: "/contact", label: "Channel" },
 ];
 
 export function Footer() {
@@ -22,7 +22,7 @@ export function Footer() {
       <div className="container-page py-16 md:py-20">
         <div className="grid gap-12 md:grid-cols-[1.6fr_1fr_1fr]">
           <div>
-            <p className="eyebrow">Get in touch</p>
+            <p className="eyebrow text-[var(--color-accent)]">Open channel</p>
             <a
               href={`mailto:${profile.email}`}
               className="link-underline mt-4 inline-block break-all font-display text-h3 font-semibold"
@@ -37,7 +37,7 @@ export function Footer() {
           </div>
 
           <nav aria-label="Footer">
-            <p className="eyebrow">Site</p>
+            <p className="eyebrow">Navigation</p>
             <ul className="mt-4 space-y-2.5">
               {siteLinks.map((link) => (
                 <li key={link.to}>
@@ -77,7 +77,7 @@ export function Footer() {
             © {year} {profile.name}
           </p>
           <p className="font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[var(--color-fg-subtle)]">
-            Build {site.build} — Ahmedabad, IN
+            Build {site.build} · Ahmedabad, IN · System nominal
           </p>
         </div>
       </div>

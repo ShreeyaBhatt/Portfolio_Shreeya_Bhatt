@@ -8,14 +8,14 @@ export function Work() {
   return (
     <section
       id="work"
-      data-spine="01 · Work"
+      data-spine="01 · Missions"
       className="container-page scroll-mt-24 py-20 md:py-28"
     >
       <SectionHeader
         index="01"
-        label="Selected work"
-        meta={`${String(projects.length).padStart(2, "0")} projects`}
-        titleLines={["Things I've", "shipped"]}
+        label="Mission Control"
+        meta={`${String(projects.length).padStart(2, "0")} logged`}
+        titleLines={["Selected", "missions"]}
         lead="A family investment platform with ML risk models, an expense tracker built twice on purpose, and console systems grounded in hand-written data structures."
       />
 

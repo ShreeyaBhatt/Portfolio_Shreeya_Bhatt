@@ -5,49 +5,43 @@ import { easeEditorial, getRevealVariants, viewportOnce } from "../../lib/motion
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 /**
- * The one section header used across the whole site — a short mint rule that
- * draws itself in, a mono index/label row, then an optional display title and
- * lead. Numbering every section gives a long scroll an editorial spine: the
- * reader always knows where they are.
- *
- *   ──
- *   01 / SELECTED WORK                         FIVE PROJECTS
- *
- *   Things I've
- *   built
+ * The one section header — a spacecraft panel heading. A glowing accent rule
+ * draws in, a thin scan line sweeps once, then a mono channel row
+ * (`02 / MISSION CONTROL … 05 PROJECTS`) and an optional display title + lead.
  *
  * @param {{
- *   index?: string,
- *   label: string,
- *   meta?: string,
- *   titleLines?: import("react").ReactNode[],
- *   lead?: import("react").ReactNode,
- *   className?: string,
- *   titleClassName?: string,
+ *   index?: string, label: string, meta?: string,
+ *   titleLines?: import("react").ReactNode[], lead?: import("react").ReactNode,
+ *   className?: string, titleClassName?: string,
  * }} props
  */
-export function SectionHeader({
-  index,
-  label,
-  meta,
-  titleLines,
-  lead,
-  className,
-  titleClassName,
-}) {
+export function SectionHeader({ index, label, meta, titleLines, lead, className, titleClassName }) {
   const prefersReducedMotion = usePrefersReducedMotion();
   const reveal = getRevealVariants(prefersReducedMotion);
 
   return (
-    <div className={cn(className)}>
-      <motion.hr
-        aria-hidden="true"
-        initial={{ scaleX: prefersReducedMotion ? 1 : 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={viewportOnce}
-        transition={{ duration: 0.7, ease: easeEditorial }}
-        className="rule-accent origin-left"
-      />
+    <div className={cn("relative", className)}>
+      <div className="relative h-0.5 w-full overflow-hidden">
+        <motion.hr
+          aria-hidden="true"
+          initial={{ scaleX: prefersReducedMotion ? 1 : 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={viewportOnce}
+          transition={{ duration: 0.7, ease: easeEditorial }}
+          className="rule-accent origin-left"
+        />
+        {!prefersReducedMotion && (
+          <motion.span
+            aria-hidden="true"
+            initial={{ x: "-100%", opacity: 0 }}
+            whileInView={{ x: "220%", opacity: [0, 1, 1, 0] }}
+            viewport={viewportOnce}
+            transition={{ duration: 1.1, ease: "easeInOut", delay: 0.15 }}
+            className="absolute left-0 top-0 h-full w-16 bg-[var(--color-accent)]"
+            style={{ filter: "blur(2px)" }}
+          />
+        )}
+      </div>
 
       <div className="mt-5 flex items-baseline justify-between gap-6">
         <p className="eyebrow flex items-baseline gap-2.5">
@@ -59,10 +53,7 @@ export function SectionHeader({
       </div>
 
       {titleLines && (
-        <RevealLines
-          lines={titleLines}
-          className={cn("mt-7 text-h2 font-semibold", titleClassName)}
-        />
+        <RevealLines lines={titleLines} className={cn("mt-7 text-h2 font-bold", titleClassName)} />
       )}
 
       {lead && (

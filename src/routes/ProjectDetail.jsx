@@ -70,48 +70,47 @@ export default function ProjectDetail() {
             aria-hidden="true"
             className="transition-transform duration-300 group-hover:-translate-x-1"
           />
-          All work
+          Mission control
         </Link>
 
         <div className="mt-10">
-          <p className="flex items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[var(--color-fg-subtle)]">
-            <span className="text-[var(--color-accent)]">{number}</span>
+          <p className="flex flex-wrap items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--color-fg-subtle)]">
+            <span className="text-[var(--color-accent)]">MISSION {number}</span>
             <span>·</span>
-            <span>{project.status}</span>
+            <span className="inline-flex items-center gap-1.5">
+              <span aria-hidden="true" className="h-1 w-1 rounded-full bg-[var(--color-accent)]" />
+              {project.status}
+            </span>
+            {project.featured && (
+              <span className="rounded-[var(--radius-sm)] border border-[var(--color-accent)]/40 px-1.5 py-0.5 text-[var(--color-accent)]">
+                PRIMARY
+              </span>
+            )}
           </p>
 
-          <RevealLines
-            as="h1"
-            animateOnMount
-            className="mt-6 text-h1 font-semibold"
-            lines={[project.title]}
-          />
+          <RevealLines as="h1" animateOnMount className="mt-6 text-h1 font-bold" lines={[project.title]} />
 
-          <p className="mt-6 max-w-2xl accent-italic text-lead text-[var(--color-fg-muted)]">
-            {project.summary}
-          </p>
+          <p className="mt-5 max-w-2xl text-lead text-[var(--color-fg-muted)]">{project.summary}</p>
         </div>
 
-        <dl className="mt-14 grid gap-8 border-t border-[var(--color-border)] pt-8 sm:grid-cols-3">
+        <dl className="hud mt-12 grid gap-8 p-6 sm:grid-cols-3 md:p-7">
           <div>
-            <dt className="coord">Timeline</dt>
+            <dt className="coord text-[var(--color-accent)]">TIMELINE</dt>
             <dd className="mt-2 font-mono text-sm">{project.period}</dd>
           </div>
           <div>
-            <dt className="coord">System</dt>
+            <dt className="coord text-[var(--color-accent)]">TYPE</dt>
             <dd className="mt-2 font-mono text-sm">{project.system}</dd>
           </div>
           <div>
-            <dt className="coord">Category</dt>
-            <dd className="mt-2 font-mono text-sm text-[var(--color-fg-muted)]">
-              {project.category}
-            </dd>
+            <dt className="coord text-[var(--color-accent)]">CLASSIFICATION</dt>
+            <dd className="mt-2 font-mono text-sm text-[var(--color-fg-muted)]">{project.category}</dd>
           </div>
         </dl>
       </Section>
 
       <Section className="pt-2">
-        <Chapter n="01" label="Overview" id="chapter-overview">
+        <Chapter n="01" label="Mission brief" id="chapter-overview">
           <div className="space-y-6 text-lead text-[var(--color-fg-muted)] md:max-w-3xl">
             {project.description.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
@@ -121,14 +120,14 @@ export default function ProjectDetail() {
 
         {project.problem && (
           <Chapter n="02" label="The problem" id="chapter-problem">
-            <p className="text-h3 font-display font-medium leading-[1.3] md:max-w-3xl">
+            <p className="text-h3 font-display font-bold leading-[1.3] md:max-w-3xl">
               {project.problem}
             </p>
           </Chapter>
         )}
 
         {project.approach && (
-          <Chapter n="03" label="The approach" id="chapter-approach">
+          <Chapter n="03" label="The solution" id="chapter-approach">
             <p className="text-lead text-[var(--color-fg-muted)] md:max-w-3xl">
               {project.approach}
             </p>
@@ -136,7 +135,7 @@ export default function ProjectDetail() {
         )}
 
         {project.architecture?.length > 0 && (
-          <Chapter n="04" label="Architecture" id="chapter-architecture">
+          <Chapter n="04" label="System architecture" id="chapter-architecture">
             <ul className="grid grid-cols-2 gap-x-8 gap-y-3 md:max-w-2xl md:grid-cols-3">
               {project.architecture.map((node, i) => (
                 <li key={node} className="flex items-baseline gap-2.5 border-t border-[var(--color-border)] pt-3">
@@ -150,7 +149,7 @@ export default function ProjectDetail() {
           </Chapter>
         )}
 
-        <Chapter n="05" label="Implementation" id="chapter-implementation">
+        <Chapter n="05" label="Key features" id="chapter-implementation">
           <ul className="border-t border-[var(--color-border)] md:max-w-3xl">
             {project.highlights.map((item, index) => (
               <li
@@ -165,20 +164,20 @@ export default function ProjectDetail() {
             ))}
           </ul>
           {project.contribution && (
-            <div className="panel tech-border mt-10 p-6 md:max-w-3xl">
-              <p className="coord">Key technical decision</p>
+            <div className="hud mt-10 p-6 md:max-w-3xl">
+              <p className="coord text-[var(--color-accent)]">KEY TECHNICAL DECISION</p>
               <p className="mt-3 text-[var(--color-fg-muted)]">{project.contribution}</p>
             </div>
           )}
         </Chapter>
 
         {project.learned && (
-          <Chapter n="06" label="What I learned" id="chapter-result">
+          <Chapter n="06" label="Result" id="chapter-result">
             <p className="text-lead text-[var(--color-fg-muted)] md:max-w-3xl">{project.learned}</p>
           </Chapter>
         )}
 
-        <Chapter n="07" label="Stack" id="chapter-technologies">
+        <Chapter n="07" label="Technology" id="chapter-technologies">
           <ul className="flex flex-wrap gap-2">
             {project.tech.map((item) => (
               <li key={item}>
@@ -188,7 +187,7 @@ export default function ProjectDetail() {
           </ul>
         </Chapter>
 
-        <Chapter n="08" label="Links" id="chapter-live">
+        <Chapter n="08" label="Access" id="chapter-live">
           {links.length > 0 ? (
             <div className="flex flex-wrap gap-3">
               {links.map((link) => (
@@ -206,7 +205,7 @@ export default function ProjectDetail() {
             </div>
           ) : (
             <p className="font-mono text-sm text-[var(--color-fg-subtle)]">
-              No public link for this one.
+              No public link logged for this mission.
             </p>
           )}
         </Chapter>
@@ -217,9 +216,9 @@ export default function ProjectDetail() {
           to={`/projects/${nextProject.slug}`}
           className="group block border-t border-[var(--color-border)] pt-10"
         >
-          <p className="eyebrow text-[var(--color-fg-subtle)]">Next project</p>
+          <p className="eyebrow text-[var(--color-fg-subtle)]">Next mission</p>
           <div className="mt-5 flex items-end justify-between gap-6">
-            <h2 className="text-h2 font-semibold text-[var(--color-fg)] transition-colors group-hover:text-[var(--color-accent)]">
+            <h2 className="text-h2 font-bold text-[var(--color-fg)] transition-colors group-hover:text-[var(--color-accent)]">
               {nextProject.title}
             </h2>
             <ArrowUpRight

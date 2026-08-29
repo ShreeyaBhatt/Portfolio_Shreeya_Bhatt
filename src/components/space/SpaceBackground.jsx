@@ -1,3 +1,4 @@
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { StarField } from "./StarField.jsx";
 import { Planet } from "./Planet.jsx";
 
@@ -6,38 +7,49 @@ import { Planet } from "./Planet.jsx";
  * everything, non-interactive:
  *
  *   1. deep-space vertical gradient
- *   2. two faint nebula clouds (radial gradients)
+ *   2. two faint nebula clouds
  *   3. a slow parallax star field (canvas)
- *   4. one distant planet as a visual anchor, low and to the right
+ *   4. one distant planet as a visual anchor
  *   5. a barely-there technical grid
- *   6. a vignette that keeps focus centre-stage
+ *   6. a vignette
  *
- * Nothing here animates aggressively; it should read as a view through a
- * spacecraft window, not a screensaver.
+ * ORBIT SHIFT — as the whole page scrolls, the planet drifts and rolls a few
+ * degrees and the grid slides, so travelling down the site reads as changing
+ * perspective in orbit. Subtle, one transform each, and disabled under
+ * reduced motion.
  */
 export function SpaceBackground() {
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll();
+  const planetY = useTransform(scrollYProgress, [0, 1], ["0vh", "-22vh"]);
+  const planetRot = useTransform(scrollYProgress, [0, 1], [0, 26]);
+  const gridY = useTransform(scrollYProgress, [0, 1], ["0px", "-140px"]);
+  const nebulaX = useTransform(scrollYProgress, [0, 1], ["0vw", "10vw"]);
+
   return (
     <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
       {/* 1 — base gradient */}
       <div
         className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(180deg, #04060f 0%, #030712 42%, #02040c 100%)",
-        }}
+        style={{ background: "linear-gradient(180deg, #04060f 0%, #030712 42%, #02040c 100%)" }}
       />
 
       {/* 2 — nebula */}
-      <div
+      <motion.div
+        style={reduce ? undefined : { x: nebulaX }}
         className="absolute -left-1/4 top-[-10%] h-[70vh] w-[70vw] opacity-70"
-        style={{
-          background:
-            "radial-gradient(circle, color-mix(in srgb, var(--color-accent-2) 16%, transparent) 0%, transparent 65%)",
-          filter: "blur(40px)",
-        }}
-      />
+      >
+        <div
+          className="h-full w-full"
+          style={{
+            background:
+              "radial-gradient(circle, color-mix(in srgb, var(--color-accent-2) 16%, transparent) 0%, transparent 65%)",
+            filter: "blur(40px)",
+          }}
+        />
+      </motion.div>
       <div
-        className="absolute right-[-15%] bottom-[-10%] h-[60vh] w-[55vw] opacity-60"
+        className="absolute bottom-[-10%] right-[-15%] h-[60vh] w-[55vw] opacity-60"
         style={{
           background:
             "radial-gradient(circle, color-mix(in srgb, var(--color-accent) 12%, transparent) 0%, transparent 62%)",
@@ -48,18 +60,23 @@ export function SpaceBackground() {
       {/* 3 — stars */}
       <StarField className="absolute inset-0 h-full w-full" />
 
-      {/* 4 — anchor planet */}
-      <Planet
-        size={640}
-        className="right-[-18rem] top-[38vh] hidden md:block"
-        tint="#0b1a30"
-        glow="var(--color-accent)"
-      />
+      {/* 4 — anchor planet (orbit shift) */}
+      <motion.div
+        style={reduce ? undefined : { y: planetY, rotate: planetRot }}
+        className="absolute right-[-18rem] top-[38vh] hidden md:block"
+      >
+        <Planet size={640} tint="#0b1a30" glow="var(--color-accent)" />
+      </motion.div>
 
-      {/* 5 — technical grid */}
-      <div
-        className="grid-overlay absolute inset-0 opacity-[0.5]"
-        style={{ "--grid-size": "64px", maskImage: "radial-gradient(circle at 50% 30%, black, transparent 78%)", WebkitMaskImage: "radial-gradient(circle at 50% 30%, black, transparent 78%)" }}
+      {/* 5 — technical grid (orbit shift) */}
+      <motion.div
+        style={{
+          y: reduce ? 0 : gridY,
+          maskImage: "radial-gradient(circle at 50% 30%, black, transparent 78%)",
+          WebkitMaskImage: "radial-gradient(circle at 50% 30%, black, transparent 78%)",
+          "--grid-size": "64px",
+        }}
+        className="grid-overlay absolute inset-x-0 -top-40 h-[calc(100%+20rem)] opacity-50"
       />
 
       {/* 6 — vignette */}
