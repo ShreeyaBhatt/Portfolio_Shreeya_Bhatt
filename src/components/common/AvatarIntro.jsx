@@ -2,66 +2,73 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { profile } from "../../data/profile.js";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
-import { easeEditorial } from "../../lib/motion.js";
+import { easeEditorial, easeSignature } from "../../lib/motion.js";
+import { RevealLines } from "./RevealLines.jsx";
 import { Avatar } from "./Avatar.jsx";
 
 const SESSION_KEY = "sb-intro-seen";
-const DURATION_MS = 2100;
+const DURATION_MS = 2400;
 
-// This screen is its own moment with its own rules — a loud, sticker-y
-// front door that resolves into the calm editorial site. Its palette is
-// fixed and theme-independent on purpose: it's a hand-off, not part of the
-// site's surface, so it shouldn't shift with the light/dark toggle.
-const INK = "#141018";
-const CREAM = "#FDF7EE";
-const VIOLET = "#6D4AFF";
-const GOLD = "#FFC44D";
-
-// Inline SVG film grain — the one texture that does the most to make a flat
-// saturated panel feel like a designed surface rather than a colour fill.
-const GRAIN =
-  "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E\")";
-
-const SPARKS = [
-  { style: { top: "-8%", left: "14%" }, size: 20, fill: GOLD, delay: 0 },
-  { style: { top: "4%", right: "-10%" }, size: 30, fill: CREAM, delay: 0.5 },
-  { style: { bottom: "-6%", right: "20%" }, size: 18, fill: GOLD, delay: 1 },
-  { style: { bottom: "12%", left: "-10%" }, size: 24, fill: CREAM, delay: 0.3 },
-  { style: { top: "46%", left: "-14%" }, size: 14, fill: GOLD, delay: 0.8 },
+// A few small stars scattered around the portal — the same idea as the
+// persistent <SpaceBackground>, just close-up and hand-placed. Kept quiet:
+// the portrait is the subject, these only give it somewhere to sit.
+const STARS = [
+  { style: { top: "-4%", left: "10%" }, size: 5, glyph: "✦", delay: 0 },
+  { style: { top: "12%", right: "-6%" }, size: 4, delay: 0.6 },
+  { style: { bottom: "0%", right: "16%" }, size: 6, glyph: "✦", delay: 1.1 },
+  { style: { bottom: "18%", left: "-6%" }, size: 3, delay: 0.35 },
+  { style: { top: "50%", left: "-9%" }, size: 4, delay: 0.85 },
 ];
 
-function Sparkle({ size, fill }) {
+function Star({ size, glyph, delay }) {
+  if (glyph) {
+    return (
+      <motion.span
+        aria-hidden="true"
+        className="block leading-none text-[var(--color-accent-2)]"
+        style={{ fontSize: `${size * 3}px` }}
+        animate={{ opacity: [0.4, 1, 0.4], scale: [0.85, 1, 0.85], rotate: [0, 15, 0] }}
+        transition={{ duration: 3.2, repeat: Infinity, delay, ease: "easeInOut" }}
+      >
+        {glyph}
+      </motion.span>
+    );
+  }
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
-      <path
-        d="M12 0c1.2 7 4 9.8 12 12-8 2.2-10.8 5-12 12-1.2-7-4-9.8-12-12 8-2.2 10.8-5 12-12Z"
-        fill={fill}
-        stroke={INK}
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-    </svg>
+    <motion.span
+      aria-hidden="true"
+      className="block rounded-full bg-[var(--color-fg-subtle)]"
+      style={{ width: size, height: size }}
+      animate={{ opacity: [0.25, 0.9, 0.25] }}
+      transition={{ duration: 2.6, repeat: Infinity, delay, ease: "easeInOut" }}
+    />
   );
 }
 
-/** The rotating "open to work" chip — circular text on a die-cut disc. */
+/** The rotating "open to work" ring — a quiet observatory dial, not a sticker. */
 function SpinBadge() {
   return (
     <motion.div
-      className="relative grid h-24 w-24 shrink-0 place-items-center rounded-full border-[3px] sm:h-28 sm:w-28"
-      style={{ borderColor: INK, background: CREAM, boxShadow: `6px 6px 0 ${INK}` }}
+      className="relative grid h-[4.5rem] w-[4.5rem] shrink-0 place-items-center rounded-full border border-[var(--color-border-strong)] bg-[var(--color-bg-raised)]"
       animate={{ rotate: 360 }}
-      transition={{ duration: 9, ease: "linear", repeat: Infinity }}
+      transition={{ duration: 14, ease: "linear", repeat: Infinity }}
     >
       <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden="true">
         <defs>
-          <path id="sb-badge-arc" d="M50,50 m-33,0 a33,33 0 1,1 66,0 a33,33 0 1,1 -66,0" />
+          <path id="sb-arc" d="M50,50 m-34,0 a34,34 0 1,1 68,0 a34,34 0 1,1 -68,0" />
         </defs>
-        <text fill={INK} style={{ fontFamily: "var(--font-mono)", fontSize: "10.5px", letterSpacing: "2.5px" }}>
-          <textPath href="#sb-badge-arc">OPEN TO WORK ✦ OPEN TO WORK ✦</textPath>
+        <text
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "8.5px",
+            letterSpacing: "3px",
+            fill: "var(--color-fg-subtle)",
+          }}
+        >
+          <textPath href="#sb-arc">OPEN TO WORK · OPEN TO WORK · </textPath>
         </text>
       </svg>
-      <span aria-hidden="true" className="absolute text-lg" style={{ color: VIOLET }}>
+      <span aria-hidden="true" className="absolute text-[0.7rem] text-[var(--color-accent)]">
         ✦
       </span>
     </motion.div>
@@ -69,14 +76,15 @@ function SpinBadge() {
 }
 
 /**
- * A one-time arrival screen. The avatar springs in and waves, the name lands
- * in a rotated sticker, chips scatter in, a counter fills — then the whole
- * panel wipes up to reveal the site.
+ * A one-time arrival screen, in the site's own visual language: deep-space
+ * ground, a hairline "portal" the portrait sits inside, display type with
+ * the surname in serif italic exactly as the hero sets it. The portrait
+ * settles into frame, a counter fills a hairline rule, then the whole panel
+ * wipes up to reveal the page.
  *
- * Shown once per browser tab (sessionStorage, same key the site has always
+ * Shown once per browser tab (sessionStorage, the key the site has always
  * used) so it never replays on in-site navigation, and skipped whole under
- * reduced motion — the panel is nothing but motion, so there's no static
- * version worth showing.
+ * reduced motion.
  */
 export function AvatarIntro() {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -84,7 +92,6 @@ export function AvatarIntro() {
   const [progress, setProgress] = useState(0);
   const rafRef = useRef(null);
 
-  // Drive the counter off real elapsed time, then dismiss.
   useEffect(() => {
     if (!visible) return undefined;
 
@@ -111,7 +118,6 @@ export function AvatarIntro() {
     };
   }, [visible, prefersReducedMotion]);
 
-  // Hold the page still while the panel covers it.
   useEffect(() => {
     if (!visible) return undefined;
     document.body.style.overflow = "hidden";
@@ -120,7 +126,6 @@ export function AvatarIntro() {
     };
   }, [visible]);
 
-  // Any tap or key skips straight to the reveal.
   useEffect(() => {
     if (!visible || prefersReducedMotion) return undefined;
     function skip() {
@@ -136,7 +141,6 @@ export function AvatarIntro() {
   }, [visible, prefersReducedMotion]);
 
   const pct = Math.round(progress * 100);
-  const firstName = profile.name.split(" ")[0];
 
   return (
     <AnimatePresence>
@@ -144,79 +148,75 @@ export function AvatarIntro() {
         <motion.div
           key="avatar-intro"
           exit={{ y: "-100%", transition: { duration: 0.8, ease: easeEditorial } }}
-          className="fixed inset-0 z-[100] flex cursor-pointer flex-col items-center justify-center overflow-hidden px-6"
-          style={{ background: VIOLET, color: CREAM }}
+          className="fixed inset-0 z-[100] flex cursor-pointer flex-col items-center justify-center overflow-hidden bg-[var(--color-bg)] px-6"
           aria-label="Loading"
         >
+          {/* nebula wash, matching the site's body::after */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
-            style={{ backgroundImage: GRAIN, opacity: 0.14, mixBlendMode: "overlay" }}
+            style={{
+              backgroundImage:
+                "radial-gradient(ellipse 62% 46% at 50% 40%, var(--color-accent-soft), transparent 62%)",
+              opacity: 0.8,
+            }}
           />
 
           <div className="relative flex w-full max-w-xl flex-col items-center text-center">
-            {/* avatar + orbiting sparkles */}
+            {/* portal + portrait */}
             <div className="relative">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-[-16%] rounded-full"
+                style={{
+                  background: "radial-gradient(circle, var(--color-accent-soft), transparent 70%)",
+                }}
+              />
               <motion.div
                 aria-hidden="true"
-                className="pointer-events-none absolute inset-[-22%]"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1, rotate: 360 }}
-                transition={{
-                  opacity: { duration: 0.6, delay: 0.3 },
-                  rotate: { duration: 26, ease: "linear", repeat: Infinity },
-                }}
-              >
-                {SPARKS.map((spark, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute"
-                    style={spark.style}
-                    animate={{ scale: [0.7, 1, 0.7], opacity: [0.55, 1, 0.55] }}
-                    transition={{
-                      duration: 2.4,
-                      repeat: Infinity,
-                      delay: spark.delay,
-                      ease: "easeInOut",
-                    }}
-                  >
-                    <Sparkle size={spark.size} fill={spark.fill} />
-                  </motion.div>
-                ))}
-              </motion.div>
+                className="pointer-events-none absolute inset-[-9%] rounded-full border border-dashed border-[var(--color-border)]"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 64, ease: "linear", repeat: Infinity }}
+              />
 
               <motion.div
-                className="relative h-[clamp(9rem,30vw,14rem)] w-[clamp(9rem,30vw,14rem)] overflow-hidden rounded-full border-[4px]"
-                style={{ borderColor: INK, background: CREAM, boxShadow: `12px 12px 0 ${INK}` }}
-                initial={{ scale: 0.5, y: 24, rotate: -10, opacity: 0 }}
-                animate={{ scale: 1, y: 0, rotate: -3, opacity: 1 }}
-                transition={{ type: "spring", stiffness: 240, damping: 15, delay: 0.05 }}
+                className="relative h-[clamp(11rem,34vw,17rem)] w-[clamp(11rem,34vw,17rem)] overflow-hidden rounded-full border border-[var(--color-border-strong)] bg-[var(--color-bg-raised)]"
+                style={{ boxShadow: "var(--shadow-glow)" }}
+                initial={{ scale: 0.92, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.7, ease: easeEditorial }}
               >
                 <Avatar className="h-full w-full" />
               </motion.div>
+
+              {STARS.map((star, i) => (
+                <span key={i} className="absolute" style={star.style}>
+                  <Star size={star.size} glyph={star.glyph} delay={star.delay} />
+                </span>
+              ))}
             </div>
 
-            {/* name */}
+            {/* name — set exactly as the hero sets it */}
             <motion.p
-              className="mt-12 font-display text-h3 font-bold uppercase tracking-tight"
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.35, duration: 0.4, ease: easeEditorial }}
+              className="label-mono mt-12 text-[var(--color-fg-subtle)]"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.4, ease: easeSignature }}
             >
-              Hey, I'm
+              Hi, I'm
             </motion.p>
 
-            <motion.div
-              className="mt-3 inline-block border-[3px] px-5 py-1"
-              style={{ borderColor: INK, background: GOLD, color: INK, boxShadow: `8px 8px 0 ${INK}` }}
-              initial={{ y: 26, opacity: 0, rotate: 7 }}
-              animate={{ y: 0, opacity: 1, rotate: -2 }}
-              transition={{ type: "spring", stiffness: 210, damping: 13, delay: 0.45 }}
-            >
-              <span className="font-display text-[clamp(2.5rem,10vw,4rem)] font-bold uppercase leading-none tracking-tight">
-                {firstName}
-              </span>
-            </motion.div>
+            <RevealLines
+              as="h1"
+              animateOnMount
+              className="mt-3 font-display text-[clamp(2.5rem,8vw,4.5rem)] font-medium leading-[0.95] tracking-[-0.03em]"
+              lines={[
+                "Shreeya",
+                <span key="last" className="accent-italic text-[var(--color-accent)]">
+                  Bhatt
+                </span>,
+              ]}
+            />
 
             {/* chips */}
             <motion.div
@@ -225,22 +225,21 @@ export function AvatarIntro() {
               animate="visible"
               variants={{
                 hidden: {},
-                visible: { transition: { staggerChildren: 0.08, delayChildren: 0.6 } },
+                visible: { transition: { staggerChildren: 0.08, delayChildren: 0.7 } },
               }}
             >
               <motion.div
-                variants={{ hidden: { scale: 0.7, opacity: 0 }, visible: { scale: 1, opacity: 1 } }}
+                variants={{ hidden: { scale: 0.8, opacity: 0 }, visible: { scale: 1, opacity: 1 } }}
               >
                 <SpinBadge />
               </motion.div>
-              {profile.disciplines.map((discipline, i) => (
+              {profile.disciplines.map((discipline) => (
                 <motion.span
                   key={discipline}
-                  className="rounded-full border-[3px] px-4 py-2 font-mono text-[0.7rem] uppercase tracking-wider"
-                  style={{ borderColor: INK, background: CREAM, color: INK, boxShadow: `4px 4px 0 ${INK}` }}
+                  className="rounded-full border border-[var(--color-border-strong)] px-3.5 py-1.5 font-mono text-[0.7rem] uppercase tracking-wider text-[var(--color-fg-muted)]"
                   variants={{
-                    hidden: { y: 14, scale: 0.8, opacity: 0 },
-                    visible: { y: 0, scale: 1, opacity: 1, rotate: i % 2 === 0 ? -3 : 3 },
+                    hidden: { y: 12, opacity: 0 },
+                    visible: { y: 0, opacity: 1 },
                   }}
                 >
                   {discipline}
@@ -248,35 +247,26 @@ export function AvatarIntro() {
               ))}
             </motion.div>
 
-            {/* counter */}
+            {/* counter on a hairline */}
             <motion.div
-              className="mt-12 flex w-full max-w-xs items-center gap-4"
+              className="mt-14 flex w-full max-w-xs items-center gap-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.7, duration: 0.4 }}
+              transition={{ delay: 0.8, duration: 0.4 }}
             >
-              <div
-                className="relative h-3.5 flex-1 overflow-hidden rounded-full border-[3px]"
-                style={{ borderColor: INK, background: CREAM }}
-              >
+              <div className="relative h-[2px] flex-1 bg-[var(--color-border)]">
                 <div
-                  className="absolute inset-y-0 left-0"
-                  style={{ width: `${pct}%`, background: GOLD }}
+                  className="absolute inset-y-0 left-0 bg-[var(--color-accent)]"
+                  style={{ width: `${pct}%` }}
                 />
               </div>
-              <span
-                className="rounded-full border-[3px] px-2.5 py-0.5 font-mono text-xs tabular-nums"
-                style={{ borderColor: INK, background: CREAM, color: INK }}
-              >
+              <span className="label-mono tabular-nums text-[var(--color-fg-subtle)]">
                 {String(pct).padStart(2, "0")}
               </span>
             </motion.div>
           </div>
 
-          <p
-            className="absolute bottom-8 font-mono text-[0.7rem] uppercase tracking-[0.2em]"
-            style={{ color: CREAM, opacity: 0.7 }}
-          >
+          <p className="label-mono absolute bottom-8 text-[var(--color-fg-subtle)]">
             Tap anywhere to skip
           </p>
         </motion.div>

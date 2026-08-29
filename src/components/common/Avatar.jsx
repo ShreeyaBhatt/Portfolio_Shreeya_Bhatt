@@ -2,106 +2,309 @@ import { motion } from "motion/react";
 import { cn } from "../../lib/cn.js";
 
 /**
- * A drawn stand-in for a photo: a flat-colour, bold-outline character face
- * with headphones — a nod to the singing that's on the profile. It's built to
- * be dropped onto the cream "sticker" disc the intro gives it, so it never
- * depends on whatever colour sits behind it.
+ * A shaded, dimensional portrait built to read as a 3D render rather than a
+ * flat illustration — and to belong to the site's cosmic theme rather than
+ * fight it.
  *
- * Motion lives here rather than in the caller because it belongs to the
- * character, not the scene: a periodic blink, a slow bob, and a one-time wave
- * as it lands. `reduced` freezes all three into one static frame.
+ * How the depth is done, all in SVG:
+ *  - every form is filled with a radial/linear gradient, not a flat colour;
+ *  - one committed light setup — a warm key from upper-left, a violet rim
+ *    (the site's accent) raking the right/back edge, so the face has a lit
+ *    side and a shadow side;
+ *  - soft occlusion under the jaw, hair, brow, nose and lip, and soft
+ *    speculars on the forehead, cheekbone, nose and lower lip;
+ *  - real front-to-back layering: nebula glow → cast shadow → back hair →
+ *    garment → neck → face → features → face-framing hair → flyaway wisps.
  *
- * All geometry is in a 200×200 user space; every animated group uses
- * `transform-box: fill-box` so its origin is its own centre, not the SVG's.
+ * Female read: long layered hair with crown volume and a side-swept fringe,
+ * a tapered jaw, arched brows, lashes, fuller highlighted lips, a slim neck,
+ * and a small gold star stud that ties into the ✦ motif used across the site.
+ *
+ * Motion belongs to the character, not the scene: a slow bob, a gentle hair
+ * sway, an unhurried blink, and a settle-into-frame as it lands. `reduced`
+ * collapses all of it to one still frame.
+ *
+ * Scene-level colour (the portal, glow, type) is token-driven in
+ * <AvatarIntro> so it tracks light/dark; the material colours here — skin,
+ * hair, makeup — are fixed and chosen to hold up against deep navy.
  */
-const INK = "#141018";
-const SKIN = "#F7C9A4";
-const HAIR = "#6D4AFF";
-const GOLD = "#FFC44D";
-const BLUSH = "#FF8FB1";
-const CREAM = "#FDF7EE";
+const SKIN_LIGHT = "#F3CDAD";
+const SKIN_MID = "#DAA37E";
+const SKIN_SHADOW = "#AE765A";
+const SKIN_OCCLUSION = "#89583F";
+const SKIN_SPEC = "#FFF4E8";
+const RIM = "#9B8CFF";
+const HAIR_LIGHT = "#332A45";
+const HAIR_DARK = "#140F1D";
+const HAIR_RIM = "#B9ABF2";
+const BROW = "#231B2F";
+const LASH = "#191320";
 
 export function Avatar({ reduced = false, className }) {
+  const loop = (props) => (reduced ? {} : props);
+
   return (
     <svg
-      viewBox="0 0 200 200"
+      viewBox="0 0 240 280"
       className={cn("block", className)}
       role="img"
-      aria-label="Illustrated portrait of Shreeya"
+      aria-label="Stylised 3D portrait of Shreeya"
     >
+      <defs>
+        <radialGradient id="av-skin" cx="38%" cy="30%" r="82%">
+          <stop offset="0%" stopColor={SKIN_LIGHT} />
+          <stop offset="55%" stopColor={SKIN_MID} />
+          <stop offset="100%" stopColor={SKIN_SHADOW} />
+        </radialGradient>
+        <linearGradient id="av-neck" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={SKIN_MID} />
+          <stop offset="100%" stopColor={SKIN_OCCLUSION} />
+        </linearGradient>
+        <linearGradient id="av-hair" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor={HAIR_LIGHT} />
+          <stop offset="100%" stopColor={HAIR_DARK} />
+        </linearGradient>
+        <linearGradient id="av-hair-rim" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={HAIR_RIM} stopOpacity="0.75" />
+          <stop offset="45%" stopColor={HAIR_RIM} stopOpacity="0" />
+        </linearGradient>
+        <linearGradient id="av-rim" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor={RIM} stopOpacity="0" />
+          <stop offset="100%" stopColor={RIM} stopOpacity="0.85" />
+        </linearGradient>
+        <radialGradient id="av-iris" cx="42%" cy="38%" r="65%">
+          <stop offset="0%" stopColor="#8A73C8" />
+          <stop offset="70%" stopColor="#4C3B7A" />
+          <stop offset="100%" stopColor="#2B2049" />
+        </radialGradient>
+        <linearGradient id="av-lip" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#C87680" />
+          <stop offset="100%" stopColor="#9A4A59" />
+        </linearGradient>
+        <linearGradient id="av-garment" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="#242138" />
+          <stop offset="100%" stopColor="#131120" />
+        </linearGradient>
+        <radialGradient id="av-glow" cx="50%" cy="46%" r="60%">
+          <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
+        </radialGradient>
+        <filter id="av-soft" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="3.5" />
+        </filter>
+        <filter id="av-blur" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="7" />
+        </filter>
+      </defs>
+
+      {/* nebula wash + contact shadow — sit behind the whole bust */}
+      <ellipse cx="120" cy="120" rx="150" ry="158" fill="url(#av-glow)" />
+      <ellipse cx="120" cy="252" rx="84" ry="18" fill={SKIN_OCCLUSION} opacity="0.22" filter="url(#av-blur)" />
+
+      {/* settle-into-frame on mount */}
       <motion.g
-        animate={reduced ? undefined : { y: [0, -4, 0] }}
-        transition={reduced ? undefined : { duration: 3, ease: "easeInOut", repeat: Infinity }}
+        initial={loop({ rotate: 6, y: 14, opacity: 0 })}
+        animate={loop({ rotate: 0, y: 0, opacity: 1 })}
+        transition={loop({ type: "spring", stiffness: 120, damping: 17 })}
+        style={{ transformBox: "fill-box", transformOrigin: "center" }}
       >
-        {/* hoodie / shoulders */}
-        <path
-          d="M50 184 C 58 150 142 150 150 184 Z"
-          fill={HAIR}
-          stroke={INK}
-          strokeWidth="5"
-          strokeLinejoin="round"
-        />
-        {/* hair silhouette */}
-        <rect x="46" y="50" width="108" height="108" rx="50" fill={HAIR} stroke={INK} strokeWidth="5" />
-        {/* headphone band */}
-        <path d="M38 100 C 38 40 162 40 162 100" fill="none" stroke={INK} strokeWidth="9" strokeLinecap="round" />
-        {/* face */}
-        <rect x="60" y="62" width="80" height="92" rx="36" fill={SKIN} stroke={INK} strokeWidth="5" />
-        {/* fringe */}
-        <path
-          d="M62 88 C 72 64 128 64 138 88 C 120 76 80 76 62 88 Z"
-          fill={HAIR}
-          stroke={INK}
-          strokeWidth="4"
-          strokeLinejoin="round"
-        />
-        {/* ear cups */}
-        <rect x="28" y="92" width="24" height="36" rx="11" fill={INK} />
-        <rect x="33" y="99" width="14" height="22" rx="7" fill={GOLD} />
-        <rect x="148" y="92" width="24" height="36" rx="11" fill={INK} />
-        <rect x="153" y="99" width="14" height="22" rx="7" fill={GOLD} />
-        {/* eyebrows */}
-        <path d="M76 98 q 9 -6 18 -1" fill="none" stroke={INK} strokeWidth="4" strokeLinecap="round" />
-        <path d="M106 97 q 9 -5 18 1" fill="none" stroke={INK} strokeWidth="4" strokeLinecap="round" />
-        {/* eyes — blink */}
+        {/* slow breathing tilt */}
         <motion.g
-          style={{ transformBox: "fill-box", transformOrigin: "center" }}
-          animate={reduced ? undefined : { scaleY: [1, 1, 0.15, 1] }}
-          transition={
-            reduced
-              ? undefined
-              : { duration: 2.8, times: [0, 0.92, 0.96, 1], repeat: Infinity, repeatDelay: 0.6 }
-          }
+          animate={loop({ rotate: [-1, 1, -1] })}
+          transition={loop({ duration: 7, ease: "easeInOut", repeat: Infinity })}
+          style={{ transformBox: "fill-box", transformOrigin: "center bottom" }}
         >
-          <ellipse cx="85" cy="112" rx="6.5" ry="8.5" fill={INK} />
-          <ellipse cx="115" cy="112" rx="6.5" ry="8.5" fill={INK} />
-          <circle cx="87" cy="109" r="2" fill={CREAM} />
-          <circle cx="117" cy="109" r="2" fill={CREAM} />
-        </motion.g>
-        {/* nose */}
-        <path
-          d="M100 116 l -3 9 q 3 3 6 0"
-          fill="none"
-          stroke={INK}
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        {/* blush */}
-        <ellipse cx="74" cy="128" rx="8" ry="5" fill={BLUSH} opacity="0.7" />
-        <ellipse cx="126" cy="128" rx="8" ry="5" fill={BLUSH} opacity="0.7" />
-        {/* mouth */}
-        <path d="M86 134 Q 100 148 114 134" fill="none" stroke={INK} strokeWidth="5" strokeLinecap="round" />
-        {/* wave — plays once as the avatar lands */}
-        <motion.g
-          style={{ transformBox: "fill-box", transformOrigin: "bottom center" }}
-          initial={reduced ? undefined : { rotate: 0 }}
-          animate={reduced ? undefined : { rotate: [0, 18, -10, 14, 0] }}
-          transition={reduced ? undefined : { duration: 1.1, ease: "easeInOut", delay: 0.5 }}
-        >
-          <rect x="150" y="150" width="12" height="26" rx="6" fill={SKIN} stroke={INK} strokeWidth="4" />
-          <circle cx="156" cy="146" r="13" fill={SKIN} stroke={INK} strokeWidth="4" />
-          <path d="M148 141 q 8 -9 16 0" fill="none" stroke={INK} strokeWidth="3" strokeLinecap="round" />
+          {/* vertical bob */}
+          <motion.g
+            animate={loop({ y: [0, -3, 0] })}
+            transition={loop({ duration: 4, ease: "easeInOut", repeat: Infinity })}
+          >
+            {/* ---- back hair (crown + curtains) ---- */}
+            <motion.g
+              animate={loop({ rotate: [-1.4, 1.4, -1.4] })}
+              transition={loop({ duration: 6, ease: "easeInOut", repeat: Infinity })}
+              style={{ transformBox: "fill-box", transformOrigin: "top center" }}
+            >
+              <path
+                d="M62 96 C 54 142 56 198 66 244 C 70 260 82 270 92 274 C 84 250 78 210 80 166 C 82 136 84 116 90 98 C 82 94 70 92 62 96 Z"
+                fill="url(#av-hair)"
+              />
+              <path
+                d="M178 96 C 186 142 184 198 174 244 C 170 260 158 270 148 274 C 156 250 162 210 160 166 C 158 136 156 116 150 98 C 158 94 170 92 178 96 Z"
+                fill="url(#av-hair)"
+              />
+              <path
+                d="M120 38 C 82 38 60 66 58 108 C 58 118 66 122 74 114 C 82 82 100 62 120 60 C 140 62 158 82 166 114 C 174 122 182 118 182 108 C 180 66 158 38 120 38 Z"
+                fill="url(#av-hair)"
+              />
+              {/* rim light catching the crown */}
+              <path
+                d="M120 38 C 88 38 66 62 60 100 C 74 68 96 52 120 50 C 144 52 166 68 180 100 C 174 62 152 38 120 38 Z"
+                fill="url(#av-hair-rim)"
+              />
+            </motion.g>
+
+            {/* ---- garment ---- */}
+            <path
+              d="M48 280 C 52 236 82 220 120 220 C 158 220 188 236 192 280 Z"
+              fill="url(#av-garment)"
+            />
+            <path
+              d="M150 226 C 176 236 188 254 192 280 L182 280 C 178 256 166 240 148 232 Z"
+              fill={RIM}
+              opacity="0.16"
+            />
+            {/* collarbone hint */}
+            <path d="M96 232 q 24 12 48 0" stroke={SKIN_SHADOW} strokeWidth="2" fill="none" opacity="0.4" />
+
+            {/* ---- neck ---- */}
+            <path
+              d="M103 176 C 103 196 101 214 99 228 L141 228 C 139 214 137 196 137 176 C 132 190 108 190 103 176 Z"
+              fill="url(#av-neck)"
+            />
+            {/* jaw occlusion onto the neck */}
+            <path
+              d="M92 176 C 104 192 136 192 148 176 C 140 200 100 200 92 176 Z"
+              fill={SKIN_OCCLUSION}
+              opacity="0.55"
+              filter="url(#av-soft)"
+            />
+
+            {/* ---- face ---- */}
+            <path
+              d="M120 60 C 92 60 74 78 72 104 C 71 122 74 142 82 160 C 90 176 104 190 120 192 C 136 190 150 176 158 160 C 166 142 169 122 168 104 C 166 78 148 60 120 60 Z"
+              fill="url(#av-skin)"
+            />
+            {/* violet rim on the shadow side */}
+            <path
+              d="M170 100 C 172 122 168 146 158 164 C 150 178 140 188 132 192 C 140 184 150 172 156 156 C 164 138 167 120 166 100 Z"
+              fill="url(#av-rim)"
+              filter="url(#av-soft)"
+            />
+            {/* key speculars */}
+            <ellipse cx="102" cy="82" rx="17" ry="11" fill={SKIN_SPEC} opacity="0.32" filter="url(#av-soft)" />
+            <ellipse cx="90" cy="132" rx="12" ry="9" fill={SKIN_SPEC} opacity="0.26" filter="url(#av-soft)" />
+            {/* temple + cheek occlusion */}
+            <ellipse cx="150" cy="120" rx="12" ry="20" fill={SKIN_SHADOW} opacity="0.3" filter="url(#av-soft)" />
+
+            {/* ---- ear + star stud ---- */}
+            <path
+              d="M70 116 C 63 120 63 134 72 141 C 77 137 79 126 77 118 C 75 115 72 115 70 116 Z"
+              fill={SKIN_MID}
+            />
+            <path
+              d="M72 138 l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6 Z"
+              fill="var(--color-accent-2)"
+            />
+
+            {/* ---- brows ---- */}
+            <path
+              d="M83 100 C 92 93 104 92 113 97 C 105 95 93 96 86 103 Z"
+              fill={BROW}
+            />
+            <path
+              d="M127 97 C 136 92 148 93 157 100 C 150 96 138 95 129 99 Z"
+              fill={BROW}
+            />
+
+            {/* ---- eyes (blink) ---- */}
+            <motion.g
+              animate={loop({ scaleY: [1, 1, 0.08, 1] })}
+              transition={loop({
+                duration: 3.6,
+                times: [0, 0.9, 0.94, 1],
+                repeat: Infinity,
+                repeatDelay: 1.4,
+              })}
+              style={{ transformBox: "fill-box", transformOrigin: "center" }}
+            >
+              {/* sockets */}
+              <ellipse cx="100" cy="118" rx="15" ry="9" fill={SKIN_SHADOW} opacity="0.28" filter="url(#av-soft)" />
+              <ellipse cx="140" cy="118" rx="15" ry="9" fill={SKIN_SHADOW} opacity="0.28" filter="url(#av-soft)" />
+              {/* sclera */}
+              <path d="M86 119 C 92 111 108 111 114 118 C 108 124 92 125 86 119 Z" fill="#EFE9F1" />
+              <path d="M126 118 C 132 111 148 111 154 119 C 148 125 132 124 126 118 Z" fill="#EFE9F1" />
+              {/* iris + pupil + catchlights */}
+              <circle cx="100" cy="118" r="6.4" fill="url(#av-iris)" />
+              <circle cx="140" cy="118" r="6.4" fill="url(#av-iris)" />
+              <circle cx="100" cy="118" r="3" fill="#160F22" />
+              <circle cx="140" cy="118" r="3" fill="#160F22" />
+              <circle cx="97.6" cy="115.4" r="2" fill="#FFFFFF" />
+              <circle cx="137.6" cy="115.4" r="2" fill="#FFFFFF" />
+              <circle cx="102.5" cy="120.5" r="1" fill="#FFFFFF" opacity="0.5" />
+              <circle cx="142.5" cy="120.5" r="1" fill="#FFFFFF" opacity="0.5" />
+              {/* upper lid line */}
+              <path d="M85 118 C 92 110 109 110 115 117" stroke={LASH} strokeWidth="2.4" fill="none" strokeLinecap="round" />
+              <path d="M125 117 C 131 110 148 110 155 118" stroke={LASH} strokeWidth="2.4" fill="none" strokeLinecap="round" />
+              {/* outer lashes */}
+              <path d="M85 118 c -3 -1 -5 -3 -6 -6" stroke={LASH} strokeWidth="2" fill="none" strokeLinecap="round" />
+              <path d="M87 121 c -3 0 -5 -1 -7 -3" stroke={LASH} strokeWidth="1.6" fill="none" strokeLinecap="round" />
+              <path d="M155 118 c 3 -1 5 -3 6 -6" stroke={LASH} strokeWidth="2" fill="none" strokeLinecap="round" />
+              <path d="M153 121 c 3 0 5 -1 7 -3" stroke={LASH} strokeWidth="1.6" fill="none" strokeLinecap="round" />
+            </motion.g>
+
+            {/* ---- nose ---- */}
+            <path d="M124 112 C 128 126 130 140 126 150 C 124 144 122 128 122 114 Z" fill={SKIN_SHADOW} opacity="0.4" filter="url(#av-soft)" />
+            <ellipse cx="119" cy="128" rx="3" ry="16" fill={SKIN_SPEC} opacity="0.28" filter="url(#av-soft)" />
+            <ellipse cx="118" cy="147" rx="5" ry="4" fill={SKIN_SPEC} opacity="0.3" filter="url(#av-soft)" />
+            <ellipse cx="112" cy="152" rx="3" ry="2" fill={SKIN_OCCLUSION} opacity="0.5" filter="url(#av-soft)" />
+            <ellipse cx="127" cy="152" rx="3" ry="2" fill={SKIN_OCCLUSION} opacity="0.5" filter="url(#av-soft)" />
+            <ellipse cx="120" cy="157" rx="10" ry="3" fill={SKIN_OCCLUSION} opacity="0.35" filter="url(#av-soft)" />
+
+            {/* ---- lips ---- */}
+            <ellipse cx="120" cy="176" rx="18" ry="5" fill={SKIN_OCCLUSION} opacity="0.22" filter="url(#av-soft)" />
+            <path
+              d="M104 167 C 110 162 116 163 120 166 C 124 163 130 162 136 167 C 130 171 124 172 120 170 C 116 172 110 171 104 167 Z"
+              fill="url(#av-lip)"
+            />
+            <path
+              d="M105 169 C 112 179 128 179 135 169 C 128 175 112 175 105 169 Z"
+              fill="url(#av-lip)"
+            />
+            <ellipse cx="122" cy="172" rx="6" ry="2" fill="#E7ADB2" opacity="0.55" filter="url(#av-soft)" />
+            <circle cx="124" cy="172" r="1.1" fill="#FFFFFF" opacity="0.7" />
+            <circle cx="112" cy="165" r="0.9" fill="#FFFFFF" opacity="0.5" />
+            <circle cx="128" cy="165" r="0.9" fill="#FFFFFF" opacity="0.5" />
+
+            {/* constellation freckles */}
+            <g fill="var(--color-accent)" opacity="0.4">
+              <circle cx="146" cy="138" r="1.1" />
+              <circle cx="152" cy="146" r="0.9" />
+              <circle cx="149" cy="152" r="0.8" />
+            </g>
+
+            {/* ---- face-framing hair + fringe ---- */}
+            <motion.g
+              animate={loop({ rotate: [1, -1, 1] })}
+              transition={loop({ duration: 5, ease: "easeInOut", repeat: Infinity })}
+              style={{ transformBox: "fill-box", transformOrigin: "top center" }}
+            >
+              {/* left curtain over temple */}
+              <path
+                d="M74 78 C 62 96 58 130 62 166 C 64 140 70 112 80 92 C 84 84 88 80 92 78 C 86 74 80 74 74 78 Z"
+                fill="url(#av-hair)"
+              />
+              {/* right curtain */}
+              <path
+                d="M166 78 C 178 96 182 130 178 166 C 176 140 170 112 160 92 C 156 84 152 80 148 78 C 154 74 160 74 166 78 Z"
+                fill="url(#av-hair)"
+              />
+              {/* side-swept fringe */}
+              <path
+                d="M150 58 C 160 74 158 96 146 108 C 132 120 106 120 90 112 C 82 108 77 100 78 92 C 88 102 108 106 124 101 C 138 96 147 84 149 66 C 149 61 150 58 150 58 Z"
+                fill="url(#av-hair)"
+              />
+              {/* fringe rim highlight */}
+              <path
+                d="M150 58 C 156 70 155 86 148 98 C 150 84 149 70 145 60 Z"
+                fill={HAIR_RIM}
+                opacity="0.5"
+              />
+              {/* flyaway wisps */}
+              <path d="M78 92 C 70 86 66 76 66 66 C 70 78 76 86 84 90 Z" fill="url(#av-hair)" />
+              <path d="M164 92 C 172 84 176 72 176 62 C 174 76 168 86 160 92 Z" fill="url(#av-hair)" />
+            </motion.g>
+          </motion.g>
         </motion.g>
       </motion.g>
     </svg>
