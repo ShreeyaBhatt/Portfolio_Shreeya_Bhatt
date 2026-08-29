@@ -21,8 +21,8 @@ const CommandPalette = lazy(() =>
 const BackToTop = lazy(() =>
   import("../common/BackToTop.jsx").then((m) => ({ default: m.BackToTop }))
 );
-const WarpTransition = lazy(() =>
-  import("../space/WarpTransition.jsx").then((m) => ({ default: m.WarpTransition }))
+const PageWipe = lazy(() =>
+  import("../space/PageWipe.jsx").then((m) => ({ default: m.PageWipe }))
 );
 
 export function Layout() {
@@ -51,7 +51,7 @@ export function Layout() {
         <Suspense fallback={null}>
           <BackToTop />
           <CommandPalette />
-          <WarpTransition />
+          <PageWipe />
         </Suspense>
       )}
     </div>
