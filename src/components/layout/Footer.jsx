@@ -29,8 +29,8 @@ export function Footer() {
 
   return (
     <footer
-      className="mt-24 border-t border-[var(--color-border-strong)] md:mt-32"
-      style={{ background: "color-mix(in srgb, var(--color-bg-raised) 85%, transparent)" }}
+      className="relative z-10 mt-24 border-t border-[var(--color-border-strong)] md:mt-32"
+      style={{ background: "color-mix(in srgb, var(--color-bg-raised) 92%, transparent)" }}
     >
       <div className="container-page py-16 md:py-20">
         <hr className="rule-accent" aria-hidden="true" />
