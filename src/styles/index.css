@@ -10,11 +10,14 @@
    ONE secondary — orbit violet — used sparingly for rim light
    and depth. Everything else stays dark and restrained.
 
-   Dark is the only intended appearance; the light tokens are a
-   muted high-contrast fallback for `prefers-color-scheme: light`
-   with no explicit choice.
+   Dark is the intended appearance and the default; the light
+   tokens apply only when the visitor explicitly toggles to light
+   (which adds `.dark` = off on <html>, and stores "light").
    ============================================================ */
 :root {
+  color-scheme: light;
+}
+:root.dark {
   color-scheme: dark;
 }
 
@@ -70,6 +73,11 @@
   --color-success: #0a7d54;
   --color-danger: #c23a2f;
 
+  /* Drifting-particle colour for <StarField>, as an "r, g, b" triplet the
+     canvas reads with getComputedStyle. Light: the scheme's teal accent
+     (#0787a8), so the field reads as teal stars rather than white ones. */
+  --star-color: 7, 135, 168;
+
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.875rem;
@@ -79,8 +87,10 @@
   --shadow-modal: 0 32px 70px -20px rgba(4, 8, 16, 0.4);
 }
 
-/* ---- The real thing: deep space ---- */
-:root:not([data-theme="light"]) {
+/* ---- The real thing: deep space. Applied via the `.dark` class on
+   <html>, which the pre-paint script in index.html sets by default and
+   the theme toggle (src/hooks/useTheme.js) flips. ---- */
+:root.dark {
   --color-bg: #030712;
   --color-bg-raised: #070c18;
   --color-bg-elevated: #0b1220;
@@ -97,24 +107,25 @@
   --color-success: #35d6f5;
   --color-danger: #ff6b6b;
 
+  /* Dark: near-white stars through a spacecraft window. */
+  --star-color: 210, 232, 255;
+
   --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-raised: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
   --shadow-modal: 0 40px 90px -24px rgba(0, 0, 0, 0.75);
 }
-:root.dark {
-  --color-bg: #030712;
-  --color-bg-raised: #070c18;
-  --color-bg-elevated: #0b1220;
-  --color-fg: #eef2f8;
-  --color-fg-muted: #adb7c8;
-  --color-fg-subtle: #909bae;
-  --color-border: rgba(150, 180, 230, 0.12);
-  --color-border-strong: rgba(160, 190, 240, 0.26);
-  --color-accent: #35d6f5;
-  --color-accent-2: #8f83ff;
-  --color-accent-soft: rgba(53, 214, 245, 0.1);
-  --color-success: #35d6f5;
-  --color-danger: #ff6b6b;
+
+/* ---- Light mode is a legibility fallback, not a designed look.
+   The deep-space atmosphere (gradient, nebula, planet, grid, vignette) is
+   hard-coded dark, so it's hidden and the light tokens carry the page. The
+   drifting particles stay — recoloured to sky blue via --star-color — and the
+   grain drops to a whisper. ---- */
+:root:not(.dark) .space-deep {
+  opacity: 0 !important;
+}
+:root:not(.dark) .grain {
+  opacity: 0.025;
+  mix-blend-mode: normal;
 }
 
 @layer base {

@@ -27,17 +27,20 @@ export function SpaceBackground() {
   const nebulaX = useTransform(scrollYProgress, [0, 1], ["0vw", "10vw"]);
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      {/* 1 — base gradient */}
+    <div
+      aria-hidden="true"
+      className="space-bg pointer-events-none fixed inset-0 z-0 overflow-hidden"
+    >
+      {/* 1 — base gradient (deep-space only; hidden in light mode) */}
       <div
-        className="absolute inset-0"
+        className="space-deep absolute inset-0"
         style={{ background: "linear-gradient(180deg, #04060f 0%, #030712 42%, #02040c 100%)" }}
       />
 
       {/* 2 — nebula */}
       <motion.div
         style={reduce ? undefined : { x: nebulaX }}
-        className="absolute -left-1/4 top-[-10%] h-[70vh] w-[70vw] opacity-70"
+        className="space-deep absolute -left-1/4 top-[-10%] h-[70vh] w-[70vw] opacity-70"
       >
         <div
           className="h-full w-full"
@@ -49,7 +52,7 @@ export function SpaceBackground() {
         />
       </motion.div>
       <div
-        className="absolute bottom-[-10%] right-[-15%] h-[60vh] w-[55vw] opacity-60"
+        className="space-deep absolute bottom-[-10%] right-[-15%] h-[60vh] w-[55vw] opacity-60"
         style={{
           background:
             "radial-gradient(circle, color-mix(in srgb, var(--color-accent) 12%, transparent) 0%, transparent 62%)",
@@ -57,13 +60,13 @@ export function SpaceBackground() {
         }}
       />
 
-      {/* 3 — stars */}
-      <StarField className="absolute inset-0 h-full w-full" />
+      {/* 3 — drifting particles (recoloured for light mode via --star-color) */}
+      <StarField className="space-particles absolute inset-0 h-full w-full" />
 
       {/* 4 — anchor planet (orbit shift) */}
       <motion.div
         style={reduce ? undefined : { y: planetY, rotate: planetRot }}
-        className="absolute right-[-18rem] top-[38vh] hidden md:block"
+        className="space-deep absolute right-[-18rem] top-[38vh] hidden md:block"
       >
         <Planet size={640} tint="#0b1a30" glow="var(--color-accent)" />
       </motion.div>
@@ -76,12 +79,12 @@ export function SpaceBackground() {
           WebkitMaskImage: "radial-gradient(circle at 50% 30%, black, transparent 78%)",
           "--grid-size": "64px",
         }}
-        className="grid-overlay absolute inset-x-0 -top-40 h-[calc(100%+20rem)] opacity-50"
+        className="space-deep grid-overlay absolute inset-x-0 -top-40 h-[calc(100%+20rem)] opacity-50"
       />
 
       {/* 6 — vignette */}
       <div
-        className="absolute inset-0"
+        className="space-deep absolute inset-0"
         style={{
           background:
             "radial-gradient(ellipse at 50% 40%, transparent 45%, rgba(2,4,10,0.55) 100%)",

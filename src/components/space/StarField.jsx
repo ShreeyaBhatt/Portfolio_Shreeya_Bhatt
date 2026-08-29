@@ -2,10 +2,16 @@ import { useEffect, useRef } from "react";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 /**
- * A lightweight canvas star field — like looking through a spacecraft window.
- * Three depth layers drift slowly; the pointer adds a small parallax that the
- * near layer feels more than the far one. Star count scales down on small
- * screens, and under reduced motion it renders once and stops.
+ * A lightweight canvas particle field — like looking through a spacecraft
+ * window in dark mode, or faint motes drifting across a bright sky in light
+ * mode (you don't see stars in the morning). Three depth layers drift slowly;
+ * the pointer adds a small parallax the near layer feels more than the far one.
+ * Star count scales down on small screens, and under reduced motion it renders
+ * once and stops.
+ *
+ * The particle colour comes from the CSS custom property `--star-color` (an
+ * "r, g, b" triplet) and is re-read whenever the theme class on <html> flips,
+ * so a light/dark toggle recolours the field live without a remount.
  *
  * Pure 2D canvas (no WebGL) so it stays cheap and never competes with the
  * avatar scene for the GPU.
@@ -19,6 +25,21 @@ export function StarField({ className }) {
     if (!canvas) return undefined;
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return undefined;
+
+    const rootEl = document.documentElement;
+    const readTheme = () => {
+      const rgb =
+        getComputedStyle(rootEl).getPropertyValue("--star-color").trim() || "210, 232, 255";
+      const light = !rootEl.classList.contains("dark");
+      // A brighter background needs a hair more alpha for the teal stars to
+      // read as clearly as the near-white ones do on deep space.
+      return { rgb, alphaScale: light ? 1.15 : 1 };
+    };
+    let theme = readTheme();
+    const themeObserver = new MutationObserver(() => {
+      theme = readTheme();
+    });
+    themeObserver.observe(rootEl, { attributes: true, attributeFilter: ["class"] });
 
     let width = 0;
     let height = 0;
@@ -84,7 +105,7 @@ export function StarField({ className }) {
         const twinkle = prefersReducedMotion ? 1 : 0.65 + 0.35 * Math.sin(t * 0.001 * s.tws + s.tw);
         ctx.beginPath();
         ctx.arc(s.x + px, s.y + py, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(210, 232, 255, ${s.a * twinkle})`;
+        ctx.fillStyle = `rgba(${theme.rgb}, ${Math.min(1, s.a * twinkle * theme.alphaScale)})`;
         ctx.fill();
       }
     }
@@ -105,6 +126,7 @@ export function StarField({ className }) {
 
     return () => {
       cancelAnimationFrame(raf);
+      themeObserver.disconnect();
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointer);
     };

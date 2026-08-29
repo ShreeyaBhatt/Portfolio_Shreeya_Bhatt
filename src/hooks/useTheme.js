@@ -17,6 +17,10 @@ export function useTheme() {
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
     window.localStorage.setItem(STORAGE_KEY, theme);
+    // Keep the browser UI colour (mobile address bar) in step with the theme.
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", theme === "dark" ? "#030712" : "#e7ebf2");
   }, [theme]);
 
   const toggleTheme = useCallback(() => {
