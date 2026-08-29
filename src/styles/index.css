@@ -62,7 +62,7 @@
   --color-bg-elevated: #dbe1ec;
   --color-fg: #0a0f1a;
   --color-fg-muted: #3d4657;
-  --color-fg-subtle: #5c6678;
+  --color-fg-subtle: #49546a; /* darkened from #5c6678 — the small mono register (coords, footer meta) was under-contrast on the pale ground */
   --color-border: #c7cedd;
   --color-border-strong: #aab4c8;
 
