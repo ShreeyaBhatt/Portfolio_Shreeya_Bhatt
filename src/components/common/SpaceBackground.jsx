@@ -3,11 +3,13 @@ import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js"
 
 const MAX_DPR = 2;
 // Three depth layers drifting at different speeds — the parallax is what
-// sells "moving through space" rather than "stars sitting still".
+// sells "moving through space" rather than "stars sitting still". `pull` is
+// how far (px) each layer slides toward the pointer: the nearest layer moves
+// most, so the field gains depth as the cursor crosses it.
 const STAR_LAYERS = [
-  { count: 70, speed: 4, size: [0.5, 1.1], alpha: 0.45 },
-  { count: 45, speed: 10, size: [0.9, 1.6], alpha: 0.7 },
-  { count: 18, speed: 19, size: [1.3, 2.2], alpha: 1 },
+  { count: 70, speed: 4, size: [0.5, 1.1], alpha: 0.45, pull: 6 },
+  { count: 45, speed: 10, size: [0.9, 1.6], alpha: 0.7, pull: 13 },
+  { count: 18, speed: 19, size: [1.3, 2.2], alpha: 1, pull: 24 },
 ];
 const SHOOTING_STAR_DELAY = [5000, 11000];
 
@@ -50,6 +52,16 @@ export function SpaceBackground() {
     let starRgb = { r: 255, g: 255, b: 255 };
     let starBaseAlpha = 0.7;
     let accentRgb = { r: 245, g: 196, b: 83 };
+
+    // Pointer parallax: `pointerTarget` is where the cursor is (-1..1 from
+    // centre), `pointer` chases it with a lazy lerp so the field glides
+    // rather than snaps.
+    const pointer = { x: 0, y: 0 };
+    const pointerTarget = { x: 0, y: 0 };
+    function handlePointer(event) {
+      pointerTarget.x = (event.clientX / window.innerWidth) * 2 - 1;
+      pointerTarget.y = (event.clientY / window.innerHeight) * 2 - 1;
+    }
 
     function readThemeColors() {
       const styles = getComputedStyle(document.documentElement);
@@ -102,7 +114,12 @@ export function SpaceBackground() {
     function draw(now) {
       ctx.clearRect(0, 0, width, height);
 
+      pointer.x += (pointerTarget.x - pointer.x) * 0.05;
+      pointer.y += (pointerTarget.y - pointer.y) * 0.05;
+
       layers.forEach((layer) => {
+        const offsetX = pointer.x * layer.pull;
+        const offsetY = pointer.y * layer.pull;
         layer.stars.forEach((star) => {
           star.x -= layer.speed / 60;
           if (star.x < -4) {
@@ -113,7 +130,7 @@ export function SpaceBackground() {
           const alpha = starBaseAlpha * layer.alpha * twinkle;
           ctx.beginPath();
           ctx.fillStyle = `rgba(${starRgb.r}, ${starRgb.g}, ${starRgb.b}, ${alpha})`;
-          ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+          ctx.arc(star.x + offsetX, star.y + offsetY, star.r, 0, Math.PI * 2);
           ctx.fill();
         });
       });
@@ -179,6 +196,7 @@ export function SpaceBackground() {
 
     start();
     window.addEventListener("resize", resize);
+    window.addEventListener("pointermove", handlePointer, { passive: true });
     document.addEventListener("visibilitychange", handleVisibility);
 
     // Re-read theme colours whenever the dark/light class flips, so a live
@@ -192,6 +210,7 @@ export function SpaceBackground() {
     return () => {
       stop();
       window.removeEventListener("resize", resize);
+      window.removeEventListener("pointermove", handlePointer);
       document.removeEventListener("visibilitychange", handleVisibility);
       themeObserver.disconnect();
     };

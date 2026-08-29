@@ -7,6 +7,7 @@ import { RevealLines } from "../common/RevealLines.jsx";
 import { profile } from "../../data/profile.js";
 import { easeSignature, durations } from "../../lib/motion.js";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
+import { useMousePosition } from "../../hooks/useMousePosition.js";
 
 const [firstName, ...restOfName] = profile.name.split(" ");
 const lastName = restOfName.join(" ");
@@ -31,6 +32,12 @@ export function HeroContent() {
   const y = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 90]);
   const opacity = useTransform(scrollYProgress, [0, 1], [1, prefersReducedMotion ? 1 : 0]);
 
+  // The name drifts a few pixels against the cursor — a shallow parallax that
+  // gives the biggest element on the page a little life without pulling focus.
+  const mouse = useMousePosition();
+  const nameX = useTransform(mouse.x, [-1, 1], [12, -12]);
+  const nameY = useTransform(mouse.y, [-1, 1], [9, -9]);
+
   return (
     <div
       ref={containerRef}
@@ -50,17 +57,19 @@ export function HeroContent() {
           {profile.availability}
         </motion.p>
 
-        <RevealLines
-          as="h1"
-          animateOnMount
-          className="mt-8 text-display font-display font-medium"
-          lines={[
-            firstName,
-            <span key="last" className="accent-italic text-[var(--color-accent)]">
-              {lastName}
-            </span>,
-          ]}
-        />
+        <motion.div style={{ x: nameX, y: nameY }}>
+          <RevealLines
+            as="h1"
+            animateOnMount
+            className="mt-8 text-display font-display font-medium"
+            lines={[
+              firstName,
+              <span key="last" className="accent-italic text-[var(--color-accent)]">
+                {lastName}
+              </span>,
+            ]}
+          />
+        </motion.div>
 
         <div className="mt-10 grid gap-10 md:mt-14 md:grid-cols-[1fr_auto] md:items-end">
           <motion.p

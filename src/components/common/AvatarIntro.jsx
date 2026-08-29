@@ -7,11 +7,10 @@ import { RevealLines } from "./RevealLines.jsx";
 import { Avatar } from "./Avatar.jsx";
 
 const SESSION_KEY = "sb-intro-seen";
-const DURATION_MS = 2400;
+const DURATION_MS = 2800;
 
-// A few small stars scattered around the portal — the same idea as the
-// persistent <SpaceBackground>, just close-up and hand-placed. Kept quiet:
-// the portrait is the subject, these only give it somewhere to sit.
+// Small stars scattered around the portal — same idea as the persistent
+// <SpaceBackground>, just close up, hand-placed, and each one draggable.
 const STARS = [
   { style: { top: "-4%", left: "10%" }, size: 5, glyph: "✦", delay: 0 },
   { style: { top: "12%", right: "-6%" }, size: 4, delay: 0.6 },
@@ -20,12 +19,24 @@ const STARS = [
   { style: { top: "50%", left: "-9%" }, size: 4, delay: 0.85 },
 ];
 
+const stopDrag = (event) => event.stopPropagation();
+
 function Star({ size, glyph, delay }) {
+  const shared = {
+    drag: true,
+    dragSnapToOrigin: true,
+    dragElastic: 0.5,
+    whileDrag: { scale: 1.4 },
+    onPointerDown: stopDrag,
+    className: "block cursor-grab touch-none active:cursor-grabbing",
+  };
+
   if (glyph) {
     return (
       <motion.span
+        {...shared}
         aria-hidden="true"
-        className="block leading-none text-[var(--color-accent-2)]"
+        className={`${shared.className} leading-none text-[var(--color-accent-2)]`}
         style={{ fontSize: `${size * 3}px` }}
         animate={{ opacity: [0.4, 1, 0.4], scale: [0.85, 1, 0.85], rotate: [0, 15, 0] }}
         transition={{ duration: 3.2, repeat: Infinity, delay, ease: "easeInOut" }}
@@ -36,8 +47,9 @@ function Star({ size, glyph, delay }) {
   }
   return (
     <motion.span
+      {...shared}
       aria-hidden="true"
-      className="block rounded-full bg-[var(--color-fg-subtle)]"
+      className={`${shared.className} rounded-full bg-[var(--color-fg-subtle)]`}
       style={{ width: size, height: size }}
       animate={{ opacity: [0.25, 0.9, 0.25] }}
       transition={{ duration: 2.6, repeat: Infinity, delay, ease: "easeInOut" }}
@@ -76,46 +88,61 @@ function SpinBadge() {
 }
 
 /**
- * A one-time arrival screen, in the site's own visual language: deep-space
- * ground, a hairline "portal" the portrait sits inside, display type with
- * the surname in serif italic exactly as the hero sets it. The portrait
- * settles into frame, a counter fills a hairline rule, then the whole panel
- * wipes up to reveal the page.
+ * A one-time arrival screen in the site's own visual language: deep-space
+ * ground, a hairline "portal" the portrait sits inside, display type with the
+ * surname in serif italic exactly as the hero sets it.
+ *
+ * The portrait is draggable — you can lift it out of its frame and it springs
+ * back — and the loading timer pauses while you're holding it, so playing
+ * with it never cuts the intro short. Tapping empty space, or any key, skips
+ * to the reveal; the whole panel then wipes up.
  *
  * Shown once per browser tab (sessionStorage, the key the site has always
- * used) so it never replays on in-site navigation, and skipped whole under
- * reduced motion.
+ * used), skipped whole under reduced motion.
  */
 export function AvatarIntro() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const [visible, setVisible] = useState(() => !window.sessionStorage.getItem(SESSION_KEY));
   const [progress, setProgress] = useState(0);
+
   const rafRef = useRef(null);
+  const startRef = useRef(0);
+  const pausedMsRef = useRef(0);
+  const dragStartedAtRef = useRef(0);
+  const draggingRef = useRef(false);
+
+  function finish() {
+    window.sessionStorage.setItem(SESSION_KEY, "true");
+    setVisible(false);
+  }
 
   useEffect(() => {
     if (!visible) return undefined;
 
     if (prefersReducedMotion) {
-      window.sessionStorage.setItem(SESSION_KEY, "true");
-      setVisible(false);
+      finish();
       return undefined;
     }
 
-    const start = performance.now();
+    startRef.current = performance.now();
     function tick(now) {
-      const ratio = Math.min((now - start) / DURATION_MS, 1);
+      if (draggingRef.current) {
+        rafRef.current = requestAnimationFrame(tick);
+        return;
+      }
+      const ratio = Math.min((now - startRef.current - pausedMsRef.current) / DURATION_MS, 1);
       setProgress(ratio);
       if (ratio < 1) {
         rafRef.current = requestAnimationFrame(tick);
         return;
       }
-      window.sessionStorage.setItem(SESSION_KEY, "true");
-      setVisible(false);
+      finish();
     }
     rafRef.current = requestAnimationFrame(tick);
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, prefersReducedMotion]);
 
   useEffect(() => {
@@ -128,30 +155,36 @@ export function AvatarIntro() {
 
   useEffect(() => {
     if (!visible || prefersReducedMotion) return undefined;
-    function skip() {
-      window.sessionStorage.setItem(SESSION_KEY, "true");
-      setVisible(false);
+    function onKey() {
+      finish();
     }
-    window.addEventListener("keydown", skip);
-    window.addEventListener("pointerdown", skip);
-    return () => {
-      window.removeEventListener("keydown", skip);
-      window.removeEventListener("pointerdown", skip);
-    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible, prefersReducedMotion]);
 
+  function handleDragStart() {
+    draggingRef.current = true;
+    dragStartedAtRef.current = performance.now();
+  }
+  function handleDragEnd() {
+    draggingRef.current = false;
+    pausedMsRef.current += performance.now() - dragStartedAtRef.current;
+  }
+
   const pct = Math.round(progress * 100);
+  const dragBox = { left: -140, right: 140, top: -140, bottom: 140 };
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
           key="avatar-intro"
+          onPointerDown={finish}
           exit={{ y: "-100%", transition: { duration: 0.8, ease: easeEditorial } }}
           className="fixed inset-0 z-[100] flex cursor-pointer flex-col items-center justify-center overflow-hidden bg-[var(--color-bg)] px-6"
           aria-label="Loading"
         >
-          {/* nebula wash, matching the site's body::after */}
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
@@ -163,7 +196,6 @@ export function AvatarIntro() {
           />
 
           <div className="relative flex w-full max-w-xl flex-col items-center text-center">
-            {/* portal + portrait */}
             <div className="relative">
               <div
                 aria-hidden="true"
@@ -180,7 +212,16 @@ export function AvatarIntro() {
               />
 
               <motion.div
-                className="relative h-[clamp(11rem,34vw,17rem)] w-[clamp(11rem,34vw,17rem)] overflow-hidden rounded-full border border-[var(--color-border-strong)] bg-[var(--color-bg-raised)]"
+                drag
+                dragConstraints={dragBox}
+                dragElastic={0.16}
+                dragSnapToOrigin
+                dragTransition={{ bounceStiffness: 280, bounceDamping: 20 }}
+                onPointerDown={stopDrag}
+                onDragStart={handleDragStart}
+                onDragEnd={handleDragEnd}
+                whileDrag={{ scale: 1.04 }}
+                className="relative h-[clamp(11rem,34vw,17rem)] w-[clamp(11rem,34vw,17rem)] cursor-grab touch-none overflow-hidden rounded-full border border-[var(--color-border-strong)] bg-[var(--color-bg-raised)] active:cursor-grabbing"
                 style={{ boxShadow: "var(--shadow-glow)" }}
                 initial={{ scale: 0.92, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
@@ -196,7 +237,6 @@ export function AvatarIntro() {
               ))}
             </div>
 
-            {/* name — set exactly as the hero sets it */}
             <motion.p
               className="label-mono mt-12 text-[var(--color-fg-subtle)]"
               initial={{ opacity: 0, y: 12 }}
@@ -218,7 +258,6 @@ export function AvatarIntro() {
               ]}
             />
 
-            {/* chips */}
             <motion.div
               className="mt-10 flex flex-wrap items-center justify-center gap-3"
               initial="hidden"
@@ -237,17 +276,13 @@ export function AvatarIntro() {
                 <motion.span
                   key={discipline}
                   className="rounded-full border border-[var(--color-border-strong)] px-3.5 py-1.5 font-mono text-[0.7rem] uppercase tracking-wider text-[var(--color-fg-muted)]"
-                  variants={{
-                    hidden: { y: 12, opacity: 0 },
-                    visible: { y: 0, opacity: 1 },
-                  }}
+                  variants={{ hidden: { y: 12, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
                 >
                   {discipline}
                 </motion.span>
               ))}
             </motion.div>
 
-            {/* counter on a hairline */}
             <motion.div
               className="mt-14 flex w-full max-w-xs items-center gap-4"
               initial={{ opacity: 0 }}
@@ -267,7 +302,7 @@ export function AvatarIntro() {
           </div>
 
           <p className="label-mono absolute bottom-8 text-[var(--color-fg-subtle)]">
-            Tap anywhere to skip
+            Drag the portrait · tap anywhere to skip
           </p>
         </motion.div>
       )}
