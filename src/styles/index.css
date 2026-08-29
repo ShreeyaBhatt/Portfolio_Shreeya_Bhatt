@@ -2,72 +2,126 @@
 
 /* ============================================================
    DESIGN TOKENS — the single source of truth for this site.
-   Theme: deep space / constellation. Nebula violet + starlight
-   gold as the two accents, a night-sky base in dark mode and a
-   pale, high-altitude sky in light mode. Every component should
-   draw color / spacing / radius / shadow values from here (via
-   Tailwind utility classes mapped below) rather than inventing
-   one-off numbers per component.
+
+   Direction: "Observatory" — an editorial, type-led portfolio
+   with a quiet cosmic atmosphere. The space theme lives in the
+   VISUAL layer (deep-navy ground, starfield, nebula wash, one
+   luminous accent); the writing and layout stay plain and
+   professional. Restraint is the point: one accent carries the
+   whole site, gold appears only where something must be
+   singled out.
+
+   Every component draws color / type / spacing / radius from
+   here rather than inventing one-off values.
    ============================================================ */
 @theme {
-  /* ---- Fonts ---- */
+  /* ---- Fonts ----
+     Display: Space Grotesk — geometric, slightly technical.
+     Accent:  Instrument Serif italic — used ONLY for a single
+              emphasised word inside a display heading. It is what
+              keeps oversized type from reading as a wall of sans.
+     Body:    Inter. Mono: JetBrains Mono (labels, indices, meta). */
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-accent: "Instrument Serif", ui-serif, Georgia, serif;
   --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
 
-  /* ---- Brand palette (light / "daylight sky" defaults) ---- */
-  --color-bg: #f6f6fb;
-  --color-bg-raised: #ffffff;
-  --color-fg: #14141f;
-  --color-fg-muted: #5a5a70;
-  --color-border: #e2e1ee;
+  /* ---- Fluid type scale ----
+     clamp() everywhere so the site scales continuously instead of
+     stepping at breakpoints — the oversized display sizes are what
+     give the layout its editorial weight.
 
-  --color-accent: #6c4cf0;
-  --color-accent-soft: #ece7ff;
-  --color-accent-2: #a15c07;
-  --color-accent-2-soft: #fff1da;
+     Each step ships its own line-height and tracking via Tailwind's
+     `--text-*--line-height` / `--text-*--letter-spacing` companions,
+     so `text-hero` alone sets all three and no component has to
+     remember to pair a size with its leading.
+
+     Leading stays just under 1 rather than the 0.86 that display
+     type can take, because these lines are rendered inside clipping
+     masks (see `.line-mask`) — anything tighter crops descenders. */
+  --text-display: clamp(3.25rem, 13vw, 11rem);
+  --text-display--line-height: 0.9;
+  --text-display--letter-spacing: -0.045em;
+
+  --text-hero: clamp(2.75rem, 9vw, 7.5rem);
+  --text-hero--line-height: 0.92;
+  --text-hero--letter-spacing: -0.04em;
+
+  --text-h1: clamp(2.5rem, 6vw, 4.5rem);
+  --text-h1--line-height: 0.96;
+  --text-h1--letter-spacing: -0.035em;
+
+  --text-h2: clamp(2rem, 4.2vw, 3.25rem);
+  --text-h2--line-height: 1;
+  --text-h2--letter-spacing: -0.03em;
+
+  --text-h3: clamp(1.5rem, 2.4vw, 2rem);
+  --text-h3--line-height: 1.12;
+  --text-h3--letter-spacing: -0.02em;
+
+  --text-lead: clamp(1.0625rem, 1.35vw, 1.375rem);
+  --text-lead--line-height: 1.55;
+  --text-lead--letter-spacing: 0;
+
+  /* ---- Palette (light / "high-altitude daylight" defaults) ---- */
+  --color-bg: #f7f7fb;
+  --color-bg-raised: #ffffff;
+  --color-bg-elevated: #f0f0f7;
+  --color-fg: #0e1020;
+  --color-fg-muted: #55596f;
+  --color-fg-subtle: #8b8fa8;
+  --color-border: #e3e3ef;
+  --color-border-strong: #cdcddf;
+
+  --color-accent: #5b3fd6;
+  --color-accent-soft: rgba(91, 63, 214, 0.1);
+  --color-accent-2: #8a5a05;
+  --color-accent-2-soft: rgba(138, 90, 5, 0.1);
 
   --color-success: #22a06b;
   --color-danger: #e5484d;
 
-  /* ---- Starfield / nebula backdrop (theme-aware, used by body::before/::after) ---- */
-  --star-color: #6c4cf0;
-  --star-opacity: 0.4;
-  --nebula-opacity: 0.35;
+  /* ---- Starfield / nebula backdrop (read by SpaceBackground + body::after) ---- */
+  --star-color: #5b3fd6;
+  --star-opacity: 0.35;
+  --nebula-opacity: 0.5;
 
-  /* ---- Radius scale (2-3 values, reused everywhere) ---- */
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
+  /* ---- Radius scale ---- */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
 
-  /* ---- Shadow / elevation tiers ---- */
-  --shadow-resting: 0 1px 2px rgba(20, 20, 30, 0.06), 0 1px 1px rgba(20, 20, 30, 0.04);
-  --shadow-raised: 0 12px 24px -8px rgba(20, 20, 30, 0.18), 0 4px 8px -2px rgba(20, 20, 30, 0.08);
-  --shadow-modal: 0 24px 48px -12px rgba(10, 10, 15, 0.35);
-  --shadow-glow: 0 0 0 rgba(124, 92, 252, 0);
+  /* ---- Elevation ---- */
+  --shadow-resting: 0 1px 2px rgba(14, 16, 32, 0.05);
+  --shadow-raised: 0 16px 40px -16px rgba(14, 16, 32, 0.2);
+  --shadow-modal: 0 24px 48px -12px rgba(10, 10, 15, 0.3);
+  --shadow-glow: 0 0 32px -6px rgba(91, 63, 214, 0.45);
 }
 
-/* ---- Dark mode overrides (same token names, new values) ---- */
+/* ---- Dark mode: the site's primary, intended appearance ---- */
 :root.dark {
-  --color-bg: #05060f;
-  --color-bg-raised: #0e1020;
-  --color-fg: #eef0fb;
-  --color-fg-muted: #9a9cbb;
-  --color-border: #202340;
+  --color-bg: #07080f;
+  --color-bg-raised: #0d0f1c;
+  --color-bg-elevated: #141728;
+  --color-fg: #f2f3f9;
+  --color-fg-muted: #8b8fa8;
+  --color-fg-subtle: #5a5e76;
+  --color-border: #1c1f35;
+  --color-border-strong: #2c3050;
 
-  --color-accent: #9c85ff;
-  --color-accent-soft: rgba(156, 133, 255, 0.16);
-  --color-accent-2: #ffc164;
-  --color-accent-2-soft: rgba(255, 193, 100, 0.16);
+  --color-accent: #9b8cff;
+  --color-accent-soft: rgba(155, 140, 255, 0.14);
+  --color-accent-2: #f5c453;
+  --color-accent-2-soft: rgba(245, 196, 83, 0.14);
 
   --star-color: #ffffff;
-  --star-opacity: 0.85;
-  --nebula-opacity: 0.55;
+  --star-opacity: 0.8;
+  --nebula-opacity: 0.6;
 
   --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.4);
-  --shadow-raised: 0 12px 24px -8px rgba(0, 0, 0, 0.5), 0 4px 8px -2px rgba(0, 0, 0, 0.3);
-  --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 24px -4px rgba(156, 133, 255, 0.55);
+  --shadow-raised: 0 16px 40px -16px rgba(0, 0, 0, 0.7);
+  --shadow-modal: 0 24px 48px -12px rgba(0, 0, 0, 0.65);
+  --shadow-glow: 0 0 32px -6px rgba(155, 140, 255, 0.5);
 }
 
 @layer base {
@@ -77,6 +131,8 @@
 
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
   }
 
   body {
@@ -84,14 +140,14 @@
     color: var(--color-fg);
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
-    transition: background-color 200ms ease, color 200ms ease;
+    text-rendering: optimizeLegibility;
+    transition: background-color 300ms ease, color 300ms ease;
   }
 
-  /* ---- Nebula wash: two soft, low-contrast color clouds for depth, drifting
-     very slowly so the backdrop never feels perfectly still. The stars
-     themselves (parallax + shooting stars + the odd passing rocket) are
-     rendered by <SpaceBackground>, mounted once in the layout — see
-     src/components/common/SpaceBackground.jsx. ---- */
+  /* ---- Nebula wash: two soft, low-contrast colour clouds for depth,
+     drifting very slowly so the backdrop is never perfectly still. The
+     stars themselves (parallax layers + shooting stars) are drawn by
+     <SpaceBackground>, mounted once in the layout. ---- */
   body::after {
     content: "";
     position: fixed;
@@ -99,10 +155,10 @@
     z-index: -3;
     pointer-events: none;
     background-image:
-      radial-gradient(ellipse 60% 45% at 12% 10%, var(--color-accent-soft), transparent 60%),
-      radial-gradient(ellipse 55% 40% at 88% 82%, var(--color-accent-2-soft), transparent 60%);
+      radial-gradient(ellipse 55% 40% at 15% 8%, var(--color-accent-soft), transparent 62%),
+      radial-gradient(ellipse 50% 38% at 85% 88%, var(--color-accent-2-soft), transparent 62%);
     opacity: var(--nebula-opacity);
-    animation: nebula-drift 90s ease-in-out infinite alternate;
+    animation: nebula-drift 100s ease-in-out infinite alternate;
   }
 
   @keyframes nebula-drift {
@@ -110,7 +166,7 @@
       transform: translate(0, 0) scale(1);
     }
     100% {
-      transform: translate(-2%, 2%) scale(1.05);
+      transform: translate(-2%, 2%) scale(1.06);
     }
   }
 
@@ -119,18 +175,24 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.03em;
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 
   ::selection {
     background: var(--color-accent);
-    color: white;
+    color: var(--color-bg);
   }
 
   :focus-visible {
     outline: 2px solid var(--color-accent);
-    outline-offset: 2px;
-    border-radius: 4px;
+    outline-offset: 3px;
+    border-radius: 2px;
   }
 
   @media (pointer: fine) {
@@ -140,10 +202,184 @@
   }
 }
 
+/* ============================================================
+   LAYOUT UTILITIES
+   ============================================================ */
+
+/** The wide editorial measure — sections, grids, index rows. */
 @utility container-page {
-  max-width: 72rem;
+  max-width: 84rem;
   margin-inline: auto;
   padding-inline: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .container-page {
+    padding-inline: 2.5rem;
+  }
+}
+
+/** Narrow measure for running prose — never let body text hit 84rem. */
+@utility container-prose {
+  max-width: 42rem;
+}
+
+/* ============================================================
+   TYPE UTILITIES
+
+   `text-display` / `text-hero` / `text-h1…h3` / `text-lead` are
+   generated by Tailwind from the `--text-*` theme variables above
+   (size + line-height + tracking together) — they are not declared
+   here, and must not be, or the two definitions would collide.
+   ============================================================ */
+
+/** The uppercase, wide-tracked mono label used for section indices,
+    eyebrows, and table headers. One look, reused everywhere. */
+@utility label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/** Serif-italic emphasis inside a display heading. */
+@utility accent-italic {
+  font-family: var(--font-accent);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* ============================================================
+   MOTION PRIMITIVES
+   ============================================================ */
+
+/** Masked line reveal — the wrapper clips, the child slides up out of it.
+    Used for headings so type rises into place rather than fading.
+
+    The padding-bottom is load-bearing: with `overflow: hidden` and display
+    leading below 1, a descender ("Shreeya", "Bhatt" in italic) would be
+    sliced off at the mask edge. The negative margin claws back half of that
+    space so the extra room doesn't visibly loosen the leading between lines.
+
+    Note the pairing with `lineRevealVariants` in src/lib/motion.js: its
+    hidden offset (135%) has to clear the box height *including* this
+    padding, or the next line peeks below the mask before it animates. */
+@utility line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.07em;
+}
+
+/** Continuous horizontal marquee. Duration is set per-instance. */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/** Underline that wipes in from the left on hover — replaces the
+    default text-decoration on inline links. */
+@utility link-underline {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.15em;
+  height: 1px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/** Hairline rule used to separate editorial sections and index rows. */
+@utility hairline {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+/* ============================================================
+   SLIDE TONES — the per-category palettes for the skills
+   carousel.
+
+   Each tone is declared here rather than passed as an inline hex
+   so it can flip with the theme automatically: a colour set from
+   JS can't respond to `:root.dark`, and reading the theme from a
+   second `useTheme()` instance would desync from the real toggle.
+   A class per tone keeps the whole thing CSS-native and free.
+
+   `--slide-accent` drives type, rules, and the progress rail;
+   `--slide-tint` is the low-alpha wash across the panel and the
+   ambient glow behind the active slide.
+   ============================================================ */
+.tone-violet {
+  --slide-accent: #5b3fd6;
+  --slide-tint: rgba(91, 63, 214, 0.09);
+}
+.tone-cyan {
+  --slide-accent: #0e7490;
+  --slide-tint: rgba(14, 116, 144, 0.09);
+}
+.tone-amber {
+  --slide-accent: #b45309;
+  --slide-tint: rgba(180, 83, 9, 0.09);
+}
+.tone-sky {
+  --slide-accent: #0369a1;
+  --slide-tint: rgba(3, 105, 161, 0.09);
+}
+.tone-pink {
+  --slide-accent: #be185d;
+  --slide-tint: rgba(190, 24, 93, 0.09);
+}
+
+:root.dark .tone-violet {
+  --slide-accent: #9b8cff;
+  --slide-tint: rgba(155, 140, 255, 0.14);
+}
+:root.dark .tone-cyan {
+  --slide-accent: #5eead4;
+  --slide-tint: rgba(94, 234, 212, 0.13);
+}
+:root.dark .tone-amber {
+  --slide-accent: #f5c453;
+  --slide-tint: rgba(245, 196, 83, 0.13);
+}
+:root.dark .tone-sky {
+  --slide-accent: #7dd3fc;
+  --slide-tint: rgba(125, 211, 252, 0.13);
+}
+:root.dark .tone-pink {
+  --slide-accent: #f9a8d4;
+  --slide-tint: rgba(249, 168, 212, 0.13);
+}
+
+/** Horizontal scroll track that keeps native swipe/trackpad momentum and
+    scroll-snap, but hides the scrollbar chrome. */
+@utility scroll-track {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroll-track::-webkit-scrollbar {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

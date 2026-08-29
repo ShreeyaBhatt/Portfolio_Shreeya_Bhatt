@@ -1,14 +1,15 @@
 import { cn } from "../../lib/cn.js";
 
-/** Small labeled badge for things like "Featured" or category markers. */
+/** Marker for the one thing on a page that should be singled out. */
 export function Badge({ className, children }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border border-[var(--color-accent)] px-3 py-1 text-xs font-medium text-[var(--color-accent)]",
+        "label-mono inline-flex items-center gap-2 text-[var(--color-accent)]",
         className
       )}
     >
+      <span aria-hidden="true" className="h-1 w-1 rounded-full bg-[var(--color-accent)]" />
       {children}
     </span>
   );

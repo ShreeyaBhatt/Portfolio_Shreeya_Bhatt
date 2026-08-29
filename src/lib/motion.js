@@ -21,8 +21,11 @@ export function getMotionComponent(as) {
   return customMotionComponentCache.get(as);
 }
 
-/** The one signature ease curve used everywhere — buttons, cards, page transitions. */
+/** The one signature ease curve used everywhere — buttons, reveals, page transitions. */
 export const easeSignature = [0.22, 1, 0.36, 1];
+
+/** A slower, heavier curve for large type and full-section reveals. */
+export const easeEditorial = [0.16, 1, 0.3, 1];
 
 export const durations = {
   micro: durationTokens.micro / 1000,
@@ -30,9 +33,29 @@ export const durations = {
   page: durationTokens.page / 1000,
 };
 
-/** Fade + slide entrance, used for whileInView reveals across pages. */
+/** Shared viewport config so every scroll reveal on the site fires alike. */
+export const viewportOnce = { once: true, margin: "-12% 0px -12% 0px" };
+
+/**
+ * Masked line reveal — the element slides up from beneath its own clipping
+ * wrapper (`.line-mask`) instead of fading in. This is the site's primary
+ * heading entrance: type rises into place, which reads far more deliberate
+ * than opacity alone.
+ */
+export const lineRevealVariants = {
+  // 135%, not 100%: `.line-mask` carries padding-bottom for descenders, so
+  // the resting box is taller than the line itself. At 100% the line would
+  // still be showing inside that padding before it animates.
+  hidden: { y: "135%" },
+  visible: {
+    y: "0%",
+    transition: { duration: durations.page, ease: easeEditorial },
+  },
+};
+
+/** Fade + slide entrance, used for body copy and cards. */
 export const revealVariants = {
-  hidden: { opacity: 0, y: 16 },
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
@@ -40,7 +63,7 @@ export const revealVariants = {
   },
 };
 
-/** Stagger wrapper for lists/grids of cards. */
+/** Stagger wrapper for lists, grids, and multi-line headings. */
 export const staggerContainer = {
   hidden: {},
   visible: {
@@ -48,18 +71,26 @@ export const staggerContainer = {
   },
 };
 
+/** Tighter stagger for the individual lines of a single heading. */
+export const staggerLines = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.06, delayChildren: 0.05 },
+  },
+};
+
 /** Page-level transition applied to each route's root element. */
 export const pageTransitionVariants = {
-  initial: { opacity: 0, y: 12 },
+  initial: { opacity: 0, y: 16 },
   animate: {
     opacity: 1,
     y: 0,
-    transition: { duration: durations.page, ease: easeSignature },
+    transition: { duration: durations.transition, ease: easeSignature },
   },
   exit: {
     opacity: 0,
-    y: -12,
-    transition: { duration: durations.transition, ease: easeSignature },
+    y: -8,
+    transition: { duration: durations.micro, ease: "easeIn" },
   },
 };
 
@@ -72,6 +103,11 @@ export const staticVariants = {
   visible: { opacity: 1, y: 0 },
 };
 
+export const staticLineVariants = {
+  hidden: { y: "0%" },
+  visible: { y: "0%" },
+};
+
 export const staticPageTransitionVariants = {
   initial: { opacity: 1, y: 0 },
   animate: { opacity: 1, y: 0 },
@@ -80,6 +116,10 @@ export const staticPageTransitionVariants = {
 
 export function getRevealVariants(prefersReducedMotion) {
   return prefersReducedMotion ? staticVariants : revealVariants;
+}
+
+export function getLineRevealVariants(prefersReducedMotion) {
+  return prefersReducedMotion ? staticLineVariants : lineRevealVariants;
 }
 
 export function getPageTransitionVariants(prefersReducedMotion) {

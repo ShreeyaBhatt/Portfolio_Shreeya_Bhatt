@@ -20,50 +20,6 @@ export function GithubIcon({ size = 20, className, ...props }) {
   );
 }
 
-/** Small line-art rocket used as the launch motif on the intro splash. */
-export function RocketIcon({ size = 40, className, ...props }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 48 64"
-      fill="none"
-      className={className}
-      aria-hidden="true"
-      {...props}
-    >
-      <path
-        d="M24 4c7 6 10 15 10 25 0 5-1 9-2.5 13h-15C15 38 14 34 14 29c0-10 3-19 10-25z"
-        fill="var(--color-bg-raised)"
-        stroke="var(--color-accent)"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <circle cx="24" cy="24" r="4.5" fill="var(--color-accent-soft)" stroke="var(--color-accent)" strokeWidth="1.5" />
-      <path
-        d="M14 30c-4 1.5-6 5-6 10 4-1 7-3 8.5-6z"
-        fill="var(--color-bg-raised)"
-        stroke="var(--color-accent)"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M34 30c4 1.5 6 5 6 10-4-1-7-3-8.5-6z"
-        fill="var(--color-bg-raised)"
-        stroke="var(--color-accent)"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path d="M18.5 42h11l-1.5 5h-8z" fill="var(--color-accent)" opacity="0.5" />
-      <path
-        className="origin-top animate-pulse"
-        d="M20.5 47h7l-1.8 8c-.6 2.2-2.8 2.2-3.4 0z"
-        fill="var(--color-accent-2)"
-      />
-    </svg>
-  );
-}
-
 export function LinkedinIcon({ size = 20, className, ...props }) {
   return (
     <svg

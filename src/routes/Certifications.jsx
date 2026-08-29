@@ -1,11 +1,10 @@
 import { motion } from "motion/react";
-import { Award, ExternalLink } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Section } from "../components/ui/Section.jsx";
-import { PageEyebrow } from "../components/common/PageEyebrow.jsx";
-import { Card } from "../components/ui/Card.jsx";
+import { SectionHeader } from "../components/common/SectionHeader.jsx";
 import { Tag } from "../components/ui/Tag.jsx";
 import { certifications } from "../data/certifications.js";
-import { staggerContainer, getRevealVariants } from "../lib/motion.js";
+import { staggerContainer, getRevealVariants, viewportOnce } from "../lib/motion.js";
 import { usePrefersReducedMotion } from "../hooks/usePrefersReducedMotion.js";
 
 export default function Certifications() {
@@ -13,68 +12,93 @@ export default function Certifications() {
   const itemVariants = getRevealVariants(prefersReducedMotion);
 
   return (
-    <Section className="pt-16 md:pt-20">
-      <PageEyebrow>// flight certifications</PageEyebrow>
-      <h1 className="mt-2 text-4xl font-bold tracking-tight md:text-5xl">
-        Certifications & Credentials
-      </h1>
-      <p className="mt-4 max-w-2xl text-[var(--color-fg-muted)]">
-        Courses I've completed while charting this trajectory — from Python fundamentals to
-        machine learning, Java data structures, and web development.
-      </p>
+    <Section className="pb-28 pt-16 md:pb-40 md:pt-20">
+      <SectionHeader
+        label="Credentials"
+        meta={`${String(certifications.length).padStart(2, "0")} Completed`}
+        titleLines={[
+          "Courses and",
+          <span key="l2" className="accent-italic text-[var(--color-accent)]">
+            certifications
+          </span>,
+        ]}
+        titleClassName="text-h1"
+        lead="From Python fundamentals to machine learning, Java data structures, and web development — with verification links where they exist."
+      />
 
-      <motion.ul
+      {/* A ledger, not a card grid: these are records, and records read best
+          as ruled rows you can scan down in one pass. */}
+      <motion.ol
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
+        viewport={viewportOnce}
         variants={staggerContainer}
-        className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2"
+        className="mt-16 border-t border-[var(--color-border)]"
       >
-        {certifications.map((cert) => (
-          <motion.li key={cert.title} variants={itemVariants}>
-            <Card tilt={false} className="flex h-full flex-col p-6">
-              <div className="flex items-start gap-3">
-                <Award size={20} className="mt-0.5 shrink-0 text-[var(--color-accent-2)]" />
+        {certifications.map((cert, index) => {
+          const Row = cert.credentialUrl ? "a" : "div";
+          const rowProps = cert.credentialUrl
+            ? {
+                href: cert.credentialUrl,
+                target: "_blank",
+                rel: "noreferrer",
+                "data-cursor-hover": true,
+              }
+            : {};
+
+          return (
+            <motion.li
+              key={cert.title}
+              variants={itemVariants}
+              className="border-b border-[var(--color-border)]"
+            >
+              <Row
+                {...rowProps}
+                className="group grid gap-4 py-8 md:grid-cols-[3rem_1fr_12rem_auto] md:items-baseline md:gap-8"
+              >
+                <span className="label-mono text-[var(--color-fg-subtle)]">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+
                 <div>
-                  <h3 className="font-semibold leading-snug">{cert.title}</h3>
-                  <p className="mt-1 text-xs text-[var(--color-fg-muted)]">
-                    {cert.issuer} · {cert.date}
-                  </p>
-                  {cert.credentialId && (
-                    <p className="mt-1 font-mono text-xs text-[var(--color-fg-muted)]">
-                      Credential ID: {cert.credentialId}
-                    </p>
+                  <h3 className="text-h3 font-medium leading-snug transition-colors group-hover:text-[var(--color-accent)]">
+                    {cert.title}
+                  </h3>
+                  {cert.skills && (
+                    <ul className="mt-4 flex flex-wrap gap-2">
+                      {cert.skills.split(",").map((skill) => (
+                        <li key={skill}>
+                          <Tag tone="accent2">{skill.trim()}</Tag>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </div>
-              </div>
-              {cert.skills && (
-                <div className="mt-4 flex flex-1 flex-wrap items-start gap-2">
-                  {cert.skills.split(",").map((skill) => (
-                    <Tag key={skill} tone="accent2">
-                      {skill.trim()}
-                    </Tag>
-                  ))}
+
+                <div>
+                  <p className="text-sm text-[var(--color-fg-muted)]">{cert.issuer}</p>
+                  <p className="label-mono mt-1.5 text-[var(--color-fg-subtle)]">{cert.date}</p>
                 </div>
-              )}
-              {cert.credentialUrl ? (
-                <a
-                  href={cert.credentialUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  data-cursor-hover
-                  className="mt-4 inline-flex w-fit items-center gap-1 text-sm font-medium text-[var(--color-accent)] hover:underline"
-                >
-                  View credential <ExternalLink size={14} />
-                </a>
-              ) : (
-                <p className="mt-4 font-mono text-xs text-[var(--color-fg-muted)]">
-                  Credential link in transit
-                </p>
-              )}
-            </Card>
-          </motion.li>
-        ))}
-      </motion.ul>
+
+                <span className="label-mono flex items-center gap-2 text-[var(--color-fg-subtle)] transition-colors group-hover:text-[var(--color-accent)]">
+                  {cert.credentialUrl ? (
+                    <>
+                      Verify
+                      <ArrowUpRight
+                        size={15}
+                        aria-hidden="true"
+                        className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                      />
+                    </>
+                  ) : (
+                    "Link pending"
+                  )}
+                </span>
+              </Row>
+            </motion.li>
+          );
+        })}
+      </motion.ol>
     </Section>
   );
 }

@@ -1,41 +1,61 @@
 import { cn } from "../../lib/cn.js";
-import { easeSignature, durations, getMotionComponent } from "../../lib/motion.js";
-
-const variantClasses = {
-  primary:
-    "bg-[var(--color-accent)] text-white hover:brightness-110 shadow-[var(--shadow-resting)] hover:shadow-[var(--shadow-glow)]",
-  secondary:
-    "bg-transparent text-[var(--color-fg)] border border-[var(--color-border)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]",
-  ghost: "bg-transparent text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]",
-};
+import { getMotionComponent } from "../../lib/motion.js";
 
 /**
- * Shared button primitive — every CTA in the site should render through this
- * so hover-lift, radius, and easing stay consistent (design-token guardrail).
+ * Shared button primitive.
+ *
+ * The hover is a fill that wipes up from the bottom edge rather than a colour
+ * fade — it's a single transform, so it stays smooth, and it gives every CTA
+ * on the site the same physical, deliberate feel. The label sits above the
+ * fill and inverts as it passes.
+ *
+ * Every CTA renders through this so radius, padding, and easing stay
+ * consistent (design-token guardrail).
  */
-export function Button({
-  as = "button",
-  variant = "primary",
-  className,
-  children,
-  ...props
-}) {
+const variantClasses = {
+  primary: cn(
+    "border-transparent bg-[var(--color-accent)] text-[var(--color-bg)]",
+    "hover:text-[var(--color-bg)]"
+  ),
+  secondary: cn(
+    "border-[var(--color-border-strong)] bg-transparent text-[var(--color-fg)]",
+    "hover:border-[var(--color-accent)] hover:text-[var(--color-bg)]"
+  ),
+  ghost: "border-transparent bg-transparent text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]",
+};
+
+/** The colour that wipes up behind the label. */
+const fillClasses = {
+  primary: "bg-[var(--color-fg)]",
+  secondary: "bg-[var(--color-accent)]",
+  ghost: "bg-transparent",
+};
+
+export function Button({ as = "button", variant = "primary", className, children, ...props }) {
   const Component = getMotionComponent(as);
 
   return (
     <Component
       data-cursor-hover
-      whileHover={{ y: -2 }}
-      whileTap={{ y: 0, scale: 0.98 }}
-      transition={{ duration: durations.micro, ease: easeSignature }}
       className={cn(
-        "inline-flex items-center gap-2 rounded-[var(--radius-sm)] px-5 py-2.5 text-sm font-medium transition-colors",
+        "group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full border",
+        "px-6 py-3 text-sm font-medium transition-colors duration-300",
         variantClasses[variant],
         className
       )}
       {...props}
     >
-      {children}
+      {variant !== "ghost" && (
+        <span
+          aria-hidden="true"
+          className={cn(
+            "absolute inset-0 translate-y-full transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+            "group-hover:translate-y-0",
+            fillClasses[variant]
+          )}
+        />
+      )}
+      <span className="relative z-10 inline-flex items-center gap-2.5">{children}</span>
     </Component>
   );
 }

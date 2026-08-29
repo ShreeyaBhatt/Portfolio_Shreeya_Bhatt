@@ -1,11 +1,10 @@
 import { motion } from "motion/react";
-import { Card } from "../ui/Card.jsx";
 import { Tag } from "../ui/Tag.jsx";
 import { profile } from "../../data/profile.js";
-import { staggerContainer, getRevealVariants } from "../../lib/motion.js";
+import { staggerContainer, getRevealVariants, viewportOnce } from "../../lib/motion.js";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
-/** A personal touch alongside the professional sections — sourced from the GitHub profile README. */
+/** A personal note alongside the professional sections. */
 export function BeyondTheCode() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const variants = getRevealVariants(prefersReducedMotion);
@@ -14,38 +13,33 @@ export function BeyondTheCode() {
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={viewportOnce}
       variants={staggerContainer}
-      className="grid grid-cols-1 gap-6 md:grid-cols-2"
+      className="grid gap-12 md:grid-cols-2 md:gap-16"
     >
       <motion.div variants={variants}>
-        <Card tilt={false} className="h-full p-6">
-          <p className="mb-3 text-xs uppercase tracking-wide text-[var(--color-fg-muted)]">
-            Currently scanning for
-          </p>
-          <div className="flex flex-wrap gap-2">
-            {profile.lookingFor.map((role) => (
-              <Tag key={role} tone="accent2">
-                {role}
-              </Tag>
-            ))}
-          </div>
-        </Card>
+        <div className="h-px w-full bg-[var(--color-border)]" aria-hidden="true" />
+        <p className="label-mono mt-5 text-[var(--color-fg-subtle)]">Currently looking for</p>
+        <ul className="mt-6 flex flex-wrap gap-2">
+          {profile.lookingFor.map((role) => (
+            <li key={role}>
+              <Tag tone="accent2">{role}</Tag>
+            </li>
+          ))}
+        </ul>
       </motion.div>
 
       <motion.div variants={variants}>
-        <Card tilt={false} className="h-full p-6">
-          <p className="mb-3 text-xs uppercase tracking-wide text-[var(--color-fg-muted)]">
-            A few things about me
-          </p>
-          <ul className="space-y-2">
-            {profile.funFacts.map((fact) => (
-              <li key={fact} className="text-sm text-[var(--color-fg-muted)]">
-                {fact}
-              </li>
-            ))}
-          </ul>
-        </Card>
+        <div className="h-px w-full bg-[var(--color-border)]" aria-hidden="true" />
+        <p className="label-mono mt-5 text-[var(--color-fg-subtle)]">A few things about me</p>
+        <ul className="mt-6 space-y-4">
+          {profile.funFacts.map((fact) => (
+            <li key={fact} className="flex gap-4 text-[var(--color-fg-muted)]">
+              <span aria-hidden="true" className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-[var(--color-accent)]" />
+              {fact}
+            </li>
+          ))}
+        </ul>
       </motion.div>
     </motion.div>
   );

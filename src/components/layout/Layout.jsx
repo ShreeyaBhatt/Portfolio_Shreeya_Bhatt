@@ -5,7 +5,7 @@ import { Footer } from "./Footer.jsx";
 import { PageTransition } from "./PageTransition.jsx";
 import { ScrollProgress } from "./ScrollProgress.jsx";
 import { CustomCursor } from "../common/CustomCursor.jsx";
-import { IntroSplash } from "../common/IntroSplash.jsx";
+import { Loader } from "../common/Loader.jsx";
 import { SpaceBackground } from "../common/SpaceBackground.jsx";
 
 export function Layout() {
@@ -14,7 +14,7 @@ export function Layout() {
   return (
     <div className="flex min-h-screen flex-col">
       <SpaceBackground />
-      <IntroSplash />
+      <Loader />
       <CustomCursor />
       <ScrollProgress />
       <Nav />

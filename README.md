@@ -37,15 +37,30 @@ npm run preview   # preview the production build locally
 
 ```
 src/
-├─ data/*.js                        # all editable content — projects, skills,
-│                                    # certifications, education, profile
-├─ components/hero/SignalField.jsx  # signature animated canvas motif
+├─ data/*.js                              # all editable content — projects, skills,
+│                                          # certifications, education, profile
+├─ components/
+│  ├─ common/SpaceBackground.jsx           # parallax starfield canvas, mounted once
+│  ├─ common/RevealLines.jsx               # masked line-by-line heading reveal
+│  ├─ common/SectionHeader.jsx             # the numbered editorial section header
+│  ├─ about/SkillsCarousel.jsx             # colour-themed skills carousel
+│  ├─ projects/ProjectIndex.jsx            # the work, as a numbered index
+│  └─ home/                                # the home page's scroll narrative
 └─ lib/
-   ├─ motion.js                     # shared animation variants
-   └─ tokens.js                     # shared design tokens
+   ├─ motion.js                            # shared animation variants + easings
+   └─ tokens.js                            # motion durations shared with CSS
 ```
 
 Edit the files in `src/data/` to update the site's content — nothing else needs to change for routine content updates.
+
+## Design system
+
+All colour, type, spacing, radius, and elevation values live as CSS custom properties in `src/styles/index.css`, under `@theme` (light) with a `:root.dark` override block using the same token names. Components reference tokens (`text-hero`, `var(--color-accent)`) rather than literal values.
+
+Two conventions worth knowing before editing:
+
+- **The fluid type scale** (`text-display` → `text-lead`) ships size, line-height, and tracking together via Tailwind's `--text-*--line-height` / `--text-*--letter-spacing` companions. Use the step; don't pair a size with a one-off leading.
+- **`.tone-*` classes** supply the skills carousel's per-panel palette (`--slide-accent`, `--slide-tint`) and flip with the theme automatically. A slide's colour is one class, set from `tone` in `src/data/skills.js`.
 
 ## Deployment (Vercel)
 
