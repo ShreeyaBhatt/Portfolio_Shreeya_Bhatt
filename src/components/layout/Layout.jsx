@@ -1,10 +1,8 @@
 import { lazy, Suspense } from "react";
-import { AnimatePresence } from "motion/react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Nav } from "./Nav.jsx";
 import { Footer } from "./Footer.jsx";
 import { Spine } from "./Spine.jsx";
-import { PageTransition } from "./PageTransition.jsx";
 import { ScrollProgress } from "./ScrollProgress.jsx";
 import { ScrollToHash } from "./ScrollToHash.jsx";
 import { SpaceBackground } from "../space/SpaceBackground.jsx";
@@ -21,9 +19,6 @@ const CommandPalette = lazy(() =>
 const BackToTop = lazy(() =>
   import("../common/BackToTop.jsx").then((m) => ({ default: m.BackToTop }))
 );
-const PageWipe = lazy(() =>
-  import("../space/PageWipe.jsx").then((m) => ({ default: m.PageWipe }))
-);
 
 export function Layout() {
   const location = useLocation();
@@ -38,11 +33,7 @@ export function Layout() {
       <Nav />
       <Spine key={location.pathname} />
       <main className="relative z-10 flex-1">
-        <AnimatePresence mode="wait">
-          <PageTransition key={location.pathname}>
-            <Outlet />
-          </PageTransition>
-        </AnimatePresence>
+        <Outlet />
       </main>
       <Footer />
       <CustomCursor />
@@ -51,7 +42,6 @@ export function Layout() {
         <Suspense fallback={null}>
           <BackToTop />
           <CommandPalette />
-          <PageWipe />
         </Suspense>
       )}
     </div>

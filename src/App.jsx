@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/layout/Layout.jsx";
+import { IntroSequence } from "./components/space/IntroSequence.jsx";
 import Home from "./routes/Home.jsx";
 
 // Home ships in the main bundle (it's the entry point); the rest are split
@@ -27,7 +28,9 @@ function Deferred({ children }) {
 
 export default function App() {
   return (
-    <Routes>
+    <>
+      <IntroSequence />
+      <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<Deferred><About /></Deferred>} />
@@ -40,6 +43,7 @@ export default function App() {
         <Route path="/contact" element={<Deferred><Contact /></Deferred>} />
         <Route path="*" element={<Deferred><NotFound /></Deferred>} />
       </Route>
-    </Routes>
+      </Routes>
+    </>
   );
 }
