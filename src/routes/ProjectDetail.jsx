@@ -5,6 +5,7 @@ import { Section } from "../components/ui/Section.jsx";
 import { Tag } from "../components/ui/Tag.jsx";
 import { Button } from "../components/ui/Button.jsx";
 import { RevealLines } from "../components/common/RevealLines.jsx";
+import { ProjectGlyph } from "../components/work/ProjectGlyph.jsx";
 import { GithubIcon } from "../components/common/icons.jsx";
 import { getProjectBySlug, projects } from "../data/projects.js";
 import { getRevealVariants, viewportOnce } from "../lib/motion.js";
@@ -74,6 +75,11 @@ export default function ProjectDetail() {
         </Link>
 
         <div className="mt-10">
+          <ProjectGlyph
+            slug={project.slug}
+            title={`${project.title} emblem`}
+            className="mb-6 h-14 w-14 text-[var(--color-accent)]"
+          />
           <p className="flex flex-wrap items-center gap-3 font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--color-fg-subtle)]">
             <span className="text-[var(--color-accent)]">MISSION {number}</span>
             <span>·</span>

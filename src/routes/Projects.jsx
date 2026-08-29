@@ -20,7 +20,13 @@ export default function Projects() {
 
       <div className="mt-10">
         {ordered.map((project, i) => (
-          <MissionPanel key={project.slug} project={project} index={i} flip={i % 2 === 1} />
+          <MissionPanel
+            key={project.slug}
+            project={project}
+            index={i}
+            flip={i % 2 === 1}
+            number={projects.findIndex((p) => p.slug === project.slug) + 1}
+          />
         ))}
         <div className="border-t border-[var(--color-border)]" />
       </div>

@@ -3,9 +3,11 @@ import { motion } from "motion/react";
 import { RevealLines } from "../common/RevealLines.jsx";
 import { viewportOnce } from "../../lib/motion.js";
 import { profile } from "../../data/profile.js";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 /** Home: OPEN CHANNEL — the closing call to action. */
 export function ContactCta() {
+  const rm = usePrefersReducedMotion();
   return (
     <section
       id="contact"
@@ -32,7 +34,7 @@ export function ContactCta() {
       />
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={rm ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={viewportOnce}
         transition={{ duration: 0.5, delay: 0.3 }}

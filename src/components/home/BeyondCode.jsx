@@ -2,9 +2,11 @@ import { motion } from "motion/react";
 import { SectionHeader } from "../common/SectionHeader.jsx";
 import { viewportOnce } from "../../lib/motion.js";
 import { profile } from "../../data/profile.js";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 /** Home: CREW LOG — the person behind the work, as terminal log lines. */
 export function BeyondCode() {
+  const rm = usePrefersReducedMotion();
   return (
     <section
       id="beyond"
@@ -26,7 +28,7 @@ export function BeyondCode() {
           {profile.funFacts.map((fact, i) => (
             <motion.li
               key={fact}
-              initial={{ opacity: 0, x: -12 }}
+              initial={rm ? { opacity: 1, x: 0 } : { opacity: 0, x: -12 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={viewportOnce}
               transition={{ duration: 0.45, delay: i * 0.08 }}

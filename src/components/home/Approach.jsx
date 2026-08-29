@@ -2,9 +2,11 @@ import { motion } from "motion/react";
 import { SectionHeader } from "../common/SectionHeader.jsx";
 import { viewportOnce } from "../../lib/motion.js";
 import { profile } from "../../data/profile.js";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 /** Home: SYSTEMS — the three things this portfolio argues for, as modules. */
 export function Approach() {
+  const rm = usePrefersReducedMotion();
   return (
     <section
       id="approach"
@@ -22,7 +24,7 @@ export function Approach() {
         {profile.capabilities.map((cap, i) => (
           <motion.article
             key={cap.title}
-            initial={{ opacity: 0, y: 24 }}
+            initial={rm ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={viewportOnce}
             transition={{ duration: 0.5, delay: i * 0.08, ease: [0.16, 1, 0.3, 1] }}

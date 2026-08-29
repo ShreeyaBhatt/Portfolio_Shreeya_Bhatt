@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { cn } from "../../lib/cn.js";
+import { ProjectGlyph } from "./ProjectGlyph.jsx";
 import { viewportOnce } from "../../lib/motion.js";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 /**
  * One project as an asymmetric "mission panel". The visual half is a live
@@ -9,15 +11,21 @@ import { viewportOnce } from "../../lib/motion.js";
  * the mission dossier. Panels alternate direction down the page for rhythm.
  * On hover a scan line sweeps the schematic and the frame lights up.
  *
- * @param {{ project: import("../../data/projects.js").Project, index: number, flip?: boolean }} props
+ * @param {{
+ *   project: import("../../data/projects.js").Project,
+ *   index: number,
+ *   flip?: boolean,
+ *   number?: number,  // stable mission number (data order); falls back to index
+ * }} props
  */
-export function MissionPanel({ project, index, flip = false }) {
-  const n = String(index + 1).padStart(3, "0");
+export function MissionPanel({ project, index, flip = false, number }) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const n = String(number ?? index + 1).padStart(2, "0");
   const nodes = (project.architecture ?? []).slice(0, 8);
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 32 }}
+      initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 32 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={viewportOnce}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -72,6 +80,12 @@ export function MissionPanel({ project, index, flip = false }) {
               </span>
             ))}
           </div>
+          {/* project emblem — large, faint, sits behind the schematic */}
+          <ProjectGlyph
+            slug={project.slug}
+            className="pointer-events-none absolute right-5 top-5 h-20 w-20 text-[var(--color-accent)] opacity-[0.18] transition-opacity duration-500 group-hover:opacity-30"
+          />
+
           {/* corner labels */}
           <span className="coord absolute left-3 top-3">SCHEMATIC · {project.system}</span>
           <span className="coord absolute bottom-3 right-3 text-[var(--color-accent)]">

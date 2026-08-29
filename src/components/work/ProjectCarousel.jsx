@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "../../lib/cn.js";
+import { ProjectGlyph } from "./ProjectGlyph.jsx";
 import { projects } from "../../data/projects.js";
 
 /**
@@ -141,7 +142,12 @@ export function ProjectCarousel() {
                 </span>
               </div>
 
-              <h3 className="mt-8 text-h3 font-semibold text-[var(--color-fg)] transition-colors group-hover:text-[var(--color-accent)]">
+              <ProjectGlyph
+                slug={p.slug}
+                className="mt-7 h-11 w-11 text-[var(--color-accent)] transition-transform duration-500 group-hover:scale-105"
+              />
+
+              <h3 className="mt-5 text-h3 font-semibold text-[var(--color-fg)] transition-colors group-hover:text-[var(--color-accent)]">
                 {p.title}
               </h3>
               <p className="mt-2 text-sm text-[var(--color-fg-subtle)]">{p.category}</p>

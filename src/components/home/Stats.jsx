@@ -2,9 +2,11 @@ import { motion } from "motion/react";
 import { CountUp } from "../common/CountUp.jsx";
 import { viewportOnce } from "../../lib/motion.js";
 import { profile } from "../../data/profile.js";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 /** Home: DIAGNOSTICS — a compact evidence readout; the numbers count up. */
 export function Stats() {
+  const rm = usePrefersReducedMotion();
   return (
     <section className="container-page py-16 md:py-20">
       <div className="hud relative overflow-hidden">
@@ -23,7 +25,7 @@ export function Stats() {
           {profile.stats.map((stat, i) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 12 }}
+              initial={rm ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewportOnce}
               transition={{ duration: 0.4, delay: i * 0.07 }}
