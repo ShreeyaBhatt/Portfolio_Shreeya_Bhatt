@@ -7,6 +7,7 @@ import { PageTransition } from "./PageTransition.jsx";
 import { ScrollProgress } from "./ScrollProgress.jsx";
 import { ScrollToHash } from "./ScrollToHash.jsx";
 import { SpaceBackground } from "../space/SpaceBackground.jsx";
+import { WarpTransition } from "../space/WarpTransition.jsx";
 import { Grain } from "../common/Grain.jsx";
 import { Spotlight } from "../common/Spotlight.jsx";
 import { BackToTop } from "../common/BackToTop.jsx";
@@ -35,6 +36,7 @@ export function Layout() {
       <BackToTop />
       <CommandPalette />
       <CustomCursor />
+      <WarpTransition />
       <Grain />
     </div>
   );

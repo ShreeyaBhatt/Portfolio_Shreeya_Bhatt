@@ -126,10 +126,11 @@ export function ProjectCarousel() {
           >
             <Link
               to={`/projects/${p.slug}`}
+              data-cursor="mission"
               onClick={(e) => {
                 if (drag.current.moved > 6) e.preventDefault(); // ignore clicks that were drags
               }}
-              className="group flex h-full flex-col rounded-[var(--radius-md)] border border-[var(--color-border-strong)] bg-[var(--color-bg-elevated)] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-raised)] md:p-8"
+              className="hud group flex h-full flex-col p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[var(--color-accent)] hover:shadow-[var(--shadow-raised)] md:p-8"
             >
               <div className="flex items-center justify-between">
                 <span className="font-mono text-[0.7rem] text-[var(--color-accent)]">
@@ -158,7 +159,7 @@ export function ProjectCarousel() {
               </ul>
 
               <span className="mt-7 inline-flex items-center gap-2 font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[var(--color-fg-subtle)] transition-colors group-hover:text-[var(--color-fg)]">
-                Open case study
+                Open mission
                 <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
               </span>
             </Link>

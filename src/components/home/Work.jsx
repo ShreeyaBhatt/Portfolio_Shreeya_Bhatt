@@ -26,7 +26,7 @@ export function Work() {
             to="/projects"
             className="link-underline font-mono text-[0.75rem] uppercase tracking-[0.16em] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
           >
-            All work →
+            All missions →
           </Link>
         </div>
       </div>

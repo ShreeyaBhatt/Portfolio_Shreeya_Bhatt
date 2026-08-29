@@ -88,7 +88,12 @@ export function Hero() {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="relative mx-auto w-full max-w-[26rem] lg:max-w-none"
         >
-          <div className="corner-frame relative overflow-hidden rounded-[var(--radius-md)] p-3">
+          <Link
+            to="/projects"
+            data-cursor="mission"
+            aria-label="Enter Mission Control"
+            className="corner-frame group relative block overflow-hidden rounded-[var(--radius-md)] p-3 outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
+          >
             <AvatarStage />
             <span className="coord absolute left-3 top-3 z-10">AVATAR · CORE</span>
             <span className="coord absolute bottom-3 right-3 z-10 flex items-center gap-1.5 text-[var(--color-accent)]">
@@ -99,7 +104,18 @@ export function Hero() {
               />
               TRACKING
             </span>
-          </div>
+            {/* enter prompt — appears on hover / focus */}
+            <span className="pointer-events-none absolute inset-x-3 bottom-3 z-10 flex items-center justify-center">
+              <span className="translate-y-3 rounded-[var(--radius-sm)] border border-[var(--color-accent)] bg-[color-mix(in_srgb,var(--color-bg)_80%,transparent)] px-4 py-2 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-[var(--color-accent)] opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                Enter mission control →
+              </span>
+            </span>
+            {/* frame lights up on hover */}
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 rounded-[var(--radius-md)] ring-1 ring-[var(--color-accent)]/0 transition-all group-hover:ring-[var(--color-accent)]/50"
+            />
+          </Link>
         </motion.div>
       </div>
 

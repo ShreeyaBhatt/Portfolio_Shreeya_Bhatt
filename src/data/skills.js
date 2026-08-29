@@ -30,7 +30,7 @@ export const toolboxGroups = [
     short: "PYTHON",
     weight: "primary",
     blurb:
-      "The core of almost everything in this lab — the data work, the ML, and the glue between them.",
+      "The core of almost everything here — the data work, the ML, and the glue between them.",
     skills: ["Python", "Pandas", "Matplotlib", "Streamlit"],
   },
   {

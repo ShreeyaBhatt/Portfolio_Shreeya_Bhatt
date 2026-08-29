@@ -33,13 +33,39 @@ export function MissionPanel({ project, index, flip = false }) {
         )}
       >
         <div className="hud relative aspect-[16/10] overflow-hidden">
-          {/* grid + node schematic */}
+          {/* grid + wiring + node schematic */}
           <div className="grid-overlay absolute inset-0 opacity-60" style={{ "--grid-size": "38px" }} />
-          <div className="absolute inset-0 grid grid-cols-4 content-center gap-2.5 p-6">
+          <svg
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full text-[var(--color-accent)]"
+            preserveAspectRatio="none"
+            viewBox="0 0 400 250"
+          >
+            {/* central bus + branch stubs to each subsystem row */}
+            <line x1="200" y1="40" x2="200" y2="210" stroke="currentColor" strokeWidth="1" opacity="0.3" />
+            <line x1="60" y1="95" x2="340" y2="95" stroke="currentColor" strokeWidth="1" opacity="0.22" />
+            <line x1="60" y1="155" x2="340" y2="155" stroke="currentColor" strokeWidth="1" opacity="0.22" />
+            <circle cx="200" cy="40" r="2.5" fill="currentColor" opacity="0.5" />
+            <circle
+              className="opacity-0 transition-opacity group-hover:opacity-100"
+              r="3"
+              fill="currentColor"
+            >
+              <animateMotion dur="1.6s" repeatCount="indefinite" path="M200,40 L200,210" />
+            </circle>
+            <circle
+              className="opacity-0 transition-opacity group-hover:opacity-100"
+              r="2.5"
+              fill="currentColor"
+            >
+              <animateMotion dur="2.1s" repeatCount="indefinite" path="M60,95 L340,95" />
+            </circle>
+          </svg>
+          <div className="absolute inset-0 grid grid-cols-2 content-center gap-2.5 p-6 sm:grid-cols-4">
             {nodes.map((node, i) => (
               <span
                 key={node}
-                className="flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] bg-[var(--color-bg)]/60 px-2 py-1.5 font-mono text-[0.6rem] uppercase tracking-[0.06em] text-[var(--color-fg-muted)] transition-colors group-hover:border-[var(--color-accent)]/50"
+                className="relative z-10 flex items-center gap-1.5 rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] bg-[var(--color-bg)]/70 px-2 py-1.5 font-mono text-[0.6rem] uppercase tracking-[0.06em] text-[var(--color-fg-muted)] backdrop-blur-sm transition-colors group-hover:border-[var(--color-accent)]/50"
               >
                 <span className="text-[var(--color-accent)]">{String(i + 1).padStart(2, "0")}</span>
                 <span className="truncate">{node}</span>

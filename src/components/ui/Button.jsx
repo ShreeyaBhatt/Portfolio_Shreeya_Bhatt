@@ -1,68 +1,31 @@
-import { useRef } from "react";
-import { useMotionValue, useSpring } from "motion/react";
 import { cn } from "../../lib/cn.js";
-import { getMotionComponent } from "../../lib/motion.js";
-import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
 
 /**
- * Shared button primitive.
- *
- * Two things move on it:
- *  - a fill that wipes up from the bottom edge on hover (one transform, so it
- *    stays smooth), with the label inverting as it passes;
- *  - a magnetic pull — while the pointer is over the button it drifts a
- *    fraction of the cursor's offset from centre, then springs back on leave.
- *    The pull is spring-smoothed and disabled under reduced motion.
- *
- * Every CTA renders through this so radius, padding, easing, and that motion
- * stay consistent site-wide.
+ * Shared button primitive — a spacecraft control. Static (no magnetic pull):
+ * the only motion is a fill that wipes up from the bottom edge on hover. Every
+ * CTA renders through this so radius, padding and easing stay consistent.
  */
 const variantClasses = {
-  primary: "border-transparent bg-[var(--color-fg)] text-[var(--color-bg)] hover:text-[var(--color-fg)]",
+  primary:
+    "border-[var(--color-accent)] bg-[var(--color-accent-soft)] text-[var(--color-accent)] hover:text-[var(--color-accent)]",
   secondary:
-    "border-[var(--color-border-strong)] bg-transparent text-[var(--color-fg)] hover:border-[var(--color-fg)]",
+    "border-[var(--color-border-strong)] bg-transparent text-[var(--color-fg)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]",
   ghost: "border-transparent bg-transparent text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]",
 };
 
-/** The colour that wipes up behind the label. */
 const fillClasses = {
-  primary: "bg-[var(--color-bg-elevated)]",
-  secondary: "bg-[var(--color-bg-elevated)]",
+  primary: "bg-[color-mix(in_srgb,var(--color-accent)_16%,transparent)]",
+  secondary: "bg-[var(--color-accent-soft)]",
   ghost: "bg-transparent",
 };
 
-export function Button({ as = "button", variant = "primary", className, children, ...props }) {
-  const Component = getMotionComponent(as);
-  const ref = useRef(null);
-  const prefersReducedMotion = usePrefersReducedMotion();
-
-  const rawX = useMotionValue(0);
-  const rawY = useMotionValue(0);
-  const x = useSpring(rawX, { stiffness: 260, damping: 18, mass: 0.4 });
-  const y = useSpring(rawY, { stiffness: 260, damping: 18, mass: 0.4 });
-
-  function handlePointerMove(event) {
-    if (prefersReducedMotion || !ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    rawX.set((event.clientX - (rect.left + rect.width / 2)) * 0.3);
-    rawY.set((event.clientY - (rect.top + rect.height / 2)) * 0.4);
-  }
-
-  function handlePointerLeave() {
-    rawX.set(0);
-    rawY.set(0);
-  }
-
+export function Button({ as: Component = "button", variant = "primary", className, children, ...props }) {
   return (
     <Component
-      ref={ref}
-      data-cursor-hover
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
-      style={{ x, y }}
+      data-cursor="select"
       className={cn(
-        "group relative inline-flex items-center gap-2.5 overflow-hidden rounded-full border",
-        "px-6 py-3 text-sm font-medium transition-colors duration-300",
+        "group relative inline-flex items-center gap-2.5 overflow-hidden rounded-[var(--radius-sm)] border",
+        "px-5 py-2.5 font-mono text-[0.7rem] font-medium uppercase tracking-[0.16em] transition-colors duration-300",
         variantClasses[variant],
         className
       )}
@@ -72,8 +35,7 @@ export function Button({ as = "button", variant = "primary", className, children
         <span
           aria-hidden="true"
           className={cn(
-            "absolute inset-0 translate-y-full transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-            "group-hover:translate-y-0",
+            "absolute inset-0 translate-y-full transition-transform duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0",
             fillClasses[variant]
           )}
         />
