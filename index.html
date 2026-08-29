@@ -4,33 +4,34 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0b0f14" />
+    <meta name="theme-color" content="#030712" />
     <script>
       // Set the theme before first paint so there's no light-mode flash.
-      // Dark is the default; only an explicit "light" choice opts out.
+      // Dark ("deep space") is the intended look; only an explicit "light"
+      // choice opts out.
       try {
-        var t = localStorage.getItem("theme");
-        if (t !== "light") document.documentElement.classList.add("dark");
+        if (localStorage.getItem("theme") !== "light")
+          document.documentElement.classList.add("dark");
       } catch (e) {
         document.documentElement.classList.add("dark");
       }
     </script>
-    <title>Shreeya Bhatt — Python & AI Developer</title>
+    <title>Shreeya Bhatt — Python Developer · Data / AI / Full-Stack</title>
     <meta
       name="description"
-      content="Shreeya Bhatt — a Computer Science student and Python developer building AI-powered, data-driven applications end to end. Selected work, approach, and credentials."
+      content="Shreeya Bhatt — a Computer Science student and Python developer building AI-powered, data-driven applications end to end. Explore the missions."
     />
-    <meta property="og:title" content="Shreeya Bhatt — Python & AI Developer" />
+    <meta property="og:title" content="Shreeya Bhatt — Space Command Center" />
     <meta
       property="og:description"
-      content="A Computer Science student and Python developer building AI-powered, data-driven applications end to end."
+      content="Python developer building AI-powered, data-driven applications end to end. Enter the command deck."
     />
     <meta property="og:type" content="website" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Newsreader:ital,opsz@1,18..24&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
   </head>

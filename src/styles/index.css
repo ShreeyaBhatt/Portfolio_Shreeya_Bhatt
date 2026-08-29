@@ -1,121 +1,120 @@
 @import "tailwindcss";
 
 /* ============================================================
-   DESIGN TOKENS — single source of truth.
+   DESIGN TOKENS — "SHREEYA BHATT · SPACE COMMAND CENTER"
 
-   Direction: an editorial portfolio on a dark "signal-lab"
-   ground. Big display type, a strict 12-column measure, mono
-   metadata, wide margins, one idea per screen. ONE accent —
-   mint — behaves like a signal trace: it is the guide orb,
-   marks the active nav item, draws one hairline per section,
-   and colours focus. It is never a fill.
+   The site is the interior of a personal spacecraft. Near-black
+   deep-space ground, translucent HUD surfaces, thin luminous
+   borders, mono telemetry. ONE primary accent — signal cyan —
+   for live state, active nav, focus, and the avatar's key light.
+   ONE secondary — orbit violet — used sparingly for rim light
+   and depth. Everything else stays dark and restrained.
 
-   Light mode is "editorial print": warm paper, ink, a darker
-   mint. Dark is the default and intended appearance.
-
-   Components pull colour / type / spacing / radius from here.
+   Dark is the only intended appearance; the light tokens are a
+   muted high-contrast fallback for `prefers-color-scheme: light`
+   with no explicit choice.
    ============================================================ */
 :root {
-  color-scheme: light;
-}
-:root.dark {
   color-scheme: dark;
 }
 
 @theme {
   /* ---- Fonts ----
-     Display: Bricolage Grotesque — a variable grotesk with
-              real character; used large, tight-tracked.
-     Body:    Inter.
-     Mono:    JetBrains Mono — every eyebrow, index, coordinate,
-              status readout and stack list.
-     Accent:  Newsreader italic — ONE editorial voice, used only
-              for a project's one-line thesis and pull quotes. */
-  --font-display: "Bricolage Grotesque", "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+     Display + body: Manrope — geometric, modern, premium; never
+     "sci-fi". Mono: JetBrains Mono — every mission ID, coordinate,
+     status readout, date and system label. */
+  --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Manrope", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", monospace;
-  --font-accent: "Newsreader", Georgia, "Times New Roman", serif;
+  --font-accent: "Manrope", ui-sans-serif, system-ui, sans-serif;
 
-  /* ---- Fluid type scale ----
-     clamp() everywhere so the site scales continuously instead
-     of stepping at breakpoints. Each step ships its own
-     line-height / tracking via Tailwind's companions, so
-     `text-hero` alone sets all three. Leading stays just under 1
-     because these lines render inside clipping masks
-     (`.line-mask`) — tighter crops descenders. */
-  --text-display: clamp(3.25rem, 11vw, 9rem);
-  --text-display--line-height: 0.9;
-  --text-display--letter-spacing: -0.04em;
+  /* ---- Fluid type scale — clamp() so it scales continuously. ---- */
+  --text-display: clamp(3rem, 9vw, 7.5rem);
+  --text-display--line-height: 0.95;
+  --text-display--letter-spacing: -0.03em;
 
-  --text-hero: clamp(2.75rem, 8.5vw, 7rem);
-  --text-hero--line-height: 0.92;
-  --text-hero--letter-spacing: -0.035em;
+  --text-hero: clamp(2.5rem, 7vw, 5.75rem);
+  --text-hero--line-height: 0.98;
+  --text-hero--letter-spacing: -0.028em;
 
-  --text-h1: clamp(2.5rem, 6vw, 4.5rem);
-  --text-h1--line-height: 0.96;
-  --text-h1--letter-spacing: -0.03em;
+  --text-h1: clamp(2.25rem, 5vw, 3.75rem);
+  --text-h1--line-height: 1;
+  --text-h1--letter-spacing: -0.025em;
 
-  --text-h2: clamp(2rem, 4.2vw, 3.25rem);
-  --text-h2--line-height: 1;
-  --text-h2--letter-spacing: -0.025em;
+  --text-h2: clamp(1.75rem, 3.6vw, 2.75rem);
+  --text-h2--line-height: 1.04;
+  --text-h2--letter-spacing: -0.02em;
 
-  --text-h3: clamp(1.5rem, 2.4vw, 2rem);
-  --text-h3--line-height: 1.14;
-  --text-h3--letter-spacing: -0.015em;
+  --text-h3: clamp(1.375rem, 2.2vw, 1.75rem);
+  --text-h3--line-height: 1.16;
+  --text-h3--letter-spacing: -0.012em;
 
-  --text-lead: clamp(1.0625rem, 1.35vw, 1.375rem);
-  --text-lead--line-height: 1.6;
+  --text-lead: clamp(1.0625rem, 1.3vw, 1.3125rem);
+  --text-lead--line-height: 1.62;
   --text-lead--letter-spacing: 0;
 
-  /* ---- Palette (light / "editorial print" defaults) ---- */
-  --color-bg: #eceae3;
-  --color-bg-raised: #f4f2ec;
-  --color-bg-elevated: #e3e0d6;
-  --color-fg: #12151a;
-  --color-fg-muted: #4a4e56;
-  --color-fg-subtle: #83877f;
-  --color-border: #d8d5ca;
-  --color-border-strong: #c0bcae;
+  /* ---- Palette (light fallback — muted, not the intended look) ---- */
+  --color-bg: #e7ebf2;
+  --color-bg-raised: #f2f5fa;
+  --color-bg-elevated: #dbe1ec;
+  --color-fg: #0a0f1a;
+  --color-fg-muted: #464f61;
+  --color-fg-subtle: #7c8698;
+  --color-border: #c7cedd;
+  --color-border-strong: #aab4c8;
 
-  --color-accent: #0e9e6e;
-  --color-accent-dim: #0b7d57;
-  --color-accent-soft: rgba(14, 158, 110, 0.12);
+  --color-accent: #0787a8;
+  --color-accent-2: #6d5fd6;
+  --color-accent-soft: rgba(7, 135, 168, 0.12);
 
-  --color-success: #0e9e6e;
+  --color-success: #0a7d54;
   --color-danger: #c23a2f;
 
-  /* ---- Radius — kept tight; this is a document, not a card UI. */
-  --radius-sm: 0.1875rem;
-  --radius-md: 0.375rem;
-  --radius-lg: 0.75rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.875rem;
 
-  /* ---- Elevation ---- */
-  --shadow-resting: 0 1px 2px rgba(18, 21, 26, 0.06);
-  --shadow-raised: 0 20px 50px -22px rgba(18, 21, 26, 0.24);
-  --shadow-modal: 0 28px 60px -18px rgba(10, 12, 16, 0.34);
+  --shadow-resting: 0 1px 2px rgba(10, 15, 26, 0.06);
+  --shadow-raised: 0 24px 60px -28px rgba(10, 15, 26, 0.3);
+  --shadow-modal: 0 32px 70px -20px rgba(4, 8, 16, 0.4);
 }
 
-/* ---- Dark mode: the site's primary, intended appearance ---- */
-:root.dark {
-  --color-bg: #0b0f14;
-  --color-bg-raised: #10151c;
-  --color-bg-elevated: #161c25;
-  --color-fg: #f2f0ea;
-  --color-fg-muted: #9ba1ac;
-  --color-fg-subtle: #5c636e;
-  --color-border: #1e2530;
-  --color-border-strong: #2f3947;
+/* ---- The real thing: deep space ---- */
+:root:not([data-theme="light"]) {
+  --color-bg: #030712;
+  --color-bg-raised: #070c18;
+  --color-bg-elevated: #0b1220;
+  --color-fg: #eef2f8;
+  --color-fg-muted: #98a3b8;
+  --color-fg-subtle: #5b6577;
+  --color-border: rgba(150, 180, 230, 0.12);
+  --color-border-strong: rgba(160, 190, 240, 0.26);
 
-  --color-accent: #5ef2b0;
-  --color-accent-dim: #37b184;
-  --color-accent-soft: rgba(94, 242, 176, 0.12);
+  --color-accent: #35d6f5; /* signal cyan */
+  --color-accent-2: #8f83ff; /* orbit violet */
+  --color-accent-soft: rgba(53, 214, 245, 0.1);
 
-  --color-success: #5ef2b0;
-  --color-danger: #e5695f;
+  --color-success: #35d6f5;
+  --color-danger: #ff6b6b;
 
   --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-raised: 0 20px 50px -22px rgba(0, 0, 0, 0.78);
-  --shadow-modal: 0 28px 60px -18px rgba(0, 0, 0, 0.72);
+  --shadow-raised: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
+  --shadow-modal: 0 40px 90px -24px rgba(0, 0, 0, 0.75);
+}
+:root.dark {
+  --color-bg: #030712;
+  --color-bg-raised: #070c18;
+  --color-bg-elevated: #0b1220;
+  --color-fg: #eef2f8;
+  --color-fg-muted: #98a3b8;
+  --color-fg-subtle: #5b6577;
+  --color-border: rgba(150, 180, 230, 0.12);
+  --color-border-strong: rgba(160, 190, 240, 0.26);
+  --color-accent: #35d6f5;
+  --color-accent-2: #8f83ff;
+  --color-accent-soft: rgba(53, 214, 245, 0.1);
+  --color-success: #35d6f5;
+  --color-danger: #ff6b6b;
 }
 
 @layer base {
@@ -136,7 +135,6 @@
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    transition: background-color 300ms ease, color 300ms ease;
     overflow-x: hidden;
   }
 
@@ -146,8 +144,8 @@
   h4 {
     font-family: var(--font-display);
     font-weight: 600;
-    letter-spacing: -0.03em;
-    line-height: 0.95;
+    letter-spacing: -0.02em;
+    line-height: 1;
     text-wrap: balance;
   }
 
@@ -155,17 +153,13 @@
     text-wrap: pretty;
   }
 
-  /* Anchors get an explicit colour rather than Preflight's `inherit`, so a
-     link that only declares a `hover:` colour still has a solid resting
-     colour and never animates up from an inherited default on load. Utility
-     `text-*` classes still override this. */
   a {
     color: var(--color-fg);
   }
 
   ::selection {
     background: var(--color-accent);
-    color: #0b0f14;
+    color: #030712;
   }
 
   :focus-visible {
@@ -176,40 +170,34 @@
 }
 
 /* ============================================================
-   LAYOUT UTILITIES
+   LAYOUT
    ============================================================ */
 
-/** The wide editorial measure — sections, grids, index rows. */
 @utility container-page {
-  max-width: 82rem;
+  max-width: 84rem;
   margin-inline: auto;
   padding-inline: 1.5rem;
 }
-
 @media (min-width: 768px) {
   .container-page {
     padding-inline: 3rem;
   }
 }
-
 @media (min-width: 1280px) {
   .container-page {
     padding-inline: 4rem;
   }
 }
 
-/** Narrow measure for running prose — never let body text hit 82rem. */
 @utility container-prose {
   max-width: 42rem;
 }
 
-/** The 12-column grid the whole site is set on. */
 @utility grid-page {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: 1.5rem;
 }
-
 @media (min-width: 768px) {
   .grid-page {
     column-gap: 2rem;
@@ -217,127 +205,150 @@
 }
 
 /* ============================================================
-   TYPE UTILITIES
-
-   `text-display` / `text-hero` / `text-h1…h3` / `text-lead` are
-   generated by Tailwind from the `--text-*` theme variables.
+   TYPE
    ============================================================ */
 
-/** The uppercase, wide-tracked mono label used for section
-    indices, eyebrows, status readouts and table headers.
-    One look, reused everywhere. */
+/** The uppercase, wide-tracked mono label used everywhere for
+    section indices, system readouts, coordinates and status. */
 @utility eyebrow {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-fg-muted);
 }
-
-/** Legacy alias of `eyebrow` — kept so older call sites keep working. */
 @utility label-mono {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 500;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-fg-muted);
 }
 
-/** Tiny mono coordinate / register label — smaller than eyebrow,
-    for diagram annotations, spine indices and panel corners. */
+/** Even smaller mono register — panel corners, diagram ticks. */
 @utility coord {
   font-family: var(--font-mono);
   font-size: 0.625rem;
   font-weight: 500;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-fg-subtle);
 }
 
-/** The single editorial voice: Newsreader italic, optical size
-    up, for a project's one-line thesis and for pull quotes.
-    (Formerly a serif highlight span — call sites unchanged.) */
+/** A highlighted word inside a display heading — cyan, lighter
+    weight. (Call sites still use `.accent-italic`.) */
 @utility accent-italic {
-  font-family: var(--font-accent);
-  font-style: italic;
-  font-weight: 400;
-  font-optical-sizing: auto;
-  letter-spacing: 0;
-  color: var(--color-fg);
+  font-family: var(--font-display);
+  font-style: normal;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--color-accent);
 }
 
 /* ============================================================
-   SURFACE PRIMITIVES
+   HUD SURFACES
    ============================================================ */
 
-/** A flat panel: raised surface, 1px border, tight radius. */
+/** The signature surface: a translucent dark panel with a thin
+    luminous border and a soft inner sheen — a spacecraft
+    instrument plate. */
+@utility hud {
+  position: relative;
+  background: color-mix(in srgb, var(--color-bg-raised) 78%, transparent);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/** Flat panel — no blur, for content that scrolls. */
 @utility panel {
   background-color: var(--color-bg-raised);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
 }
 
-/** Corner-tick frame — a 1px border with short accent ticks at the
-    top-left and bottom-right, like a crop mark on a technical plate. */
+/** Corner brackets on the top-left / bottom-right, like a
+    targeting frame on a technical plate. */
+@utility corner-frame {
+  position: relative;
+  border: 1px solid var(--color-border);
+}
+.corner-frame::before,
+.corner-frame::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: var(--color-accent);
+  border-style: solid;
+  opacity: 0.8;
+}
+.corner-frame::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+.corner-frame::after {
+  right: -1px;
+  bottom: -1px;
+  border-width: 0 1px 1px 0;
+}
+/* legacy alias */
 @utility tech-border {
   position: relative;
   border: 1px solid var(--color-border);
 }
-
 .tech-border::before,
 .tech-border::after {
   content: "";
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-color: var(--color-accent);
   border-style: solid;
-  opacity: 0.7;
+  opacity: 0.8;
 }
-
 .tech-border::before {
   top: -1px;
   left: -1px;
   border-width: 1px 0 0 1px;
 }
-
 .tech-border::after {
   right: -1px;
   bottom: -1px;
   border-width: 0 1px 1px 0;
 }
 
-/** Hairline rule used to separate editorial sections and index rows. */
 @utility hairline {
   border: 0;
   border-top: 1px solid var(--color-border);
 }
 
-/** The one accent hairline a section is allowed — a short mint
-    rule that sits above a section header. */
+/** The one short accent rule above a section header. */
 @utility rule-accent {
-  width: 2.5rem;
+  width: 2.75rem;
   height: 2px;
   background: var(--color-accent);
   border: 0;
+  box-shadow: 0 0 12px -1px var(--color-accent);
+}
+
+/** A faint technical grid, used behind the hero / section
+    dividers. Consumers set the size via --grid-size. */
+@utility grid-overlay {
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--color-accent) 8%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 8%, transparent) 1px, transparent 1px);
+  background-size: var(--grid-size, 56px) var(--grid-size, 56px);
 }
 
 /* ============================================================
-   MOTION PRIMITIVES
+   MOTION
    ============================================================ */
 
-/** Masked line reveal — the wrapper clips, the child slides up
-    out of it. Used for headings so type rises into place rather
-    than fading. The padding-bottom is load-bearing: with
-    overflow:hidden and leading below 1, a descender would be
-    sliced at the mask edge; the negative margin claws back half
-    that space so leading between lines doesn't visibly loosen.
-
-    Pairs with `lineRevealVariants` in src/lib/motion.js — its
-    hidden offset (135%) must clear this box height INCLUDING the
-    padding. */
 @utility line-mask {
   display: block;
   overflow: hidden;
@@ -345,7 +356,6 @@
   margin-bottom: -0.07em;
 }
 
-/** Continuous horizontal marquee. Duration is set per-instance. */
 @keyframes marquee-scroll {
   from {
     transform: translateX(0);
@@ -355,25 +365,46 @@
   }
 }
 
-/** Slow readout tick for status dots. */
+/** Slow tick for status dots / "SYSTEM ONLINE". */
 @keyframes lab-pulse {
   0%,
   100% {
     opacity: 1;
   }
   50% {
-    opacity: 0.35;
+    opacity: 0.3;
   }
 }
 
-/** Steady rotation — the "available for work" badge. */
+/** Steady rotation — orbital rings, seals. */
 @keyframes spin-slow {
   to {
     transform: rotate(360deg);
   }
 }
+@keyframes spin-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
 
-/** A caret that blinks while scramble text resolves. */
+/** A thin light bar sweeping down a surface — the "scanning"
+    pass on mission panels and section reveals. */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
 @keyframes caret-blink {
   0%,
   100% {
@@ -384,19 +415,17 @@
   }
 }
 
-/** Fine film grain over the whole page — flat backgrounds read as
-    filmed rather than printed. Static (no animation) on purpose. */
+/** Fine grain over the page — deep black reads as filmed. */
 @utility grain {
   position: fixed;
   inset: 0;
   z-index: 60;
   pointer-events: none;
-  opacity: 0.4;
+  opacity: 0.32;
   mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
-/** Marquee that stops when you hover it. */
 @utility marquee-track {
   animation: marquee-scroll linear infinite;
 }
@@ -404,13 +433,10 @@
   animation-play-state: paused;
 }
 
-/** Underline that wipes in from the left on hover — replaces the
-    default text-decoration on inline links. */
 @utility link-underline {
   position: relative;
   text-decoration: none;
 }
-
 .link-underline::after {
   content: "";
   position: absolute;
@@ -423,20 +449,16 @@
   transform-origin: right;
   transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
 }
-
 .link-underline:hover::after,
 .link-underline:focus-visible::after {
   transform: scaleX(1);
   transform-origin: left;
 }
 
-/** Horizontal scroll track that keeps native swipe/trackpad
-    momentum and scroll-snap, but hides the scrollbar chrome. */
 @utility scroll-track {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-
 .scroll-track::-webkit-scrollbar {
   display: none;
 }

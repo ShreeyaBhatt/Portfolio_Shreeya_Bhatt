@@ -5,17 +5,18 @@ import { ThemeToggle } from "../common/ThemeToggle.jsx";
 import { cn } from "../../lib/cn.js";
 import { easeSignature, easeEditorial } from "../../lib/motion.js";
 import { profile } from "../../data/profile.js";
+import { openCommandPalette } from "../../lib/commandBus.js";
 
 /**
- * A quiet editorial top bar: the name set in display type on the left, three
- * mono links on the right with a mint marker under the active one. On scroll a
- * hairline and a blurred ground fade in so it reads as settling, not changing.
- * Mobile collapses to a Menu button and a full-screen overlay.
+ * The floating command bar — a spacecraft control strip pinned to the top. A
+ * live status readout on the left, the section channels on the right, and a
+ * ⌘K entry to the command palette. On scroll it settles onto a translucent
+ * plate. Mobile collapses to a full-screen channel list.
  */
 const links = [
-  { to: "/projects", label: "Work" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { to: "/about", index: "01", label: "Crew", meta: "Profile" },
+  { to: "/projects", index: "02", label: "Missions", meta: "Projects" },
+  { to: "/contact", index: "03", label: "Channel", meta: "Contact" },
 ];
 
 export function Nav() {
@@ -49,57 +50,82 @@ export function Nav() {
         className={cn(
           "fixed inset-x-0 top-0 z-50 transition-colors duration-300",
           scrolled && !menuOpen
-            ? "border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-xl"
+            ? "border-b border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-bg)_72%,transparent)] backdrop-blur-xl"
             : "border-b border-transparent"
         )}
       >
         <nav
           aria-label="Primary"
-          className="container-page flex items-center justify-between py-4 md:py-5"
+          className="container-page flex items-center justify-between py-3.5 md:py-4"
         >
-          <NavLink
-            to="/"
-            aria-label="Shreeya Bhatt — home"
-            className="font-display text-[0.95rem] font-semibold tracking-tight text-[var(--color-fg)]"
-          >
-            Shreeya&nbsp;Bhatt
+          <NavLink to="/" aria-label="Shreeya Bhatt — command deck" className="flex items-center gap-3">
+            <span className="font-display text-[0.9rem] font-bold tracking-tight text-[var(--color-fg)]">
+              SHREEYA&nbsp;BHATT
+            </span>
+            <span className="hidden items-center gap-1.5 sm:flex">
+              <span
+                aria-hidden="true"
+                className="h-1.5 w-1.5 rounded-full bg-[var(--color-accent)]"
+                style={{ animation: "lab-pulse 2.2s ease-in-out infinite", boxShadow: "0 0 8px var(--color-accent)" }}
+              />
+              <span className="coord">System online</span>
+            </span>
           </NavLink>
 
-          <ul className="hidden items-center gap-1 md:flex">
-            {links.map((link) => (
-              <li key={link.to}>
-                <NavLink
-                  to={link.to}
-                  className={({ isActive }) =>
-                    cn(
-                      "relative block px-3 py-1.5 font-mono text-[0.7rem] uppercase tracking-[0.16em] transition-colors",
-                      isActive
-                        ? "text-[var(--color-fg)]"
-                        : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
-                    )
-                  }
-                >
-                  {({ isActive }) => (
-                    <>
-                      {link.label}
-                      {isActive && (
-                        <motion.span
-                          layoutId="nav-active"
-                          className="absolute inset-x-3 -bottom-0.5 h-px bg-[var(--color-accent)]"
-                          transition={{ type: "spring", stiffness: 400, damping: 34 }}
-                        />
-                      )}
-                    </>
-                  )}
-                </NavLink>
-              </li>
-            ))}
-            <li className="ml-2">
-              <ThemeToggle />
-            </li>
-          </ul>
+          <div className="hidden items-center gap-1 md:flex">
+            <ul className="flex items-center gap-1">
+              {links.map((link) => (
+                <li key={link.to}>
+                  <NavLink
+                    to={link.to}
+                    className={({ isActive }) =>
+                      cn(
+                        "relative flex items-baseline gap-1.5 px-3 py-1.5 font-mono text-[0.7rem] uppercase tracking-[0.16em] transition-colors",
+                        isActive
+                          ? "text-[var(--color-fg)]"
+                          : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+                      )
+                    }
+                  >
+                    {({ isActive }) => (
+                      <>
+                        <span className="text-[var(--color-accent)]">{link.index}</span>
+                        {link.label}
+                        {isActive && (
+                          <motion.span
+                            layoutId="nav-active"
+                            className="absolute inset-x-3 -bottom-0.5 h-px bg-[var(--color-accent)]"
+                            style={{ boxShadow: "0 0 8px var(--color-accent)" }}
+                            transition={{ type: "spring", stiffness: 400, damping: 34 }}
+                          />
+                        )}
+                      </>
+                    )}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+            <button
+              type="button"
+              onClick={openCommandPalette}
+              aria-label="Open command palette"
+              title="Command palette — ⌘K"
+              className="ml-2 rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] px-2 py-1 font-mono text-[0.65rem] tracking-[0.1em] text-[var(--color-fg-subtle)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+            >
+              ⌘K
+            </button>
+            <ThemeToggle />
+          </div>
 
           <div className="flex items-center gap-1 md:hidden">
+            <button
+              type="button"
+              onClick={openCommandPalette}
+              aria-label="Open command palette"
+              className="rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] px-2 py-1 font-mono text-[0.65rem] text-[var(--color-fg-subtle)]"
+            >
+              ⌘K
+            </button>
             <ThemeToggle />
             <button
               type="button"
@@ -122,7 +148,7 @@ export function Nav() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3, ease: easeEditorial }}
-            className="fixed inset-0 z-40 bg-[var(--color-bg)]/97 pt-24 backdrop-blur-xl md:hidden"
+            className="fixed inset-0 z-40 bg-[color-mix(in_srgb,var(--color-bg)_96%,transparent)] pt-24 backdrop-blur-xl md:hidden"
           >
             <ul className="container-page flex flex-col">
               {links.map((link, i) => (
@@ -133,21 +159,15 @@ export function Nav() {
                   transition={{ delay: 0.05 * i, duration: 0.4, ease: easeSignature }}
                   className="border-b border-[var(--color-border)]"
                 >
-                  <NavLink
-                    to={link.to}
-                    className="flex items-baseline gap-4 py-5 text-h2 font-semibold text-[var(--color-fg)]"
-                  >
-                    <span className="font-mono text-[0.7rem] text-[var(--color-accent)]">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+                  <NavLink to={link.to} className="flex items-baseline gap-4 py-5 text-h2 font-semibold text-[var(--color-fg)]">
+                    <span className="font-mono text-[0.7rem] text-[var(--color-accent)]">{link.index}</span>
                     {link.label}
+                    <span className="coord ml-auto self-center">{link.meta}</span>
                   </NavLink>
                 </motion.li>
               ))}
             </ul>
-            <p className="container-page mt-10 font-mono text-sm text-[var(--color-fg-muted)]">
-              {profile.email}
-            </p>
+            <p className="container-page mt-10 font-mono text-sm text-[var(--color-fg-muted)]">{profile.email}</p>
           </motion.div>
         )}
       </AnimatePresence>

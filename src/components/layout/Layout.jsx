@@ -6,15 +6,18 @@ import { Spine } from "./Spine.jsx";
 import { PageTransition } from "./PageTransition.jsx";
 import { ScrollProgress } from "./ScrollProgress.jsx";
 import { ScrollToHash } from "./ScrollToHash.jsx";
+import { SpaceBackground } from "../space/SpaceBackground.jsx";
 import { Grain } from "../common/Grain.jsx";
 import { Spotlight } from "../common/Spotlight.jsx";
 import { BackToTop } from "../common/BackToTop.jsx";
+import { CommandPalette } from "../common/CommandPalette.jsx";
 
 export function Layout() {
   const location = useLocation();
 
   return (
     <div className="relative flex min-h-screen flex-col">
+      <SpaceBackground />
       <Spotlight />
       <ScrollToHash />
       <ScrollProgress />
@@ -29,6 +32,7 @@ export function Layout() {
       </main>
       <Footer />
       <BackToTop />
+      <CommandPalette />
       <Grain />
     </div>
   );
