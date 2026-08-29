@@ -58,8 +58,8 @@
   --color-bg-raised: #f2f5fa;
   --color-bg-elevated: #dbe1ec;
   --color-fg: #0a0f1a;
-  --color-fg-muted: #464f61;
-  --color-fg-subtle: #7c8698;
+  --color-fg-muted: #3d4657;
+  --color-fg-subtle: #5c6678;
   --color-border: #c7cedd;
   --color-border-strong: #aab4c8;
 
@@ -85,8 +85,8 @@
   --color-bg-raised: #070c18;
   --color-bg-elevated: #0b1220;
   --color-fg: #eef2f8;
-  --color-fg-muted: #98a3b8;
-  --color-fg-subtle: #5b6577;
+  --color-fg-muted: #adb7c8;
+  --color-fg-subtle: #909bae;
   --color-border: rgba(150, 180, 230, 0.12);
   --color-border-strong: rgba(160, 190, 240, 0.26);
 
@@ -106,8 +106,8 @@
   --color-bg-raised: #070c18;
   --color-bg-elevated: #0b1220;
   --color-fg: #eef2f8;
-  --color-fg-muted: #98a3b8;
-  --color-fg-subtle: #5b6577;
+  --color-fg-muted: #adb7c8;
+  --color-fg-subtle: #909bae;
   --color-border: rgba(150, 180, 230, 0.12);
   --color-border-strong: rgba(160, 190, 240, 0.26);
   --color-accent: #35d6f5;
@@ -268,6 +268,16 @@
   border-radius: var(--radius-md);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+}
+
+/* Backdrop-blur is expensive to composite on phones/tablets — drop it there
+   and lean on a more opaque surface instead. */
+@media (max-width: 1024px) {
+  .hud {
+    background: color-mix(in srgb, var(--color-bg-raised) 94%, transparent);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 /** Flat panel — no blur, for content that scrolls. */

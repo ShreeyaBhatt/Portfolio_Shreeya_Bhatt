@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { AnimatePresence } from "motion/react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Nav } from "./Nav.jsx";
@@ -7,15 +8,26 @@ import { PageTransition } from "./PageTransition.jsx";
 import { ScrollProgress } from "./ScrollProgress.jsx";
 import { ScrollToHash } from "./ScrollToHash.jsx";
 import { SpaceBackground } from "../space/SpaceBackground.jsx";
-import { WarpTransition } from "../space/WarpTransition.jsx";
 import { Grain } from "../common/Grain.jsx";
 import { Spotlight } from "../common/Spotlight.jsx";
-import { BackToTop } from "../common/BackToTop.jsx";
-import { CommandPalette } from "../common/CommandPalette.jsx";
 import { CustomCursor } from "../common/CustomCursor.jsx";
+import { useIdleMount } from "../../hooks/useIdleMount.js";
+
+// Non-critical chrome — loaded and mounted only once the browser is idle, so
+// it never competes with first paint / time-to-interactive.
+const CommandPalette = lazy(() =>
+  import("../common/CommandPalette.jsx").then((m) => ({ default: m.CommandPalette }))
+);
+const BackToTop = lazy(() =>
+  import("../common/BackToTop.jsx").then((m) => ({ default: m.BackToTop }))
+);
+const WarpTransition = lazy(() =>
+  import("../space/WarpTransition.jsx").then((m) => ({ default: m.WarpTransition }))
+);
 
 export function Layout() {
   const location = useLocation();
+  const idle = useIdleMount();
 
   return (
     <div className="relative flex min-h-screen flex-col">
@@ -33,11 +45,15 @@ export function Layout() {
         </AnimatePresence>
       </main>
       <Footer />
-      <BackToTop />
-      <CommandPalette />
       <CustomCursor />
-      <WarpTransition />
       <Grain />
+      {idle && (
+        <Suspense fallback={null}>
+          <BackToTop />
+          <CommandPalette />
+          <WarpTransition />
+        </Suspense>
+      )}
     </div>
   );
 }

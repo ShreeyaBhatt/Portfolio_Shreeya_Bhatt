@@ -108,7 +108,7 @@ export function Nav() {
             <button
               type="button"
               onClick={openCommandPalette}
-              aria-label="Open command palette"
+              aria-label="⌘K — open command palette"
               title="Command palette — ⌘K"
               className="ml-2 rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] px-2 py-1 font-mono text-[0.65rem] tracking-[0.1em] text-[var(--color-fg-subtle)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
             >
@@ -121,7 +121,7 @@ export function Nav() {
             <button
               type="button"
               onClick={openCommandPalette}
-              aria-label="Open command palette"
+              aria-label="⌘K — open command palette"
               className="rounded-[var(--radius-sm)] border border-[var(--color-border-strong)] px-2 py-1 font-mono text-[0.65rem] text-[var(--color-fg-subtle)]"
             >
               ⌘K

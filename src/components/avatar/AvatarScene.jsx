@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Float, Lightformer, useGLTF } from "@react-three/drei";
+import { Float, useGLTF } from "@react-three/drei";
 import { AdditiveBlending, MathUtils } from "three";
 
 /* ------------------------------------------------------------------
@@ -60,7 +60,7 @@ function CommandCore({ pointer }) {
   const ringB = useRef();
 
   const particles = useMemo(() => {
-    const n = 140;
+    const n = 80;
     const arr = new Float32Array(n * 3);
     for (let i = 0; i < n; i += 1) {
       const r = 1.9 + Math.random() * 1.6;
@@ -112,7 +112,14 @@ function CommandCore({ pointer }) {
       {/* faceted body */}
       <mesh ref={core}>
         <icosahedronGeometry args={[1, 1]} />
-        <meshStandardMaterial color="#132539" metalness={0.86} roughness={0.24} flatShading envMapIntensity={1.9} />
+        <meshStandardMaterial
+          color="#16283e"
+          metalness={0.3}
+          roughness={0.4}
+          flatShading
+          emissive={CYAN}
+          emissiveIntensity={0.06}
+        />
       </mesh>
       {/* wireframe shell */}
       <mesh scale={1.32}>
@@ -157,7 +164,8 @@ function Scene({ pointer }) {
     <>
       <ambientLight intensity={0.3} />
       <directionalLight position={[3, 4, 5]} intensity={2.2} color="#dff6ff" />
-      <directionalLight position={[-4, -1, -3]} intensity={1.7} color={VIOLET} />
+      <directionalLight position={[-4, -1, -3]} intensity={1.9} color={VIOLET} />
+      <directionalLight position={[0, 2, 4]} intensity={0.9} color="#bfefff" />
       <Float speed={1.1} rotationIntensity={0.15} floatIntensity={0.5} floatingRange={[-0.05, 0.05]}>
         {AVATAR_MODEL_URL ? (
           <Suspense fallback={null}>
@@ -167,11 +175,6 @@ function Scene({ pointer }) {
           <CommandCore pointer={pointer} />
         )}
       </Float>
-      <Environment resolution={96}>
-        <Lightformer intensity={1.4} color="#bfefff" position={[-3, 2, 3]} scale={[3, 4, 1]} />
-        <Lightformer intensity={0.9} color={VIOLET} position={[4, -1, 2]} scale={[2, 3, 1]} />
-        <Lightformer intensity={0.5} color="#ffffff" position={[0, 4, -3]} scale={[5, 2, 1]} />
-      </Environment>
     </>
   );
 }
@@ -190,7 +193,7 @@ export default function AvatarScene({ className }) {
   return (
     <div className={className}>
       <Canvas
-        dpr={[1, 1.75]}
+        dpr={[1, 1.5]}
         gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
         camera={{ position: [0, 0, 7], fov: 34 }}
       >

@@ -33,12 +33,15 @@ export function StarField({ className }) {
       { count: 0.00003, speed: 0.02, size: [1.0, 1.8], alpha: [0.5, 0.95], parallax: 26 },
     ];
 
+    const isMobile = window.matchMedia("(max-width: 1024px)").matches;
+    const minFrameMs = isMobile ? 1000 / 30 : 0; // cap the star field at 30fps on phones
+    let lastDraw = 0;
+
     function build() {
       const area = width * height;
-      const mobile = width < 640;
       stars = [];
       LAYERS.forEach((layer, li) => {
-        const n = Math.round(area * layer.count * (mobile ? 0.5 : 1));
+        const n = Math.round(area * layer.count * (isMobile ? 0.32 : 1));
         for (let i = 0; i < n; i += 1) {
           stars.push({
             l: li,
@@ -64,6 +67,9 @@ export function StarField({ className }) {
     }
 
     function draw(t) {
+      raf = requestAnimationFrame(draw);
+      if (minFrameMs && t - lastDraw < minFrameMs) return;
+      lastDraw = t;
       ctx.clearRect(0, 0, width, height);
       pointer.x += (pointer.tx - pointer.x) * 0.05;
       pointer.y += (pointer.ty - pointer.y) * 0.05;
@@ -81,7 +87,6 @@ export function StarField({ className }) {
         ctx.fillStyle = `rgba(210, 232, 255, ${s.a * twinkle})`;
         ctx.fill();
       }
-      raf = requestAnimationFrame(draw);
     }
 
     function onPointer(e) {

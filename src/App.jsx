@@ -1,26 +1,44 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { Layout } from "./components/layout/Layout.jsx";
 import Home from "./routes/Home.jsx";
-import About from "./routes/About.jsx";
-import Projects from "./routes/Projects.jsx";
-import ProjectDetail from "./routes/ProjectDetail.jsx";
-import Contact from "./routes/Contact.jsx";
-import NotFound from "./routes/NotFound.jsx";
+
+// Home ships in the main bundle (it's the entry point); the rest are split
+// out so the first load stays lean.
+const About = lazy(() => import("./routes/About.jsx"));
+const Projects = lazy(() => import("./routes/Projects.jsx"));
+const ProjectDetail = lazy(() => import("./routes/ProjectDetail.jsx"));
+const Contact = lazy(() => import("./routes/Contact.jsx"));
+const NotFound = lazy(() => import("./routes/NotFound.jsx"));
+
+function Deferred({ children }) {
+  return (
+    <Suspense
+      fallback={
+        <div className="container-page flex min-h-[60vh] items-center pt-32">
+          <span className="coord animate-pulse">Loading channel…</span>
+        </div>
+      }
+    >
+      {children}
+    </Suspense>
+  );
+}
 
 export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/projects/:slug" element={<ProjectDetail />} />
+        <Route path="/about" element={<Deferred><About /></Deferred>} />
+        <Route path="/projects" element={<Deferred><Projects /></Deferred>} />
+        <Route path="/projects/:slug" element={<Deferred><ProjectDetail /></Deferred>} />
         {/* Retired routes — keep old links alive. */}
         <Route path="/work" element={<Navigate to="/projects" replace />} />
         <Route path="/journal" element={<Navigate to="/about" replace />} />
         <Route path="/certifications" element={<Navigate to="/about#credentials" replace />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/contact" element={<Deferred><Contact /></Deferred>} />
+        <Route path="*" element={<Deferred><NotFound /></Deferred>} />
       </Route>
     </Routes>
   );

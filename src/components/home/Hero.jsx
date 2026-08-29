@@ -72,12 +72,12 @@ export function Hero() {
               </Link>
             </div>
 
-            <dl className="mt-12 grid max-w-lg grid-cols-2 gap-x-8 gap-y-5 border-t border-[var(--color-border)] pt-6 sm:grid-cols-4">
+            <div className="mt-12 grid max-w-lg grid-cols-2 gap-x-8 gap-y-5 border-t border-[var(--color-border)] pt-6 sm:grid-cols-4">
               <HudLabel k="Subject" v="S. Bhatt" />
               <HudLabel k="Focus" v="Python / AI" />
               <HudLabel k="Location" v="India" />
               <HudLabel k="Build" v={site.build} live />
-            </dl>
+            </div>
           </motion.div>
         </div>
 
@@ -91,12 +91,12 @@ export function Hero() {
           <Link
             to="/projects"
             data-cursor="mission"
-            aria-label="Enter Mission Control"
+            aria-label="Enter mission control"
             className="corner-frame group relative block overflow-hidden rounded-[var(--radius-md)] p-3 outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
           >
             <AvatarStage />
-            <span className="coord absolute left-3 top-3 z-10">AVATAR · CORE</span>
-            <span className="coord absolute bottom-3 right-3 z-10 flex items-center gap-1.5 text-[var(--color-accent)]">
+            <span aria-hidden="true" className="coord absolute left-3 top-3 z-10">AVATAR · CORE</span>
+            <span aria-hidden="true" className="coord absolute bottom-3 right-3 z-10 flex items-center gap-1.5 text-[var(--color-accent)]">
               <span
                 aria-hidden="true"
                 className="h-1 w-1 rounded-full bg-[var(--color-accent)]"
@@ -107,7 +107,7 @@ export function Hero() {
             {/* enter prompt — appears on hover / focus */}
             <span className="pointer-events-none absolute inset-x-3 bottom-3 z-10 flex items-center justify-center">
               <span className="translate-y-3 rounded-[var(--radius-sm)] border border-[var(--color-accent)] bg-[color-mix(in_srgb,var(--color-bg)_80%,transparent)] px-4 py-2 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-[var(--color-accent)] opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-                Enter mission control →
+                Enter mission control <span aria-hidden="true">&rarr;</span>
               </span>
             </span>
             {/* frame lights up on hover */}
