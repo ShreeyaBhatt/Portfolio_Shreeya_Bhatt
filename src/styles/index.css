@@ -66,17 +66,17 @@
   --color-border: #c7cedd;
   --color-border-strong: #aab4c8;
 
-  --color-accent: #b5761a; /* amber — Command Deck default, light variant */
-  --color-accent-2: #6d5fd6; /* violet nebula counterpoint — stays global */
-  --color-accent-soft: rgba(181, 118, 26, 0.12);
+  --color-accent: #6a3fd6; /* deep violet — Command Deck default, light variant */
+  --color-accent-2: #3f6fd0; /* blue nebula counterpoint — stays global */
+  --color-accent-soft: rgba(106, 63, 214, 0.12);
 
   --color-success: #0a7d54;
   --color-danger: #c23a2f;
 
   /* Drifting-particle colour for <StarField>, as an "r, g, b" triplet the
-     canvas reads with getComputedStyle. Light: a warm dim gold so the field
-     reads as amber stars rather than white ones. */
-  --star-color: 176, 130, 60;
+     canvas reads with getComputedStyle. Light: a dim violet so the field
+     reads as amethyst stars rather than white ones. */
+  --star-color: 106, 63, 214;
 
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
@@ -100,21 +100,21 @@
   --color-border: rgba(150, 180, 230, 0.12);
   --color-border-strong: rgba(160, 190, 240, 0.26);
 
-  --color-accent: #f5b74a; /* amber — Command Deck default; galaxy gold */
-  --color-accent-2: #8f83ff; /* violet nebula counterpoint — stays global */
-  --color-accent-soft: rgba(245, 183, 74, 0.1);
+  --color-accent: #9b8cff; /* luminous violet — Command Deck default; galaxy hue */
+  --color-accent-2: #5b8dff; /* cosmic blue nebula counterpoint — stays global */
+  --color-accent-soft: rgba(155, 140, 255, 0.1);
 
-  --color-success: #f5b74a;
+  --color-success: #9b8cff;
   --color-danger: #ff6b6b;
 
   /* Deep-space gradient stops — nudged per page via [data-page]. Base is a
-     warm near-black so the amber sits in a gold-tinged void. */
-  --space-bg-a: #0a0704;
-  --space-bg-b: #090710;
-  --space-bg-c: #050308;
+     violet-black so the accent sits in a nebula-tinged void. */
+  --space-bg-a: #06050f;
+  --space-bg-b: #05040e;
+  --space-bg-c: #030209;
 
-  /* Dark: warm-white stars through a spacecraft window. */
-  --star-color: 255, 242, 220;
+  /* Dark: cool violet-white stars through a spacecraft window. */
+  --star-color: 214, 224, 255;
 
   --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-raised: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
@@ -135,37 +135,38 @@
 }
 
 /* ============================================================
-   PER-PAGE COLOUR — every route is an amber "room of the ship",
-   each a slightly different gold so pages still feel distinct
-   while the whole galaxy stays one warm hue. A `data-page`
-   attribute on <html> (index.html pre-paint + Layout.jsx) swaps
-   the shade and nudges the deep-space ground. Registered as
-   <color> so it cross-fades on nav. `deck` = the default above.
+   PER-PAGE COLOUR — every route is a violet "room of the ship",
+   each a slightly different point on the violet→magenta→blue
+   nebula spectrum so pages still feel distinct while the whole
+   galaxy stays one hue. A `data-page` attribute on <html>
+   (index.html pre-paint + Layout.jsx) swaps the shade and nudges
+   the deep-space ground. Registered as <color> so it cross-fades
+   on nav. `deck` = the default above.
    ============================================================ */
 @property --color-accent {
   syntax: "<color>";
   inherits: true;
-  initial-value: #f5b74a;
+  initial-value: #9b8cff;
 }
 @property --color-accent-2 {
   syntax: "<color>";
   inherits: true;
-  initial-value: #8f83ff;
+  initial-value: #5b8dff;
 }
 @property --space-bg-a {
   syntax: "<color>";
   inherits: true;
-  initial-value: #0a0704;
+  initial-value: #06050f;
 }
 @property --space-bg-b {
   syntax: "<color>";
   inherits: true;
-  initial-value: #090710;
+  initial-value: #05040e;
 }
 @property --space-bg-c {
   syntax: "<color>";
   inherits: true;
-  initial-value: #050308;
+  initial-value: #030209;
 }
 
 :root {
@@ -173,68 +174,68 @@
     --space-bg-a 450ms ease, --space-bg-b 450ms ease, --space-bg-c 450ms ease;
 }
 
-/* CREW /about — warm gold */
+/* CREW /about — lilac / orchid */
 :root[data-page="crew"] {
-  --color-accent: #a86a15;
-  --color-accent-soft: rgba(168, 106, 21, 0.12);
+  --color-accent: #7a3fd0;
+  --color-accent-soft: rgba(122, 63, 208, 0.12);
 }
 :root.dark[data-page="crew"] {
-  --color-accent: #f0a838;
-  --color-accent-soft: rgba(240, 168, 56, 0.1);
-  --space-bg-a: #0b0803;
-  --space-bg-b: #0a0710;
-  --space-bg-c: #060306;
+  --color-accent: #b48cff;
+  --color-accent-soft: rgba(180, 140, 255, 0.1);
+  --space-bg-a: #08050f;
+  --space-bg-b: #07050f;
+  --space-bg-c: #04030a;
 }
 :root:not(.dark)[data-page="crew"] {
-  --color-bg: #f5efe3;
-  --color-bg-raised: #fbf5ea;
-  --color-bg-elevated: #eee4d1;
+  --color-bg: #efecf6;
+  --color-bg-raised: #f6f3fb;
+  --color-bg-elevated: #e5e0f0;
 }
 
-/* MISSIONS /projects(+/:slug) — pale champagne */
+/* MISSIONS /projects(+/:slug) — blue-violet / indigo */
 :root[data-page="missions"] {
-  --color-accent: #b5820f;
-  --color-accent-soft: rgba(181, 130, 15, 0.12);
+  --color-accent: #3f52d6;
+  --color-accent-soft: rgba(63, 82, 214, 0.12);
 }
 :root.dark[data-page="missions"] {
-  --color-accent: #f7c766;
-  --color-accent-soft: rgba(247, 199, 102, 0.1);
-  --space-bg-a: #0a0805;
-  --space-bg-b: #09080f;
-  --space-bg-c: #050408;
+  --color-accent: #6f8dff;
+  --color-accent-soft: rgba(111, 141, 255, 0.1);
+  --space-bg-a: #05060f;
+  --space-bg-b: #04050e;
+  --space-bg-c: #03040a;
 }
 :root:not(.dark)[data-page="missions"] {
-  --color-bg: #f4f0e6;
-  --color-bg-raised: #faf6ee;
-  --color-bg-elevated: #ede5d6;
+  --color-bg: #ebeef8;
+  --color-bg-raised: #f3f5fc;
+  --color-bg-elevated: #dfe4f2;
 }
 
-/* CHANNEL /contact — deep orange-amber */
+/* CHANNEL /contact — cosmic magenta-violet */
 :root[data-page="channel"] {
-  --color-accent: #bd6a12;
-  --color-accent-soft: rgba(189, 106, 18, 0.12);
+  --color-accent: #9a3fd0;
+  --color-accent-soft: rgba(154, 63, 208, 0.12);
 }
 :root.dark[data-page="channel"] {
-  --color-accent: #ef9a3c;
-  --color-accent-soft: rgba(239, 154, 60, 0.1);
-  --space-bg-a: #0b0703;
-  --space-bg-b: #0a0710;
-  --space-bg-c: #060305;
+  --color-accent: #c77bff;
+  --color-accent-soft: rgba(199, 123, 255, 0.1);
+  --space-bg-a: #09050f;
+  --space-bg-b: #08040f;
+  --space-bg-c: #05030a;
 }
 :root:not(.dark)[data-page="channel"] {
-  --color-bg: #f6ede1;
-  --color-bg-raised: #fcf4e8;
-  --color-bg-elevated: #efe3cf;
+  --color-bg: #f1ecf7;
+  --color-bg-raised: #f8f3fb;
+  --color-bg-elevated: #e8e0f0;
 }
 
-/* LOST — 404; dim amber, ground unchanged */
+/* LOST — 404; muted grey-violet, ground unchanged */
 :root[data-page="lost"] {
-  --color-accent: #8a7040;
-  --color-accent-soft: rgba(138, 112, 64, 0.12);
+  --color-accent: #6a5aa0;
+  --color-accent-soft: rgba(106, 90, 160, 0.12);
 }
 :root.dark[data-page="lost"] {
-  --color-accent: #c99b58;
-  --color-accent-soft: rgba(201, 155, 88, 0.1);
+  --color-accent: #9a86c8;
+  --color-accent-soft: rgba(154, 134, 200, 0.1);
 }
 
 @media (prefers-reduced-motion: reduce) {
