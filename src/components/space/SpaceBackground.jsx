@@ -31,10 +31,14 @@ export function SpaceBackground() {
       aria-hidden="true"
       className="space-bg pointer-events-none fixed inset-0 z-0 overflow-hidden"
     >
-      {/* 1 — base gradient (deep-space only; hidden in light mode) */}
+      {/* 1 — base gradient (deep-space only; hidden in light mode).
+             Stops are per-page vars (see [data-page] in index.css). */}
       <div
         className="space-deep absolute inset-0"
-        style={{ background: "linear-gradient(180deg, #04060f 0%, #030712 42%, #02040c 100%)" }}
+        style={{
+          background:
+            "linear-gradient(180deg, var(--space-bg-a) 0%, var(--space-bg-b) 42%, var(--space-bg-c) 100%)",
+        }}
       />
 
       {/* 2 — nebula */}

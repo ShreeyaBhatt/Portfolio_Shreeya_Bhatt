@@ -6,12 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#030712" />
     <script>
-      // Set the theme before first paint so there's no light-mode flash.
+      // Set theme + per-page colour before first paint so there's no flash.
       // Dark ("deep space") is the intended look; only an explicit "light"
-      // choice opts out.
+      // choice opts out. `data-page` picks the accent + ground per route.
       try {
-        if (localStorage.getItem("theme") !== "light")
-          document.documentElement.classList.add("dark");
+        var r = document.documentElement;
+        if (localStorage.getItem("theme") !== "light") r.classList.add("dark");
+        var p = location.pathname;
+        r.setAttribute(
+          "data-page",
+          p === "/"
+            ? "deck"
+            : p.indexOf("/about") === 0
+              ? "crew"
+              : p.indexOf("/projects") === 0
+                ? "missions"
+                : p.indexOf("/contact") === 0
+                  ? "channel"
+                  : "lost"
+        );
       } catch (e) {
         document.documentElement.classList.add("dark");
       }

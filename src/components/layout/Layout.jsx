@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { Nav } from "./Nav.jsx";
 import { Footer } from "./Footer.jsx";
@@ -20,9 +20,22 @@ const BackToTop = lazy(() =>
   import("../common/BackToTop.jsx").then((m) => ({ default: m.BackToTop }))
 );
 
+/** Which colour "room of the ship" a path belongs to (see [data-page] in index.css). */
+function pageOf(pathname) {
+  if (pathname === "/") return "deck";
+  if (pathname.startsWith("/about")) return "crew";
+  if (pathname.startsWith("/projects")) return "missions";
+  if (pathname.startsWith("/contact")) return "channel";
+  return "lost";
+}
+
 export function Layout() {
   const location = useLocation();
   const idle = useIdleMount();
+
+  useEffect(() => {
+    document.documentElement.dataset.page = pageOf(location.pathname);
+  }, [location.pathname]);
 
   return (
     <div className="relative flex min-h-screen flex-col">
