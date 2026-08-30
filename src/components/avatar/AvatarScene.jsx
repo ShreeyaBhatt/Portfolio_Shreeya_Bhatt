@@ -1,7 +1,14 @@
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { Float, useGLTF } from "@react-three/drei";
 import { AdditiveBlending, MathUtils } from "three";
+import { AvatarFallback } from "./AvatarFallback.jsx";
+
+/** Coarse "is this a phone/tablet" check — used only to trim the scene's cost. */
+const isMobile =
+  typeof window !== "undefined" &&
+  (window.matchMedia("(max-width: 1024px)").matches ||
+    window.matchMedia("(pointer: coarse)").matches);
 
 /* ------------------------------------------------------------------
    AVATAR MODEL SLOT
@@ -60,7 +67,7 @@ function CommandCore({ pointer }) {
   const ringB = useRef();
 
   const particles = useMemo(() => {
-    const n = 80;
+    const n = isMobile ? 40 : 80;
     const arr = new Float32Array(n * 3);
     for (let i = 0; i < n; i += 1) {
       const r = 1.9 + Math.random() * 1.6;
@@ -181,6 +188,8 @@ function Scene({ pointer }) {
 
 export default function AvatarScene({ className }) {
   const pointer = useRef({ x: 0, y: 0 });
+  const [lost, setLost] = useState(false);
+
   useEffect(() => {
     const onMove = (e) => {
       pointer.current.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -190,12 +199,31 @@ export default function AvatarScene({ className }) {
     return () => window.removeEventListener("pointermove", onMove);
   }, []);
 
+  // A phone GPU can drop the WebGL context under memory pressure. If that
+  // happens, stop trying and show the schematic instead of a frozen canvas.
+  if (lost) return <AvatarFallback className={className} />;
+
   return (
     <div className={className}>
       <Canvas
-        dpr={[1, 1.5]}
-        gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }}
+        dpr={isMobile ? 1 : [1, 1.5]}
+        gl={{
+          alpha: true,
+          antialias: !isMobile,
+          powerPreference: isMobile ? "default" : "high-performance",
+          failIfMajorPerformanceCaveat: false,
+        }}
         camera={{ position: [0, 0, 7], fov: 34 }}
+        onCreated={({ gl }) => {
+          gl.domElement.addEventListener(
+            "webglcontextlost",
+            (e) => {
+              e.preventDefault();
+              setLost(true);
+            },
+            { once: true }
+          );
+        }}
       >
         <Scene pointer={pointer} />
       </Canvas>
