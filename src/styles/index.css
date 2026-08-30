@@ -135,13 +135,14 @@
 }
 
 /* ============================================================
-   PER-PAGE COLOUR — every route is a violet "room of the ship",
-   each a slightly different point on the violet→magenta→blue
-   nebula spectrum so pages still feel distinct while the whole
-   galaxy stays one hue. A `data-page` attribute on <html>
-   (index.html pre-paint + Layout.jsx) swaps the shade and nudges
-   the deep-space ground. Registered as <color> so it cross-fades
-   on nav. `deck` = the default above.
+   PER-PAGE COLOUR — each route is a different region of the
+   galaxy. `deck` (home) is the luminous-violet core; the others
+   pull from the real nebula spectrum — a gold star-forming
+   furnace for MISSIONS, an aurora teal for CREW, deep hydrogen
+   magenta for CHANNEL. A `data-page` attribute on <html>
+   (index.html pre-paint + Layout.jsx) swaps the accent, the star
+   colour, and nudges the deep-space ground. Registered as
+   <color> so it cross-fades on nav.
    ============================================================ */
 @property --color-accent {
   syntax: "<color>";
@@ -174,46 +175,51 @@
     --space-bg-a 450ms ease, --space-bg-b 450ms ease, --space-bg-c 450ms ease;
 }
 
-/* CREW /about — lilac / orchid */
+/* CREW /about — aurora teal (emission-nebula green) */
 :root[data-page="crew"] {
-  --color-accent: #7a3fd0;
-  --color-accent-soft: rgba(122, 63, 208, 0.12);
+  --color-accent: #0a8f70;
+  --color-accent-soft: rgba(10, 143, 112, 0.12);
+  --star-color: 10, 143, 112;
 }
 :root.dark[data-page="crew"] {
-  --color-accent: #b48cff;
-  --color-accent-soft: rgba(180, 140, 255, 0.1);
-  --space-bg-a: #08050f;
-  --space-bg-b: #07050f;
-  --space-bg-c: #04030a;
+  --color-accent: #4fe0c4;
+  --color-accent-soft: rgba(79, 224, 196, 0.1);
+  --space-bg-a: #04090c;
+  --space-bg-b: #03080b;
+  --space-bg-c: #020608;
+  --star-color: 196, 244, 236;
 }
 :root:not(.dark)[data-page="crew"] {
-  --color-bg: #efecf6;
-  --color-bg-raised: #f6f3fb;
-  --color-bg-elevated: #e5e0f0;
+  --color-bg: #e9f3f0;
+  --color-bg-raised: #f1f8f6;
+  --color-bg-elevated: #dde9e6;
 }
 
-/* MISSIONS /projects(+/:slug) — blue-violet / indigo */
+/* MISSIONS /projects(+/:slug) — a gold star-forming furnace */
 :root[data-page="missions"] {
-  --color-accent: #3f52d6;
-  --color-accent-soft: rgba(63, 82, 214, 0.12);
+  --color-accent: #b26a00;
+  --color-accent-soft: rgba(178, 106, 0, 0.12);
+  --star-color: 178, 106, 0;
 }
 :root.dark[data-page="missions"] {
-  --color-accent: #6f8dff;
-  --color-accent-soft: rgba(111, 141, 255, 0.1);
-  --space-bg-a: #05060f;
-  --space-bg-b: #04050e;
-  --space-bg-c: #03040a;
+  --color-accent: #f0a94a;
+  --color-accent-soft: rgba(240, 169, 74, 0.1);
+  --space-bg-a: #0b0805;
+  --space-bg-b: #090604;
+  --space-bg-c: #050403;
+  --star-color: 250, 224, 184;
 }
 :root:not(.dark)[data-page="missions"] {
-  --color-bg: #ebeef8;
-  --color-bg-raised: #f3f5fc;
-  --color-bg-elevated: #dfe4f2;
+  --color-bg: #f4f1ea;
+  --color-bg-raised: #faf7f0;
+  --color-bg-elevated: #ece7db;
 }
 
-/* CHANNEL /contact — cosmic magenta-violet */
+/* CHANNEL /contact — deep-hydrogen magenta */
 :root[data-page="channel"] {
   --color-accent: #9a3fd0;
   --color-accent-soft: rgba(154, 63, 208, 0.12);
+  --star-color: 154, 63, 208;
 }
 :root.dark[data-page="channel"] {
   --color-accent: #c77bff;
@@ -221,6 +227,7 @@
   --space-bg-a: #09050f;
   --space-bg-b: #08040f;
   --space-bg-c: #05030a;
+  --star-color: 236, 214, 255;
 }
 :root:not(.dark)[data-page="channel"] {
   --color-bg: #f1ecf7;

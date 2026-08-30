@@ -27,7 +27,7 @@ export function Uplink() {
   return (
     <section
       id="uplink"
-      data-spine="01 · Uplink"
+      data-spine="02 · Uplink"
       className="container-page scroll-mt-24 py-16 md:py-20"
     >
       <div className="hud relative overflow-hidden">

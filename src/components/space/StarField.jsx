@@ -36,10 +36,11 @@ export function StarField({ className }) {
       return { rgb, alphaScale: light ? 1.15 : 1 };
     };
     let theme = readTheme();
+    // Re-read when the theme (`class`) or the galaxy region (`data-page`) flips.
     const themeObserver = new MutationObserver(() => {
       theme = readTheme();
     });
-    themeObserver.observe(rootEl, { attributes: true, attributeFilter: ["class"] });
+    themeObserver.observe(rootEl, { attributes: true, attributeFilter: ["class", "data-page"] });
 
     let width = 0;
     let height = 0;

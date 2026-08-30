@@ -1,18 +1,18 @@
 import { Hero } from "../components/home/Hero.jsx";
 import { Marquee } from "../components/common/Marquee.jsx";
+import { Intro } from "../components/home/Intro.jsx";
 import { Uplink } from "../components/home/Uplink.jsx";
 import { Channels } from "../components/home/Channels.jsx";
 import { profile } from "../data/profile.js";
 
 /**
- * COMMAND DECK — deliberately sparse.
+ * COMMAND DECK — the introduction, then the way in.
  *
- * The old home page summarised every other route inline (a projects carousel,
- * full capability write-ups, the crew log, a contact block) — so there was no
- * reason to go anywhere. This one gives the visitor the identity (Hero +
- * avatar) and one honest GitHub telemetry read, then three *encrypted*
- * channel cards: enough to know what's behind each door, not enough to skip
- * walking through it. Each card's preview matches the route it opens.
+ * Identity and one honest sentence (Hero) → the working vocabulary (Marquee)
+ * → a plain-language briefing on what the work consists of (Intro) → the
+ * GitHub telemetry read (Uplink) → three routes with honest previews
+ * (Channels). No sealed doors — just enough to make a visitor curious about
+ * the pages behind it.
  */
 export default function Home() {
   return (
@@ -23,6 +23,7 @@ export default function Home() {
         durationSeconds={55}
         className="relative z-10 border-y border-[var(--color-border)] bg-[var(--color-bg)]"
       />
+      <Intro />
       <Uplink />
       <Channels />
     </>
