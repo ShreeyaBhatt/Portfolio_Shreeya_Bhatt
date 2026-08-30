@@ -27,7 +27,7 @@ const AVATAR_MODEL_URL = null;
 const MODEL_SCALE = 1;
 const MODEL_Y = -1;
 
-const CYAN = "#35d6f5";
+const CYAN = "#f5b74a"; /* amber — home is the amber Command Deck */
 const VIOLET = "#8f83ff";
 
 function AvatarModel({ url, pointer }) {
@@ -92,7 +92,7 @@ function CommandCore({ pointer }) {
           gl_Position = projectionMatrix*mv; }`,
       fragmentShader: `varying vec3 vN; varying vec3 vV;
         void main(){ float f = pow(1.0-max(dot(vN,vV),0.0), 2.2);
-          gl_FragColor = vec4(vec3(0.21,0.84,0.96)*f, f*0.85); }`,
+          gl_FragColor = vec4(vec3(0.96,0.72,0.29)*f, f*0.85); }`,
     }),
     []
   );
@@ -120,7 +120,7 @@ function CommandCore({ pointer }) {
       <mesh ref={core}>
         <icosahedronGeometry args={[1, 1]} />
         <meshStandardMaterial
-          color="#16283e"
+          color="#2a2114"
           metalness={0.3}
           roughness={0.4}
           flatShading
@@ -170,9 +170,9 @@ function Scene({ pointer }) {
   return (
     <>
       <ambientLight intensity={0.3} />
-      <directionalLight position={[3, 4, 5]} intensity={2.2} color="#dff6ff" />
+      <directionalLight position={[3, 4, 5]} intensity={2.2} color="#fff2dc" />
       <directionalLight position={[-4, -1, -3]} intensity={1.9} color={VIOLET} />
-      <directionalLight position={[0, 2, 4]} intensity={0.9} color="#bfefff" />
+      <directionalLight position={[0, 2, 4]} intensity={0.9} color="#ffe6bd" />
       <Float speed={1.1} rotationIntensity={0.15} floatIntensity={0.5} floatingRange={[-0.05, 0.05]}>
         {AVATAR_MODEL_URL ? (
           <Suspense fallback={null}>
