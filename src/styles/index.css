@@ -137,12 +137,12 @@
 /* ============================================================
    PER-PAGE COLOUR — each route is a different region of the
    galaxy. `deck` (home) is the luminous-violet core; the others
-   pull from the real nebula spectrum — a gold star-forming
-   furnace for MISSIONS, an aurora teal for CREW, deep hydrogen
-   magenta for CHANNEL. A `data-page` attribute on <html>
-   (index.html pre-paint + Layout.jsx) swaps the accent, the star
-   colour, and nudges the deep-space ground. Registered as
-   <color> so it cross-fades on nav.
+   pull from the real nebula spectrum — Hα rose for MISSIONS, an
+   aurora teal for CREW, deep-hydrogen magenta for CHANNEL. A
+   `data-page` attribute on <html> (index.html pre-paint +
+   Layout.jsx) swaps the accent, the star colour, and nudges the
+   deep-space ground. Registered as <color> so it cross-fades on
+   nav.
    ============================================================ */
 @property --color-accent {
   syntax: "<color>";
@@ -195,24 +195,24 @@
   --color-bg-elevated: #dde9e6;
 }
 
-/* MISSIONS /projects(+/:slug) — a gold star-forming furnace */
+/* MISSIONS /projects(+/:slug) — Hα rose, the glow of a star-forming region */
 :root[data-page="missions"] {
-  --color-accent: #b26a00;
-  --color-accent-soft: rgba(178, 106, 0, 0.12);
-  --star-color: 178, 106, 0;
+  --color-accent: #cc3b62;
+  --color-accent-soft: rgba(204, 59, 98, 0.12);
+  --star-color: 204, 59, 98;
 }
 :root.dark[data-page="missions"] {
-  --color-accent: #f0a94a;
-  --color-accent-soft: rgba(240, 169, 74, 0.1);
-  --space-bg-a: #0b0805;
-  --space-bg-b: #090604;
-  --space-bg-c: #050403;
-  --star-color: 250, 224, 184;
+  --color-accent: #ff6b8a;
+  --color-accent-soft: rgba(255, 107, 138, 0.1);
+  --space-bg-a: #0b060a;
+  --space-bg-b: #090509;
+  --space-bg-c: #050307;
+  --star-color: 255, 198, 212;
 }
 :root:not(.dark)[data-page="missions"] {
-  --color-bg: #f4f1ea;
-  --color-bg-raised: #faf7f0;
-  --color-bg-elevated: #ece7db;
+  --color-bg: #f6eef1;
+  --color-bg-raised: #fbf4f6;
+  --color-bg-elevated: #eee1e6;
 }
 
 /* CHANNEL /contact — deep-hydrogen magenta */
