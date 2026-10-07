@@ -20,7 +20,7 @@ export function useTheme() {
     // Keep the browser UI colour (mobile address bar) in step with the theme.
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", theme === "dark" ? "#030712" : "#e7ebf2");
+      ?.setAttribute("content", theme === "dark" ? "#030712" : "#eeecf7");
   }, [theme]);
 
   const toggleTheme = useCallback(() => {

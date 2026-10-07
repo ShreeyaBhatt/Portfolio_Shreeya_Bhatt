@@ -562,6 +562,15 @@
     transform: rotate(-360deg);
   }
 }
+/* Mission Core readout — the bar that fills until the scan moves on. */
+@keyframes scan-timer {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
 
 /** A thin light bar sweeping down a surface — the "scanning"
     pass on mission panels and section reveals. */

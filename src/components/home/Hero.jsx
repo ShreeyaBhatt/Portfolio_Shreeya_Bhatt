@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "motion/react";
 import { RevealLines } from "../common/RevealLines.jsx";
 import { Scramble } from "../common/Scramble.jsx";
-import { AvatarStage } from "../avatar/AvatarStage.jsx";
+import { MissionCore } from "../avatar/MissionCore.jsx";
 import { HudLabel } from "../space/HudLabel.jsx";
 import { getRevealVariants } from "../../lib/motion.js";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion.js";
@@ -88,34 +88,7 @@ export function Hero() {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
           className="relative mx-auto w-full max-w-[26rem] lg:max-w-none"
         >
-          <Link
-            to="/projects"
-            data-cursor="mission"
-            aria-label="Enter mission control"
-            className="corner-frame group relative block overflow-hidden rounded-[var(--radius-md)] p-3 outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-[var(--color-accent)]"
-          >
-            <AvatarStage />
-            <span aria-hidden="true" className="coord absolute left-3 top-3 z-10">AVATAR · CORE</span>
-            <span aria-hidden="true" className="coord absolute bottom-3 right-3 z-10 flex items-center gap-1.5 text-[var(--color-accent)]">
-              <span
-                aria-hidden="true"
-                className="h-1 w-1 rounded-full bg-[var(--color-accent)]"
-                style={{ animation: "lab-pulse 1.8s ease-in-out infinite" }}
-              />
-              TRACKING
-            </span>
-            {/* enter prompt — appears on hover / focus */}
-            <span className="pointer-events-none absolute inset-x-3 bottom-3 z-10 flex items-center justify-center">
-              <span className="translate-y-3 rounded-[var(--radius-sm)] border border-[var(--color-accent)] bg-[color-mix(in_srgb,var(--color-bg)_80%,transparent)] px-4 py-2 font-mono text-[0.65rem] uppercase tracking-[0.18em] text-[var(--color-accent)] opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
-                Enter mission control <span aria-hidden="true">&rarr;</span>
-              </span>
-            </span>
-            {/* frame lights up on hover */}
-            <span
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 rounded-[var(--radius-md)] ring-1 ring-[var(--color-accent)]/0 transition-all group-hover:ring-[var(--color-accent)]/50"
-            />
-          </Link>
+          <MissionCore />
         </motion.div>
       </div>
 
