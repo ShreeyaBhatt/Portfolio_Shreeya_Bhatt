@@ -38,9 +38,8 @@ export default function Contact() {
       />
 
       <p className="container-prose mt-10 text-lead text-[var(--color-fg-muted)]">
-        Let's build something useful. I'm currently interning at Anblicks — if you're hiring for
-        a Python or software engineering role, or want to talk through a project, open the
-        channel.
+        Let's build something useful. Want to talk through a project, an idea, or just say
+        hello? Open the channel.
       </p>
 
       <div className="mt-16 grid grid-cols-1 gap-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-20">

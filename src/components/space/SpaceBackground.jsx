@@ -31,8 +31,8 @@ export function SpaceBackground() {
       aria-hidden="true"
       className="space-bg pointer-events-none fixed inset-0 z-0 overflow-hidden"
     >
-      {/* 1 — base gradient (deep-space only; hidden in light mode).
-             Stops are per-page vars (see [data-page] in index.css). */}
+      {/* 1 — base gradient. Stops are per-page, per-theme vars (see
+             [data-page] in index.css): deep space in dark, a pale sky in light. */}
       <div
         className="space-deep absolute inset-0"
         style={{
@@ -64,7 +64,7 @@ export function SpaceBackground() {
         }}
       />
 
-      {/* 3 — drifting particles (recoloured for light mode via --star-color) */}
+      {/* 3 — drifting particles (recoloured per theme via --star-color) */}
       <StarField className="space-particles absolute inset-0 h-full w-full" />
 
       {/* 4 — anchor planet (orbit shift) */}
@@ -72,7 +72,7 @@ export function SpaceBackground() {
         style={reduce ? undefined : { y: planetY, rotate: planetRot }}
         className="space-deep absolute right-[-18rem] top-[38vh] hidden md:block"
       >
-        <Planet size={640} tint="#0b1a30" glow="var(--color-accent)" />
+        <Planet size={640} tint="var(--planet-tint)" glow="var(--color-accent)" />
       </motion.div>
 
       {/* 5 — technical grid (orbit shift) */}
@@ -91,7 +91,7 @@ export function SpaceBackground() {
         className="space-deep absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 40%, transparent 45%, rgba(2,4,10,0.55) 100%)",
+            "radial-gradient(ellipse at 50% 40%, transparent 45%, var(--vignette) 100%)",
         }}
       />
     </div>

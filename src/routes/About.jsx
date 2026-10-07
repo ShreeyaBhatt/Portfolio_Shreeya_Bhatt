@@ -4,11 +4,13 @@ import { SectionHeader } from "../components/common/SectionHeader.jsx";
 import { RevealLines } from "../components/common/RevealLines.jsx";
 import { HudLabel } from "../components/space/HudLabel.jsx";
 import { SystemGraph } from "../components/about/SystemGraph.jsx";
+import { IssuerMark } from "../components/common/icons.jsx";
 import { viewportOnce } from "../lib/motion.js";
 import { profile } from "../data/profile.js";
 import { timeline } from "../data/timeline.js";
 import { toolboxGroups } from "../data/skills.js";
 import { education } from "../data/education.js";
+import { experience } from "../data/experience.js";
 import { certifications } from "../data/certifications.js";
 import { experimentLog } from "../data/log.js";
 
@@ -87,10 +89,40 @@ export default function About() {
         </div>
       </Section>
 
+      {/* SERVICE RECORD */}
+      <Section id="experience">
+        <SectionHeader index="02" label="Service Record" meta="Experience" />
+        <div className="mt-12">
+          {experience.map((entry) => (
+            <motion.div
+              key={`${entry.company}-${entry.role}`}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+              variants={fade}
+              className="grid-page border-t border-[var(--color-border)] py-8"
+            >
+              <p className="col-span-12 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-[var(--color-accent)] md:col-span-3">
+                <span className="whitespace-nowrap">{entry.period}</span>
+                {entry.current && <span className="ml-2 whitespace-nowrap md:ml-0 md:mt-1 md:block">· Active</span>}
+              </p>
+              <div className="col-span-12 mt-3 md:col-span-9 md:mt-0">
+                <h3 className="text-h3 font-medium">{entry.role}</h3>
+                <p className="mt-1 text-sm text-[var(--color-fg-muted)]">
+                  {entry.company} · {entry.type} — {entry.location}
+                </p>
+                <p className="mt-3 text-sm text-[var(--color-fg-subtle)]">{entry.summary}</p>
+              </div>
+            </motion.div>
+          ))}
+          <div className="border-t border-[var(--color-border)]" />
+        </div>
+      </Section>
+
       {/* MISSION LOG */}
       <Section id="log">
         <SectionHeader
-          index="02"
+          index="03"
           label="Mission Log"
           meta="2024 — 2028"
           titleLines={["A development", "timeline"]}
@@ -143,7 +175,7 @@ export default function About() {
       {/* SYSTEMS */}
       <Section id="skills">
         <SectionHeader
-          index="03"
+          index="04"
           label="Systems"
           meta={`${String(toolboxGroups.length).padStart(2, "0")} subsystems`}
           titleLines={["System", "architecture"]}
@@ -156,7 +188,7 @@ export default function About() {
 
       {/* EDUCATION */}
       <Section>
-        <SectionHeader index="04" label="Training Record" meta="2021 — 2028" />
+        <SectionHeader index="05" label="Training Record" meta="2021 — 2028" />
         <div className="mt-12">
           {education.map((entry) => (
             <div key={entry.degree} className="grid-page border-t border-[var(--color-border)] py-8">
@@ -179,7 +211,7 @@ export default function About() {
       {/* CREDENTIALS */}
       <Section id="credentials" className="pb-28 md:pb-40">
         <SectionHeader
-          index="05"
+          index="06"
           label="Credentials"
           meta={`${String(certifications.length).padStart(2, "0")} verified`}
           lead={`${certifications.length} certifications so far — Python, machine learning, AI tooling with Claude, FastAPI, Linux, web fundamentals, Java, and version control.`}
@@ -193,20 +225,33 @@ export default function About() {
               <p className="col-span-12 font-mono text-[0.7rem] uppercase tracking-[0.14em] text-[var(--color-fg-subtle)] md:col-span-2">
                 {cert.date}
               </p>
-              <div className="col-span-12 mt-1 md:col-span-7 md:mt-0">
-                <p className="text-[var(--color-fg)]">{cert.title}</p>
-                <p className="mt-0.5 text-sm text-[var(--color-fg-subtle)]">{cert.issuer}</p>
+              <div className="col-span-12 mt-2 flex min-w-0 gap-4 md:col-span-7 md:mt-0">
+                <IssuerMark issuer={cert.issuer} className="mt-0.5" />
+                <div className="min-w-0">
+                  <p className="text-[var(--color-fg)]">{cert.title}</p>
+                  <p className="mt-0.5 text-sm text-[var(--color-fg-subtle)]">{cert.issuer}</p>
+                  {cert.skills && (
+                    <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
+                      {cert.skills.split(", ").map((s) => (
+                        <li key={s} className="font-mono text-[0.7rem] text-[var(--color-fg-subtle)]">
+                          {s}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </div>
-              <div className="col-span-12 mt-2 md:col-span-3 md:mt-0 md:text-right">
+              <div className="col-span-12 mt-3 pl-[3.25rem] md:col-span-3 md:mt-0 md:pl-0 md:text-right">
                 {cert.credentialUrl && (
                   <a
                     href={cert.credentialUrl}
                     target="_blank"
                     rel="noreferrer"
                     data-cursor="external"
+                    aria-label={`View credential — ${cert.title} (opens in a new tab)`}
                     className="link-underline font-mono text-[0.7rem] uppercase tracking-[0.14em] text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
                   >
-                    Verify →
+                    View credential →
                   </a>
                 )}
               </div>

@@ -22,6 +22,7 @@ export function CommandPalette() {
     () => [
       { label: "Go to Command Deck", hint: "Home", run: () => navigate("/") },
       { label: "Go to Crew Profile", hint: "About", run: () => navigate("/about") },
+      { label: "Open Service Record", hint: "Experience", run: () => navigate("/about#experience") },
       { label: "Open Systems", hint: "Skills", run: () => navigate("/about#skills") },
       { label: "Open Mission Log", hint: "Timeline", run: () => navigate("/about#log") },
       { label: "View Missions", hint: "Projects", run: () => navigate("/projects") },

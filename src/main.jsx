@@ -11,7 +11,7 @@ if (typeof window !== "undefined") {
   const dim = "color:#9ba1ac";
   // eslint-disable-next-line no-console
   console.log(
-    "%cShreeya Bhatt%c\n%cPython · ML · full-stack. Built with React 19, Vite, Tailwind v4, Motion.\nPoke around — source is on GitHub. Hiring? shreeyasbhatt@gmail.com  👋",
+    "%cShreeya Bhatt%c\n%cPython · ML · full-stack. Built with React 19, Vite, Tailwind v4, Motion.\nPoke around — source is on GitHub. Say hi: shreeyasbhatt@gmail.com  👋",
     brand,
     "",
     dim

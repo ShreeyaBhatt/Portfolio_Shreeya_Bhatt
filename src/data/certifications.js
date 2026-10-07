@@ -15,24 +15,28 @@ export const certifications = [
     issuer: "Anthropic",
     date: "Sep 2026",
     skills: "Claude Code",
+    credentialUrl: "https://verify.skilljar.com/c/ac3febb2pi6a",
   },
   {
     title: "Building with the Claude API",
     issuer: "Anthropic",
     date: "Sep 2026",
     skills: "Claude API",
+    credentialUrl: "https://verify.skilljar.com/c/5cig9bp8nrjw",
   },
   {
     title: "Introduction to Agent Skills",
     issuer: "Anthropic",
     date: "Sep 2026",
     skills: "Claude Skills",
+    credentialUrl: "https://verify.skilljar.com/c/yfztbwyamae4",
   },
   {
     title: "Claude 101",
     issuer: "Anthropic",
     date: "Sep 2026",
     skills: "Anthropic Claude, Claude Code",
+    credentialUrl: "https://verify.skilljar.com/c/ojj8298fwtig",
   },
   {
     title: "Practical Linux Command Line 2.0",

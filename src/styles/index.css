@@ -10,9 +10,9 @@
    ONE secondary — orbit violet — used sparingly for rim light
    and depth. Everything else stays dark and restrained.
 
-   Dark is the intended appearance and the default; the light
-   tokens apply only when the visitor explicitly toggles to light
-   (which adds `.dark` = off on <html>, and stores "light").
+   Dark is the default; light applies when the visitor toggles
+   to it (which removes `.dark` from <html> and stores "light").
+   Both themes share one environment, driven by the same tokens.
    ============================================================ */
 :root {
   color-scheme: light;
@@ -56,10 +56,11 @@
   --text-lead--line-height: 1.62;
   --text-lead--letter-spacing: 0;
 
-  /* ---- Palette (light fallback — muted, not the intended look) ---- */
-  --color-bg: #e7ebf2;
-  --color-bg-raised: #f2f5fa;
-  --color-bg-elevated: #dbe1ec;
+  /* ---- Palette (light theme — a faint lavender ground for the Command
+     Deck, mirroring dark mode's violet-black; other pages tint below) ---- */
+  --color-bg: #eeecf7;
+  --color-bg-raised: #f6f5fb;
+  --color-bg-elevated: #e3e0f0;
   --color-fg: #0a0f1a;
   --color-fg-muted: #3d4657;
   --color-fg-subtle: #49546a; /* darkened from #5c6678 — the small mono register (coords, footer meta) was under-contrast on the pale ground */
@@ -116,18 +117,34 @@
   /* Dark: cool violet-white stars through a spacecraft window. */
   --star-color: 214, 224, 255;
 
+  /* Night-side planet + edge darkening. */
+  --planet-tint: #0b1a30;
+  --planet-mid: #04070f;
+  --planet-edge: #02040a;
+  --planet-shade: rgba(0, 0, 0, 0.85);
+  --vignette: rgba(2, 4, 10, 0.55);
+
   --shadow-resting: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow-raised: 0 30px 70px -30px rgba(0, 0, 0, 0.8);
   --shadow-modal: 0 40px 90px -24px rgba(0, 0, 0, 0.75);
 }
 
-/* ---- Light mode is a legibility fallback, not a designed look.
-   The deep-space atmosphere (gradient, nebula, planet, grid, vignette) is
-   hard-coded dark, so it's hidden and the light tokens carry the page. The
-   drifting particles stay — recoloured to sky blue via --star-color — and the
-   grain drops to a whisper. ---- */
-:root:not(.dark) .space-deep {
-  opacity: 0 !important;
+/* ---- Light mode: the same space environment, seen by day. Every layer of
+   <SpaceBackground> (gradient, nebula, particles, planet, grid, vignette)
+   renders in both themes from tokens, so the two read as one design:
+   the gradient becomes a pale sky tinted by the page's ground, the planet
+   a pale moon, the vignette a faint edge-darkening. The grain drops to a
+   whisper. ---- */
+:root:not(.dark) {
+  --space-bg-a: color-mix(in srgb, var(--color-bg) 45%, #ffffff);
+  --space-bg-b: var(--color-bg);
+  --space-bg-c: color-mix(in srgb, var(--color-bg) 90%, var(--color-accent));
+
+  --planet-tint: #ffffff;
+  --planet-mid: color-mix(in srgb, var(--color-bg-elevated) 85%, var(--color-accent));
+  --planet-edge: color-mix(in srgb, var(--color-bg-elevated) 70%, var(--color-accent));
+  --planet-shade: rgba(40, 36, 80, 0.22);
+  --vignette: rgba(40, 36, 90, 0.1);
 }
 :root:not(.dark) .grain {
   opacity: 0.025;

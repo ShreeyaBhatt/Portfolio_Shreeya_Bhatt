@@ -20,7 +20,6 @@
  * @property {Capability[]} capabilities
  * @property {{label: string, value: string}[]} stats
  * @property {{bio: string, publicRepos: number, stars: number, focusAreas: string[]}} github
- * @property {string[]} lookingFor
  * @property {string[]} funFacts
  * @property {string[]} roles
  */
@@ -28,7 +27,7 @@
 /** @type {Profile} */
 export const profile = {
   name: "Shreeya Bhatt",
-  tagline: "Python Developer & AI Enthusiast",
+  tagline: "Python Developer · Data / AI / Full-Stack",
   bio: "Computer Science student and intern at Anblicks who builds with Python at the core — data-driven, AI-powered applications with machine learning at their heart, backed by full-stack platforms and console-based systems grounded in solid data structures and clean architecture.",
   email: "shreeyasbhatt@gmail.com",
   location: "Ahmedabad, India",
@@ -37,7 +36,7 @@ export const profile = {
   githubUrl: "https://github.com/ShreeyaBhatt",
 
   /** Set beneath the name on the loader and in the hero meta row. */
-  disciplines: ["Python", "Machine Learning", "Full-Stack"],
+  disciplines: ["Python", "Data", "AI / ML", "Full-Stack"],
 
   /** Scrolling band on the home page — the working vocabulary, at a glance. */
   marquee: [
@@ -92,8 +91,7 @@ export const profile = {
     focusAreas: ["Machine Learning", "System Design", "AWS & Cloud Computing", "Advanced MERN Stack"],
   },
 
-  // Sourced from the "Looking For" / "Fun Fact" sections of my GitHub profile README.
-  lookingFor: ["Python Developer Roles", "Software Engineering Internships", "MERN Stack Developer Roles"],
+  // Sourced from the "Fun Fact" section of my GitHub profile README.
   funFacts: [
     "I enjoy singing just as much as I enjoy building software.",
     "I believe technology should solve real-world problems.",

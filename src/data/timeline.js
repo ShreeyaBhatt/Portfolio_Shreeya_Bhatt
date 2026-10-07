@@ -67,7 +67,6 @@ export const timeline = [
     summary:
       "Joined Anblicks as an intern, kept certifying on the side, and heading toward graduation in 2028.",
     built: [
-      "Intern at Anblicks — Ahmedabad, on-site (Sep 2026 – present)",
       "Certified in Anthropic's Claude Code, Claude API, and Agent Skills courses",
       "Completed FastAPI (OAuth & JWT) and Practical Linux Command Line courses",
     ],

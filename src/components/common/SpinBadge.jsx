@@ -9,7 +9,7 @@ import { cn } from "../../lib/cn.js";
  * @param {{ text?: string, to?: string, className?: string, size?: number }} props
  */
 export function SpinBadge({
-  text = "AVAILABLE FOR WORK · OPEN TO INTERNSHIPS · ",
+  text = "PYTHON · DATA · AI · FULL-STACK · ",
   to = "/contact",
   className,
   size = 116,
@@ -17,7 +17,7 @@ export function SpinBadge({
   return (
     <Link
       to={to}
-      aria-label="Available for work — get in touch"
+      aria-label="Get in touch"
       className={cn(
         "group relative grid place-items-center rounded-full text-[var(--color-fg-muted)] transition-colors hover:text-[var(--color-accent)]",
         className
