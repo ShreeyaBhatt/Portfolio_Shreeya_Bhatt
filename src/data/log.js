@@ -13,6 +13,12 @@
 /** @type {LogEntry[]} */
 export const experimentLog = [
   {
+    id: "006",
+    date: "2026.09",
+    tag: "Internship",
+    note: "Started as an intern at Anblicks in Ahmedabad (on-site), and picked up FastAPI, Linux, and Anthropic's Claude API and Claude Code courses alongside it.",
+  },
+  {
     id: "005",
     date: "2026.08",
     tag: "Cloud",

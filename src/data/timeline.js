@@ -1,8 +1,8 @@
 /**
  * The development timeline — a factual journey, assembled only from this
  * portfolio's own records (see education.js, certifications.js, projects.js).
- * It is deliberately NOT an employment history: every line is a thing built or
- * a technology picked up, dated from the material already on the site.
+ * Every line is a thing built, a technology picked up, or (from 2026) a role
+ * taken on, dated from the material already on the site and LinkedIn.
  *
  * @typedef {Object} TimelinePhase
  * @property {string} year
@@ -63,10 +63,15 @@ export const timeline = [
   },
   {
     year: "2026 +",
-    title: "Next experiment",
-    summary: "Mid-course on cloud, heading toward graduation in 2028, and open to internships.",
-    built: [],
-    explored: ["AWS & Cloud Computing", "System Design", "Advanced MERN"],
+    title: "In the field",
+    summary:
+      "Joined Anblicks as an intern, kept certifying on the side, and heading toward graduation in 2028.",
+    built: [
+      "Intern at Anblicks — Ahmedabad, on-site (Sep 2026 – present)",
+      "Certified in Anthropic's Claude Code, Claude API, and Agent Skills courses",
+      "Completed FastAPI (OAuth & JWT) and Practical Linux Command Line courses",
+    ],
+    explored: ["FastAPI", "Linux", "Claude API", "Claude Code", "AWS & Cloud Computing", "System Design"],
     open: true,
   },
 ];

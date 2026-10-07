@@ -54,7 +54,7 @@ export default function About() {
             <p className="mt-1 font-display text-h3 font-bold">{profile.name}</p>
             <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-5">
               <HudLabel k="Role" v="Python Dev" />
-              <HudLabel k="Clearance" v="Student" />
+              <HudLabel k="Clearance" v="Student · Intern" />
               <HudLabel k="Location" v="Ahmedabad, IN" />
               <HudLabel k="Status" v={profile.availability} live />
             </div>
@@ -94,7 +94,7 @@ export default function About() {
           label="Mission Log"
           meta="2024 — 2028"
           titleLines={["A development", "timeline"]}
-          lead="Not a job history — a record of what got built and what got learned, year by year."
+          lead="A record of what got built, what got learned, and where it's being put to work — year by year."
         />
         <div className="mt-12">
           {timeline.map((phase, i) => (
@@ -182,7 +182,7 @@ export default function About() {
           index="05"
           label="Credentials"
           meta={`${String(certifications.length).padStart(2, "0")} verified`}
-          lead={`${certifications.length} certifications so far — Python, machine learning, web fundamentals, Java, and version control.`}
+          lead={`${certifications.length} certifications so far — Python, machine learning, AI tooling with Claude, FastAPI, Linux, web fundamentals, Java, and version control.`}
         />
         <ul className="mt-12 border-t border-[var(--color-border)]">
           {certifications.map((cert) => (

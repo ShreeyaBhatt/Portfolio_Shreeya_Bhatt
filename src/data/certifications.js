@@ -11,6 +11,46 @@
 /** @type {Certification[]} */
 export const certifications = [
   {
+    title: "Claude Code in Action",
+    issuer: "Anthropic",
+    date: "Sep 2026",
+    skills: "Claude Code",
+  },
+  {
+    title: "Building with the Claude API",
+    issuer: "Anthropic",
+    date: "Sep 2026",
+    skills: "Claude API",
+  },
+  {
+    title: "Introduction to Agent Skills",
+    issuer: "Anthropic",
+    date: "Sep 2026",
+    skills: "Claude Skills",
+  },
+  {
+    title: "Claude 101",
+    issuer: "Anthropic",
+    date: "Sep 2026",
+    skills: "Anthropic Claude, Claude Code",
+  },
+  {
+    title: "Practical Linux Command Line 2.0",
+    issuer: "Udemy",
+    date: "Sep 2026",
+    skills: "Linux",
+    credentialId: "UC-b5b2ef8d-6991-4629-95ae-819915f632f9",
+    credentialUrl: "https://www.udemy.com/certificate/UC-b5b2ef8d-6991-4629-95ae-819915f632f9/",
+  },
+  {
+    title: "The Complete FastAPI Course With OAuth & JWT Authentication",
+    issuer: "Udemy",
+    date: "Sep 2026",
+    skills: "FastAPI",
+    credentialId: "UC-43e74fa7-4c10-4c0b-99b6-6ddd30ea3ed4",
+    credentialUrl: "https://www.udemy.com/certificate/UC-43e74fa7-4c10-4c0b-99b6-6ddd30ea3ed4/",
+  },
+  {
     title: "Exploratory Data Analysis for Machine Learning",
     issuer: "IBM",
     date: "Jun 2026",

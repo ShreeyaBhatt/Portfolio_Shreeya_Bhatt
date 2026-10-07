@@ -47,7 +47,7 @@ export const toolboxGroups = [
     short: "ML",
     weight: "core",
     blurb: "Models that do real work inside a product — risk classification, value prediction.",
-    skills: ["Machine Learning", "Artificial Intelligence", "Automatic model selection", "Gemini API"],
+    skills: ["Machine Learning", "Artificial Intelligence", "Automatic model selection", "Gemini API", "Claude API"],
   },
   {
     id: "web",
@@ -63,15 +63,15 @@ export const toolboxGroups = [
     short: "BACKEND",
     weight: "core",
     blurb: "REST APIs on the back, relational and document stores underneath.",
-    skills: ["Django", "Django REST", "REST APIs", "MongoDB", "MySQL", "DBMS", "JDBC"],
+    skills: ["Django", "Django REST", "FastAPI", "REST APIs", "MongoDB", "MySQL", "DBMS", "JDBC"],
   },
   {
     id: "tooling",
     label: "Tooling & Practice",
     short: "TOOLING",
     weight: "core",
-    blurb: "The workflow around the code — version control and a sense of the lifecycle.",
-    skills: ["Git & GitHub", "SDLC", "OOP"],
+    blurb: "The workflow around the code — version control, the command line, AI-assisted development, and a sense of the lifecycle.",
+    skills: ["Git & GitHub", "Linux", "Claude Code", "SDLC", "OOP"],
   },
   {
     id: "fundamentals",

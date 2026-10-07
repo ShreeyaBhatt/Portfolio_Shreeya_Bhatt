@@ -11,7 +11,7 @@
 
 /** @type {SiteConfig} */
 export const site = {
-  build: "2026.08",
+  build: "2026.10",
   status: "AVAILABLE",
   contactEndpoint: "",
 };

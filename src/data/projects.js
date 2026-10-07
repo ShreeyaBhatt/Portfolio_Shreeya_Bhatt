@@ -32,21 +32,23 @@ export const projects = [
     slug: "wealthnest",
     title: "WealthNest",
     category: "AI-Powered Family Investment Portfolio Tracker",
-    period: "06/2026 – 07/2026",
+    period: "07/2026 – 08/2026",
     summary:
-      "A full-stack family investment platform with role-based access, ML-driven risk prediction, and a Gemini-powered AI assistant.",
+      "A family investment tracker across three deployed services — ML risk models trained on real Federal Reserve survey data and a Gemini assistant grounded in the family's own portfolio.",
     description: [
-      "WealthNest is a full-stack investment portfolio platform built for families to manage investments and transactions together, with role-based access control separating family heads, members, and administrators.",
-      "The core of the platform is a set of machine learning models that classify investment risk and predict future portfolio value — multiple algorithms are compared automatically, and the best-performing model is selected without manual intervention.",
-      "A Google Gemini API integration provides portfolio-aware AI assistance directly inside the app, alongside automated chart generation and PDF report exports.",
+      "WealthNest gives a household one unified view of its investments — mutual funds, stocks, gold, FDs, PPF, and more — instead of scattering them across separate apps and spreadsheets, with role-based access separating family heads, members, and administrators. Built as a team project with Aayushi and Raghav.",
+      "It runs as three independently deployed services: a React (Vite) + Redux Toolkit frontend, a Node.js/Express + MongoDB backend for auth and CRUD, and a Django REST Framework service for machine learning and analytics.",
+      "The risk-classification model is trained on real data from a U.S. Federal Reserve household survey rather than synthetic numbers, and chosen by 5-fold cross-validation across kNN, Decision Tree, Random Forest, and SVM. Future-value forecasting, rebalancing alerts, goal tracking, Seaborn/Plotly/NetworkX analytics, PDF reports, and a Gemini-powered assistant grounded in the family's real portfolio round it out.",
+      "Fully deployed on Render (three services) with MongoDB Atlas, backed by 37 automated tests across Jest and Django's test framework.",
     ],
     highlights: [
-      "Role-based access control for family heads, members, and administrators",
-      "ML models for risk classification and future-value prediction with automatic best-model selection",
-      "Google Gemini API integration for portfolio-aware AI assistance",
-      "Automated charts and PDF report generation",
+      "Three independently deployed services — React + Redux, Node/Express + MongoDB, Django REST ML",
+      "Risk model trained on real U.S. Federal Reserve household-survey data, selected by 5-fold CV across kNN, Decision Tree, Random Forest, and SVM",
+      "Future-value forecasting, automatic rebalancing alerts, and goal tracking",
+      "Gemini-powered assistant grounded in the family's real portfolio data",
+      "37 automated tests across Jest and Django's test framework",
     ],
-    tech: ["Django REST", "Machine Learning", "Gemini API", "React.js", "Node.js", "Express", "MongoDB"],
+    tech: ["React.js", "Redux Toolkit", "Node.js", "Express", "MongoDB", "Django REST", "Machine Learning", "Gemini API"],
     featured: true,
     codeUrl: "https://github.com/ShreeyaBhatt/WealthNest_v1.1",
     demoUrl: "https://wealthnest-client.onrender.com",
@@ -54,23 +56,23 @@ export const projects = [
     status: "DEPLOYED",
     system: "Full-Stack + ML",
     architecture: [
+      "React + Redux",
       "Auth / RBAC",
-      "Investments",
-      "Transactions",
-      "Market Data",
-      "ML Predictions",
-      "AI Assistant",
-      "Notifications",
-      "MongoDB",
+      "Node / Express API",
+      "MongoDB Atlas",
+      "Django ML Service",
+      "Risk Model (5-fold CV)",
+      "Forecast + Rebalance",
+      "Gemini Assistant",
     ],
     problem:
-      "Families managing investments together have no shared place to track holdings and transactions, and no clear read on the risk they are carrying or where a portfolio is heading.",
+      "A household's investments — mutual funds, stocks, gold, FDs, PPF — end up scattered across separate apps and spreadsheets, with no shared view and no clear read on the risk being carried or where the portfolio is heading.",
     approach:
-      "A full-stack platform on Django REST and a React front end, with role-based access separating family heads, members, and administrators. A set of machine-learning models sits inside the product: they classify investment risk and predict future portfolio value, comparing multiple algorithms and selecting the best performer automatically.",
+      "Three independently deployed services: a React (Vite) + Redux Toolkit frontend, a Node.js/Express + MongoDB backend for auth and CRUD, and a Django REST Framework service for machine learning and analytics — all on Render with MongoDB Atlas, covered by 37 automated tests across Jest and Django.",
     contribution:
-      "Automatic model selection — several algorithms are trained and compared on each run and the strongest is promoted without manual intervention — plus a Google Gemini integration that answers questions with the user's own portfolio as context.",
+      "An honest risk model: trained on a real U.S. Federal Reserve household survey instead of synthetic numbers, and picked by 5-fold cross-validation across kNN, Decision Tree, Random Forest, and SVM — plus a Gemini assistant that answers with the family's real portfolio as context.",
     learned:
-      "Wiring machine learning into a real product end to end: serving predictions through an API, keeping model choice honest, and folding automated charts and PDF reports into the same flow.",
+      "Wiring machine learning into a real product end to end: splitting it into services that deploy on their own, serving predictions through an API, keeping model choice honest, and testing across two stacks.",
   },
   {
     slug: "spendwise",
@@ -80,7 +82,7 @@ export const projects = [
     summary:
       "An expense management system shipped as two live, independently deployed versions — a Python/Streamlit data app and a vanilla-JS web app.",
     description: [
-      "SpendWise manages expenses, monthly budgets, and borrowing/lending transactions, with categorisation, budget monitoring, repayment tracking, and spending analytics.",
+      "SpendWise manages expenses, monthly budgets, and borrowing/lending transactions, with categorisation, budget monitoring, repayment tracking, and spending analytics. Built as a Semester III group project with Raghav and Aayushi.",
       "It exists in two parallel implementations: a Python-based version built with Streamlit, Pandas, and Matplotlib for data management and visualization, and a web version built with plain HTML, CSS, and vanilla JavaScript focused on a responsive, dynamic UI.",
     ],
     highlights: [
@@ -122,14 +124,15 @@ export const projects = [
     summary:
       "A console-based job portal with resume-based job matching and a custom linked-node queue for tracking matches.",
     description: [
-      "CareeRise is a console-based job portal built with Core Java, JDBC, and Data Structures, backed by MySQL. It handles user authentication, resume-based job matching, job discovery, application tracking, and salary-based filtering.",
-      "Matched jobs are managed through a custom queue built from linked nodes, applying Data Structures concepts directly to the application logic, and all database operations use PreparedStatements, MySQL stored procedures, and custom exceptions for reliability.",
+      "CareeRise is a console-based job portal built with Core Java, JDBC, and Data Structures, backed by MySQL — a Semester II group project with Raghav and Siya. It handles user authentication, resume-based job matching, job discovery, application tracking, and salary-based filtering.",
+      "The matching engine reads each user's resume (stored as a CLOB in MySQL) and surfaces only roles where every required skill is present. Matched jobs are held in a custom queue built from linked nodes, and all database operations use PreparedStatements, a MySQL stored procedure, and custom exceptions (InvalidDataException, UserNotFoundException, MultipleLoginException) for reliability.",
     ],
     highlights: [
-      "Resume-based job matching and salary-based filtering",
+      "Resume-to-skill matching that only surfaces roles where every required skill is present",
       "Custom queue built from linked nodes to manage matched jobs",
+      "Session tracking that blocks simultaneous duplicate logins",
+      "Duplicate-application prevention, salary filtering, and applicant-count rankings",
       "PreparedStatements, stored procedures, and custom exception handling",
-      "Application tracking and job discovery",
     ],
     tech: ["Core Java", "JDBC", "Data Structures", "MySQL"],
     codeUrl: "https://github.com/ShreeyaBhatt/CareeRiseJobPortal",
@@ -158,12 +161,12 @@ export const projects = [
     slug: "smartcart",
     title: "SmartCart",
     category: "Supermarket & Inventory Management System",
-    period: "02/2025 – 02/2025",
+    period: "01/2025 – 02/2025",
     summary:
       "A console-based supermarket management system with inventory tracking, cart management, and multi-mode billing.",
     description: [
-      "SmartCart is a group-built supermarket management system using Core Java, OOP, and multidimensional arrays, covering product categorisation, inventory tracking, cart management, and stock validation.",
-      "Billing supports discounts and conditional charges across Cash, Card, and UPI payment modes, with independently developed modules integrated into a single cohesive application.",
+      "SmartCart is a Semester I group project (with Aryan, Vrutik, and a third teammate) built in Core Java with OOP and multidimensional arrays, covering product categorisation across Dairy, Snacks, Fruits, and Beverages, real-time inventory tracking, cart management, and stock validation — every cart edit or clear restores stock automatically.",
+      "Billing generates itemised bills with threshold-based discounts, conditional charges, and payment-based discounts across Cash, Card, and UPI, with ANSI formatting for the console UI and a JOptionPane UPI QR simulation. Independently developed modules were integrated into a single cohesive application.",
     ],
     highlights: [
       "Product categorisation and inventory tracking",
@@ -201,8 +204,8 @@ export const projects = [
     summary:
       "An independently built payroll system handling salary calculation, deductions, overtime, and bonus logic.",
     description: [
-      "A console-based payroll system built independently using Core Java, OOP, inheritance, encapsulation, and arrays, managing employee records and calculating salary, allowances, deductions, overtime, and bonuses.",
-      "Additional functionality includes searching and sorting employee records (via Bubble Sort), automatic employee ID generation, input validation, and average salary calculation.",
+      "A console-based payroll system built independently in Semester I using Core Java, OOP, inheritance, encapsulation, and arrays. A Member → Employee class hierarchy holds the records, and gross salary adds HRA (20% of basic), DA (10%), overtime pay, leave allowance, and bonus, minus Provident Fund (12%) and Professional Tax (1%).",
+      "Additional functionality includes searching and sorting employee records (via Bubble Sort), automatic employee ID generation, input validation, average salary calculation, and blocking deletion while an employee is serving their notice period.",
     ],
     highlights: [
       "Salary, allowance, deduction, overtime, and bonus calculation",

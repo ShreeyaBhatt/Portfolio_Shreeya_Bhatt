@@ -38,8 +38,8 @@ export default function Contact() {
       />
 
       <p className="container-prose mt-10 text-lead text-[var(--color-fg-muted)]">
-        Let's build something useful. I'm looking for a software engineering internship or a
-        Python developer role — if you're hiring, or want to talk through a project, open the
+        Let's build something useful. I'm currently interning at Anblicks — if you're hiring for
+        a Python or software engineering role, or want to talk through a project, open the
         channel.
       </p>
 

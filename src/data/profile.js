@@ -29,10 +29,10 @@
 export const profile = {
   name: "Shreeya Bhatt",
   tagline: "Python Developer & AI Enthusiast",
-  bio: "Motivated Computer Science student who builds with Python at the core — data-driven, AI-powered applications with machine learning at their heart, backed by full-stack platforms and console-based systems grounded in solid data structures and clean architecture.",
+  bio: "Computer Science student and intern at Anblicks who builds with Python at the core — data-driven, AI-powered applications with machine learning at their heart, backed by full-stack platforms and console-based systems grounded in solid data structures and clean architecture.",
   email: "shreeyasbhatt@gmail.com",
   location: "Ahmedabad, India",
-  availability: "Available for internships",
+  availability: "Intern @ Anblicks",
   linkedinUrl: "https://www.linkedin.com/in/shreeya-bhatt-4a5715363",
   githubUrl: "https://github.com/ShreeyaBhatt",
 
@@ -51,6 +51,8 @@ export const profile = {
     "MongoDB",
     "Streamlit",
     "REST APIs",
+    "FastAPI",
+    "Claude API",
   ],
 
   /** The three things this portfolio is actually arguing for. */
@@ -78,7 +80,7 @@ export const profile = {
   /** Compact evidence row — kept honest and easy to update by hand. */
   stats: [
     { label: "Projects shipped", value: "05" },
-    { label: "Certifications", value: "07" },
+    { label: "Certifications", value: "13" },
     { label: "Public repositories", value: "13" },
     { label: "Graduating", value: "2028" },
   ],

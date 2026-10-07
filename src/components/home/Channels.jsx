@@ -38,7 +38,7 @@ const CHANNELS = [
     to: "/contact",
     meta: "Open",
     teaser:
-      "A direct line — currently available for internships. Email, LinkedIn, GitHub, and a message form that reaches me straight away.",
+      "A direct line — currently interning at Anblicks. Email, LinkedIn, GitHub, and a message form that reaches me straight away.",
     cta: "Open a channel",
   },
 ];
